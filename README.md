@@ -4,9 +4,9 @@ Production website and content management platform for AY Media Work, a creative
 
 ## Project status
 
-**Stage 1 — Foundation Setup**
+**Stage 2 — Design System**
 
-The application scaffold, compatibility baseline, quality tooling, route structure, and environment template are configured. Public pages, the design system, Supabase integration, and admin features are implemented in later approved stages.
+The production foundation and shared visual language are configured. Stage 2 adds semantic design tokens, fluid typography, responsive layout helpers, accessible interface primitives, performance-conscious motion, and a visual review surface. Public page composition begins in Stage 3 after approval.
 
 ## Compatibility baseline
 
@@ -87,6 +87,7 @@ Public Supabase values may be used by browser code. Service-role, email, anti-sp
 ## Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
+- [Design system](docs/DESIGN_SYSTEM.md)
 - [Security policy](SECURITY.md)
 - [Deployment baseline](DEPLOYMENT.md)
 
