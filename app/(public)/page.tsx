@@ -60,7 +60,7 @@ const principles = [
 
 export default function HomePage() {
   return (
-    <main className="relative isolate overflow-hidden">
+    <div className="relative isolate overflow-hidden">
       <div
         aria-hidden="true"
         className="ambient-grid pointer-events-none absolute inset-x-0 top-0 -z-20 h-[52rem] opacity-35"
@@ -74,14 +74,7 @@ export default function HomePage() {
         className="pointer-events-none absolute right-[-14rem] top-[26rem] -z-10 size-[30rem] rounded-full bg-brand-violet/10 blur-[120px]"
       />
 
-      <Container className="flex min-h-screen flex-col py-6 sm:py-8">
-        <header className="flex items-center justify-between border-b border-border/70 pb-5">
-          <div className="font-display text-sm font-semibold tracking-[-0.02em]">
-            AY<span className="text-primary">/</span>MW
-          </div>
-          <Badge variant="outline">Design system · 02</Badge>
-        </header>
-
+      <Container className="flex min-h-[calc(100svh-6rem)] flex-col py-6 sm:py-8">
         <section className="grid flex-1 items-center gap-14 py-20 lg:grid-cols-[minmax(0,1.18fr)_minmax(19rem,0.82fr)] lg:py-24">
           <Reveal className="max-w-5xl">
             <p className="editorial-kicker">Stage 02 · Visual language</p>
@@ -337,13 +330,6 @@ export default function HomePage() {
           </Stagger>
         </Container>
       </section>
-
-      <Container className="pb-8">
-        <footer className="flex flex-col gap-4 border-t border-border/70 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>AY Media Work · Design system preview</p>
-          <p>Responsive · Accessible · Motion-aware</p>
-        </footer>
-      </Container>
-    </main>
+    </div>
   );
 }

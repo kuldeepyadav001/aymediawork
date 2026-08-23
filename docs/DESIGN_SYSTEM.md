@@ -1,6 +1,6 @@
 # AY Media Work Design System
 
-The Stage 2 visual system establishes a cinematic dark canvas, editorial typography, reusable interface primitives, and a restrained motion language. It is the shared foundation for public pages and the admin experience; page-specific layout and content begin in Stage 3.
+The Stage 2 visual system establishes a cinematic dark canvas, editorial typography, reusable interface primitives, and a restrained motion language. It is the shared foundation for the public shell, page-specific compositions, and the admin experience.
 
 ## Source of truth
 
