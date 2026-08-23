@@ -68,6 +68,23 @@ describe("global public layout", () => {
     expect(
       screen.getByRole("navigation", { name: "Legal" }),
     ).toBeInTheDocument();
+
+    const socialNavigation = screen.getByRole("navigation", {
+      name: "Social media",
+    });
+    expect(
+      within(socialNavigation).getByRole("link", { name: /Instagram/i }),
+    ).toHaveAttribute("href", "https://www.instagram.com/aymediawork_/");
+    expect(
+      within(socialNavigation).getByRole("link", { name: /YTJobs/i }),
+    ).toHaveAttribute("href", "https://ytjobs.co/talent/profile/439676?r=253");
+    expect(
+      within(socialNavigation).queryByRole("link", { name: /LinkedIn/i }),
+    ).not.toBeInTheDocument();
+    const comingSoon = within(socialNavigation).getByText("Coming soon");
+    expect(comingSoon).toBeVisible();
+    expect(comingSoon.closest('[aria-disabled="true"]')).toBeInTheDocument();
+
     expect(
       screen.getAllByText("Ideas in motion. Stories that stay."),
     ).toHaveLength(2);

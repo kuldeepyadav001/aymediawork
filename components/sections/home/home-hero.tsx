@@ -70,7 +70,7 @@ export function HomeHero() {
               fill
               priority
               alt="Abstract translucent film ribbon illuminated in electric blue"
-              className="object-cover object-center"
+              className="object-cover object-center motion-safe:animate-hero-drift motion-safe:will-change-transform"
               sizes="(max-width: 1023px) 92vw, (max-width: 1279px) 46vw, 52vw"
               src="/images/home/hero-cinematic-frame.jpg"
             />

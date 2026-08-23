@@ -42,14 +42,11 @@ export function ServicesOverview() {
           </Button>
         </div>
 
-        <Stagger className="mt-10 grid gap-px overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.08] md:grid-cols-2 lg:grid-cols-3">
+        <Stagger className="mt-10 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {HOMEPAGE_SERVICES.map((service) => (
-            <StaggerItem
-              className="min-h-full bg-background"
-              key={service.slug}
-            >
+            <StaggerItem className="min-h-full" key={service.slug}>
               <Link
-                className="group flex h-full min-h-64 flex-col p-6 transition-colors duration-400 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring sm:p-8"
+                className="group relative z-0 flex h-full min-h-64 flex-col rounded-xl border border-white/[0.1] bg-background p-6 shadow-panel transition-[background-color,border-color,box-shadow,transform] duration-400 ease-cinematic hover:z-10 hover:border-primary/30 hover:bg-surface hover:shadow-glow focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-safe:hover:-translate-y-1 motion-safe:hover:scale-[1.01] motion-safe:focus-visible:-translate-y-1 motion-safe:focus-visible:scale-[1.01] sm:p-8"
                 href={`/services/${service.slug}`}
               >
                 <div className="flex items-center justify-between">

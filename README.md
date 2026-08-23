@@ -6,7 +6,7 @@ Production website and content management platform for AY Media Work, a creative
 
 **Stage 4 — Homepage**
 
-The production foundation, shared visual language, public application shell, and cinematic homepage are configured. The homepage introduces AY Media Work with original non-factual copy and visual studies, a nine-service overview, a transparent studio process, separate client and partner conversion paths, responsive art direction, page metadata, and reduced-motion-safe entrance choreography.
+The production foundation, shared visual language, public application shell, and cinematic homepage are configured. The homepage introduces AY Media Work with original non-factual copy and visual studies, a nine-service overview, a transparent studio process, separate client and partner conversion paths, approved social destinations, responsive art direction, page metadata, and reduced-motion-safe motion and interactions.
 
 ## Compatibility baseline
 

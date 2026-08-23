@@ -86,6 +86,7 @@ Motion rules:
 3. Keep interactions short and entrance motion restrained.
 4. Respect `prefers-reduced-motion`; the shared primitives and global stylesheet disable or simplify motion automatically.
 5. Do not animate large blur filters or persistent full-screen backgrounds.
+6. The homepage hero's slow artwork drift and capability-card lift are transform-only, remain inside the established motion language, and stop under reduced-motion preferences.
 
 ## Accessibility baseline
 

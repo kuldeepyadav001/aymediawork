@@ -33,6 +33,20 @@ The following abstract assets were generated specifically for AY Media Work duri
 
 The homepage identifies the three supporting images as original studio concepts, not client case studies. Confirmed client media will be introduced only after the client supplies or approves the source, attribution, claims, and publication rights.
 
+## Motion and interaction
+
+- The hero artwork uses one slow, transform-only drift animation. It is disabled automatically when `prefers-reduced-motion: reduce` is active.
+- Capability cards use a restrained hover and keyboard-focus lift without changing document flow or causing layout shift.
+- Neither treatment animates layout properties or large filters.
+
+## Published social destinations
+
+- Instagram: `https://www.instagram.com/aymediawork_/`
+- YTJobs: `https://ytjobs.co/talent/profile/439676?r=253`
+- LinkedIn: a non-interactive “Coming soon” label; no destination is published until the client supplies an approved profile.
+
+The YTJobs destination is linked only as a profile. Its metrics, testimonials, project outcomes, and other factual claims are not reproduced on the site.
+
 ## Conversion paths
 
 - Client project inquiries route to `/contact?type=client`.
