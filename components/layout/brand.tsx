@@ -13,7 +13,7 @@ export function BrandLockup({ className, priority = false }: BrandProps) {
       <Image
         alt=""
         aria-hidden="true"
-        className="h-7 w-auto sm:h-8"
+        className="h-6 w-auto sm:h-7"
         height={176}
         priority={priority}
         src="/images/brand/ay-media-work-mark-light.png"

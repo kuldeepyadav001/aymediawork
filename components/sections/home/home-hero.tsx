@@ -26,11 +26,11 @@ export function HomeHero() {
         className="pointer-events-none absolute bottom-[-18rem] right-[-16rem] -z-20 size-[38rem] rounded-full bg-brand-violet/10 blur-[130px]"
       />
 
-      <Container className="grid min-h-[calc(100svh-5rem)] items-center gap-12 py-16 sm:min-h-[calc(100svh-6rem)] sm:py-20 lg:grid-cols-[minmax(0,0.9fr)_minmax(26rem,1.1fr)] lg:gap-14 lg:py-16 xl:gap-20">
+      <Container className="grid min-h-[calc(100svh-7.25rem)] content-center items-center gap-10 py-10 sm:min-h-[calc(100svh-7.75rem)] sm:py-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(25rem,0.95fr)] lg:gap-12 lg:py-10 xl:gap-16 xl:py-12">
         <Reveal className="relative z-10 max-w-4xl">
           <p className="editorial-kicker">Creative media studio</p>
           <h1
-            className="mt-7 text-balance text-display-xl"
+            className="mt-5 text-balance font-display text-[clamp(3.25rem,6.25vw,6.5rem)] font-medium leading-[0.9] tracking-[-0.055em] sm:mt-6"
             id="home-hero-title"
           >
             Stories built to move.
@@ -38,13 +38,13 @@ export function HomeHero() {
               Frames made to stay.
             </span>
           </h1>
-          <p className="mt-7 max-w-copy text-pretty text-lead text-muted-foreground sm:mt-8">
-            AY Media Work brings editing, motion, design, and digital
-            storytelling into one focused creative process for brands,
-            businesses, and creators.
+          <p className="mt-5 max-w-copy text-pretty text-lead text-muted-foreground sm:mt-6">
+            AY Media Work brings creative production, digital experiences, and
+            intelligent systems into one focused process for brands, businesses,
+            and creators.
           </p>
 
-          <div className="mt-9 flex flex-col gap-3 xs:flex-row">
+          <div className="mt-7 flex flex-col gap-3 xs:flex-row sm:mt-8">
             <Button asChild size="xl" variant="brand">
               <Link href="/contact?type=client">
                 Start a project
@@ -65,7 +65,7 @@ export function HomeHero() {
           delay={0.12}
           direction="left"
         >
-          <div className="relative aspect-[16/11] overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel sm:aspect-[16/10] lg:aspect-[7/8] xl:aspect-[16/11]">
+          <div className="relative aspect-[16/11] overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel sm:aspect-[16/10] lg:aspect-[4/3] xl:aspect-[16/11]">
             <Image
               fill
               priority
@@ -94,8 +94,12 @@ export function HomeHero() {
               <div className="absolute inset-[18%] animate-pulse-glow rounded-full border border-brand-blue/30 motion-reduce:animate-none" />
             </div>
 
-            <div className="absolute inset-x-5 bottom-5 grid gap-4 rounded-lg border border-white/[0.1] bg-background/55 p-5 backdrop-blur-xl sm:inset-x-7 sm:bottom-7 sm:grid-cols-[1fr_auto] sm:items-end sm:p-6">
-              <div>
+            <div className="absolute inset-x-5 bottom-8 grid gap-4 overflow-hidden rounded-lg border border-white/[0.12] bg-background/[0.58] p-5 shadow-panel backdrop-blur-2xl motion-safe:animate-hero-card-float motion-safe:will-change-transform sm:inset-x-7 sm:bottom-10 sm:grid-cols-[1fr_auto] sm:items-end sm:p-6 lg:bottom-11">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,0.055),transparent_34%,rgba(74,108,255,0.055)_78%,transparent)]"
+              />
+              <div className="relative">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
                   Built around the idea
                 </p>
@@ -105,7 +109,7 @@ export function HomeHero() {
               </div>
               <div
                 aria-hidden="true"
-                className="hidden size-12 items-center justify-center rounded-full border border-white/15 bg-white/10 sm:flex"
+                className="relative hidden size-12 items-center justify-center rounded-full border border-white/15 bg-white/10 sm:flex"
               >
                 <ArrowUpRight className="size-4" />
               </div>

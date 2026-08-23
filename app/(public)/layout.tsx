@@ -12,7 +12,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       </a>
       <SiteHeader />
       <main
-        className="min-h-[60vh] pt-20 sm:pt-24"
+        className="min-h-[60vh] pt-16 sm:pt-[4.5rem]"
         id="main-content"
         tabIndex={-1}
       >

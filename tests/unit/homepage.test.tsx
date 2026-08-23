@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import HomePage from "@/app/(public)/page";
 import {
+  CREATIVE_DISCIPLINES,
   CREATIVE_STUDIES,
   HOMEPAGE_SERVICES,
   PROCESS_STEPS,
@@ -40,6 +41,24 @@ describe("production homepage", () => {
         screen.getByRole("link", { name: new RegExp(service.title) }),
       ).toHaveAttribute("href", `/services/${service.slug}`);
     }
+  });
+
+  it("keeps the hero glass message in subtle motion and the ticker in sync", () => {
+    render(<HomePage />);
+
+    expect(CREATIVE_DISCIPLINES).toEqual(
+      HOMEPAGE_SERVICES.map(({ title }) => title),
+    );
+    expect(
+      screen.getByRole("group", { name: /Creative disciplines:/i }),
+    ).toHaveAccessibleName(
+      `Creative disciplines: ${CREATIVE_DISCIPLINES.join(", ")}`,
+    );
+
+    const glassMessage = screen
+      .getByText("Built around the idea")
+      .closest("div.motion-safe\\:animate-hero-card-float");
+    expect(glassMessage).toBeInTheDocument();
   });
 
   it("labels original visual studies transparently and avoids client attribution", () => {

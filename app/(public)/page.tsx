@@ -8,7 +8,7 @@ import { StudioProcess } from "@/components/sections/home/studio-process";
 export const metadata: Metadata = {
   title: "Creative Media Studio",
   description:
-    "AY Media Work shapes video editing, motion graphics, design, and digital storytelling into focused visual experiences for brands, businesses, and creators.",
+    "AY Media Work connects video, animation, design, web development, automation, advertising, CGI, and VFX for brands, businesses, and creators.",
   alternates: {
     canonical: "/",
   },

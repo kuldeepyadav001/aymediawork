@@ -6,21 +6,21 @@ Stage 4 replaces the temporary design-system review surface with the production 
 
 The client authorised original draft copy and abstract visual direction for Stage 4. The homepage therefore uses non-factual positioning language and does not publish unconfirmed statistics, client logos, testimonials, awards, project results, or third-party portfolio claims.
 
-## Draft service taxonomy
+## Service taxonomy
 
-The homepage currently proposes these nine stable service routes:
+The homepage derives its capability cards from the current Stage 5 service catalog:
 
 1. Video Editing — `/services/video-editing`
-2. Shorts & Reels — `/services/shorts-and-reels`
-3. YouTube Production — `/services/youtube-production`
-4. Motion Graphics — `/services/motion-graphics`
-5. 3D Animation — `/services/3d-animation`
-6. Thumbnail Design — `/services/thumbnail-design`
-7. Channel Management — `/services/channel-management`
-8. Scriptwriting — `/services/scriptwriting`
-9. Creative Direction — `/services/creative-direction`
+2. 2D & 3D Animation — `/services/2d-and-3d-animation`
+3. SaaS Video — `/services/saas-video`
+4. Graphic Design — `/services/graphic-design`
+5. AI Animation — `/services/ai-animation`
+6. Web Development — `/services/web-development`
+7. AI Automation — `/services/ai-automation`
+8. Facebook & Meta Ads — `/services/facebook-and-meta-ads`
+9. CGI & VFX — `/services/cgi-and-vfx`
 
-These labels and slugs become the initial service seed data only after client approval. Database service records will receive stable IDs when the Supabase schema is introduced.
+These labels and routes reflect the agency's expanded focus. The later Supabase-backed service manager will assign stable database IDs, support additional services, and keep display content editable without using labels as relationships.
 
 ## Original homepage visuals
 
@@ -33,11 +33,14 @@ The following abstract assets were generated specifically for AY Media Work duri
 
 The homepage identifies the three supporting images as original studio concepts, not client case studies. Confirmed client media will be introduced only after the client supplies or approves the source, attribution, claims, and publication rights.
 
-## Motion and interaction
+## Hero composition, motion, and interaction
 
-- The hero artwork uses one slow, transform-only drift animation. It is disabled automatically when `prefers-reduced-motion: reduce` is active.
+- The public header uses a compact 64 px mobile / 72 px larger-screen height with the public layout offset kept in sync. Its translucent surface, highlight gradient, blur, and restrained scrolled state visually relate it to the site's glass panels.
+- Homepage and service heroes use compact, content-centred spacing so the primary message and artwork enter the initial viewport earlier without changing the established composition.
+- The hero artwork uses a slow transform-only drift animation. Its “Built around the idea” glass card sits higher within the artwork and uses a separate subtle transform-only float.
+- Both hero motions stop automatically when `prefers-reduced-motion: reduce` is active.
 - Capability cards use a restrained hover and keyboard-focus lift without changing document flow or causing layout shift.
-- Neither treatment animates layout properties or large filters.
+- No treatment animates layout properties or large filters.
 
 ## Published social destinations
 

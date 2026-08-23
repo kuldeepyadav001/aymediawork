@@ -28,8 +28,9 @@ describe("global public layout", () => {
     expect(
       screen.getByRole("link", { name: "Skip to content" }),
     ).toHaveAttribute("href", "#main-content");
-    expect(screen.getByRole("banner")).toBeInTheDocument();
+    expect(screen.getByRole("banner")).toHaveClass("backdrop-blur-2xl");
     expect(screen.getByRole("main")).toHaveAttribute("id", "main-content");
+    expect(screen.getByRole("main")).toHaveClass("pt-16", "sm:pt-[4.5rem]");
     expect(screen.getByRole("contentinfo")).toBeInTheDocument();
   });
 

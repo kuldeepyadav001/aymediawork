@@ -4,9 +4,9 @@ Production website and content management platform for AY Media Work, a creative
 
 ## Project status
 
-**Stage 4 — Homepage**
+**Stage 5 — Services**
 
-The production foundation, shared visual language, public application shell, and cinematic homepage are configured. The homepage introduces AY Media Work with original non-factual copy and visual studies, a nine-service overview, a transparent studio process, separate client and partner conversion paths, approved social destinations, responsive art direction, page metadata, and reduced-motion-safe motion and interactions.
+The production foundation, shared visual language, public application shell, cinematic homepage, and service architecture are configured. The service experience includes an overview, nine detail routes, original non-client artwork, non-factual capability copy, connected-service discovery, route-level metadata, and inquiry links that preserve the selected service slug. The current catalog reflects the agency's expanded focus across creative production, digital experiences, automation, and advertising.
 
 ## Compatibility baseline
 
@@ -89,6 +89,7 @@ The Supabase project URL and publishable key may be used by browser code when Ro
 - [Architecture](docs/ARCHITECTURE.md)
 - [Design system](docs/DESIGN_SYSTEM.md)
 - [Homepage content and provenance](docs/HOMEPAGE_CONTENT.md)
+- [Services content and provenance](docs/SERVICES_CONTENT.md)
 - [Security policy](SECURITY.md)
 - [Deployment baseline](DEPLOYMENT.md)
 
