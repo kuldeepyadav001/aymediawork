@@ -5,18 +5,18 @@ import HomePage from "@/app/(public)/page";
 import { cn } from "@/lib/utils/cn";
 
 describe("project foundation", () => {
-  it("renders the design-system review surface", () => {
+  it("renders the production homepage entry point", () => {
     render(<HomePage />);
 
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: /cinematic clarity.*editorial control/i,
+        name: /stories built to move.*frames made to stay/i,
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /explore the system/i }),
-    ).toHaveAttribute("href", "#components");
+      screen.getByRole("link", { name: /explore the work/i }),
+    ).toHaveAttribute("href", "/work");
   });
 
   it("merges conditional and conflicting Tailwind classes", () => {

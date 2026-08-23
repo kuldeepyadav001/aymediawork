@@ -13,7 +13,7 @@ The Stage 2 visual system establishes a cinematic dark canvas, editorial typogra
 | Layout helpers                     | `components/shared/`               |
 | Motion primitives                  | `components/animations/reveal.tsx` |
 | Motion timing                      | `lib/constants/motion.ts`          |
-| Visual review surface              | `app/(public)/page.tsx`            |
+| Production homepage composition    | `app/(public)/page.tsx`            |
 
 Use semantic tokens and existing variants before adding one-off values. Add a new token only when a value is repeated, purposeful, and belongs to the visual language.
 
@@ -86,6 +86,7 @@ Motion rules:
 3. Keep interactions short and entrance motion restrained.
 4. Respect `prefers-reduced-motion`; the shared primitives and global stylesheet disable or simplify motion automatically.
 5. Do not animate large blur filters or persistent full-screen backgrounds.
+6. The homepage hero's slow artwork drift and capability-card lift are transform-only, remain inside the established motion language, and stop under reduced-motion preferences.
 
 ## Accessibility baseline
 
@@ -98,7 +99,7 @@ Motion rules:
 
 ## Review and validation
 
-The Stage 2 review surface at `/` exercises typography, colour, buttons, badges, cards, tabs, fields, layout helpers, and motion at representative breakpoints. Run the complete gate before merging changes:
+The Stage 2 review surface was intentionally replaced by the production homepage in Stage 4. Shared primitives retain focused unit coverage, while the homepage exercises the public typography, colour, layout, imagery, links, and motion language in a real composition. Run the complete gate before merging changes:
 
 ```bash
 npm run validate

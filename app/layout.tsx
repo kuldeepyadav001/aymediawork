@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 
+import { getSiteUrl } from "@/lib/utils/site-url";
+
 import "lenis/dist/lenis.css";
 import "./globals.css";
 
@@ -17,9 +19,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  ),
+  metadataBase: getSiteUrl(),
   title: {
     default: "AY Media Work",
     template: "%s | AY Media Work",

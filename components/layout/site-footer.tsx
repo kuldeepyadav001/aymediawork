@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import {
+  ArrowUpRight,
+  BriefcaseBusiness,
+  Camera,
+  Clapperboard,
+} from "lucide-react";
 
 import { BrandLogo } from "@/components/layout/brand";
 import { Container } from "@/components/shared/container";
@@ -9,6 +14,13 @@ import {
   LEGAL_NAVIGATION,
   PRIMARY_NAVIGATION,
 } from "@/lib/constants/navigation";
+import { SOCIAL_LINKS } from "@/lib/constants/social";
+
+const SOCIAL_ICONS = {
+  Instagram: Camera,
+  LinkedIn: BriefcaseBusiness,
+  YTJobs: Clapperboard,
+} as const;
 
 export function SiteFooter() {
   return (
@@ -40,7 +52,7 @@ export function SiteFooter() {
           </Button>
         </section>
 
-        <div className="grid gap-14 py-14 sm:py-16 lg:grid-cols-[minmax(0,1.5fr)_minmax(10rem,0.5fr)_minmax(10rem,0.5fr)] lg:gap-12">
+        <div className="grid gap-12 py-14 sm:grid-cols-2 sm:py-16 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(9rem,0.55fr))] lg:gap-10">
           <div className="max-w-sm">
             <Link
               aria-label="AY Media Work — home"
@@ -83,6 +95,58 @@ export function SiteFooter() {
                   </Link>
                 </li>
               ))}
+            </ul>
+          </nav>
+
+          <nav aria-label="Social media">
+            <p className="editorial-kicker mb-5">Connect</p>
+            <ul className="space-y-2">
+              {SOCIAL_LINKS.map((item) => {
+                const Icon = SOCIAL_ICONS[item.label];
+                const content = (
+                  <>
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.035] transition-[background-color,border-color,color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:border-primary/35 group-hover:bg-primary group-hover:text-background">
+                      <Icon aria-hidden="true" className="size-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-sm font-medium text-foreground">
+                        {item.label}
+                      </span>
+                      <span className="block truncate text-[0.6875rem] text-muted-foreground">
+                        {item.note}
+                      </span>
+                    </span>
+                    {item.status === "active" ? (
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        className="ml-auto size-3.5 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
+                      />
+                    ) : null}
+                  </>
+                );
+
+                return (
+                  <li key={item.label}>
+                    {item.status === "active" ? (
+                      <a
+                        className="group flex min-h-12 items-center gap-3 rounded-lg p-1.5 pr-2 transition-colors hover:bg-white/[0.035] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        href={item.href}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        {content}
+                      </a>
+                    ) : (
+                      <div
+                        aria-disabled="true"
+                        className="flex min-h-12 cursor-not-allowed items-center gap-3 rounded-lg p-1.5 pr-2 opacity-45"
+                      >
+                        {content}
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </nav>
         </div>
