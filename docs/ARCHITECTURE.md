@@ -5,8 +5,8 @@
 - **Public application:** SEO-focused Next.js routes under `app/(public)`.
 - **Admin application:** authentication at `app/admin/(auth)` and protected management routes at `app/admin/(protected)`.
 - **Server endpoints:** validated handlers under `app/api` for inquiries, revalidation, and generated media.
-- **Data platform:** Supabase PostgreSQL, Auth, and Storage, introduced in Stage 3.
-- **Email:** server-only Resend integration, introduced in Stage 8.
+- **Data platform:** Supabase PostgreSQL, Auth, and Storage, introduced when the data layer is implemented.
+- **Email:** server-only Resend integration, introduced with inquiry notifications.
 - **Hosting:** Vercel-compatible build and runtime; the client selects the commercial Vercel plan before production launch.
 
 ## Route protection correction

@@ -4,9 +4,9 @@ Production website and content management platform for AY Media Work, a creative
 
 ## Project status
 
-**Stage 2 — Design System**
+**Stage 3 — Global Layout**
 
-The production foundation and shared visual language are configured. Stage 2 adds semantic design tokens, fluid typography, responsive layout helpers, accessible interface primitives, performance-conscious motion, and a visual review surface. Public page composition begins in Stage 3 after approval.
+The production foundation, shared visual language, and public application shell are configured. The shell provides responsive desktop and mobile navigation, the approved AY Media Work brand assets, a conversion-focused footer, accessible skip navigation, reduced-motion-safe smooth scrolling, and cohesive loading and error states.
 
 ## Compatibility baseline
 
@@ -39,7 +39,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-No real credentials are required until the Supabase stage. Never commit `.env.local` or other secret-bearing files.
+No real credentials are required for the current public shell. Never commit `.env.local` or other secret-bearing files.
 
 ## Quality commands
 
@@ -75,12 +75,12 @@ The separated admin route groups ensure `/admin/login` remains accessible while 
 
 ## Environment variables
 
-`.env.example` documents every planned variable. Values are configured only when their integration stage begins:
+`.env.example` documents every planned variable. Values are configured only when the corresponding integration is implemented:
 
-- Stage 3: Supabase
-- Stage 8: Resend and Turnstile
-- Stage 11: Analytics
-- Stage 12: Vercel production environment
+- Supabase database, authentication, and storage
+- Resend email notifications and Turnstile anti-spam protection
+- Consent-aware analytics
+- Vercel preview and production environments
 
 Public Supabase values may be used by browser code. Service-role, email, anti-spam, and revalidation secrets are server-only.
 
