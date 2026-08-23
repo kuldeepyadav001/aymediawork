@@ -4,9 +4,9 @@ Production website and content management platform for AY Media Work, a creative
 
 ## Project status
 
-**Stage 3 — Global Layout**
+**Stage 4 — Homepage**
 
-The production foundation, shared visual language, and public application shell are configured. The shell provides responsive desktop and mobile navigation, the approved AY Media Work brand assets, a conversion-focused footer, accessible skip navigation, reduced-motion-safe smooth scrolling, and cohesive loading and error states.
+The production foundation, shared visual language, public application shell, and cinematic homepage are configured. The homepage introduces AY Media Work with original non-factual copy and visual studies, a nine-service overview, a transparent studio process, separate client and partner conversion paths, responsive art direction, page metadata, and reduced-motion-safe entrance choreography.
 
 ## Compatibility baseline
 
@@ -39,7 +39,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-No real credentials are required for the current public shell. Never commit `.env.local` or other secret-bearing files.
+No real credentials are required for the current public homepage. Never commit `.env.local` or other secret-bearing files.
 
 ## Quality commands
 
@@ -82,12 +82,13 @@ The separated admin route groups ensure `/admin/login` remains accessible while 
 - Consent-aware analytics
 - Vercel preview and production environments
 
-Public Supabase values may be used by browser code. Service-role, email, anti-spam, and revalidation secrets are server-only.
+The Supabase project URL and publishable key may be used by browser code when Row Level Security is enabled. Supabase secret keys, email, anti-spam, and revalidation secrets are server-only.
 
 ## Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Design system](docs/DESIGN_SYSTEM.md)
+- [Homepage content and provenance](docs/HOMEPAGE_CONTENT.md)
 - [Security policy](SECURITY.md)
 - [Deployment baseline](DEPLOYMENT.md)
 
