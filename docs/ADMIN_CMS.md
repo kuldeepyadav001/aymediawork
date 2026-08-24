@@ -4,11 +4,14 @@ Stage 10 adds Supabase Auth, role-aware content management, inquiries, newslette
 
 ## Production activation order
 
-1. In Supabase **SQL Editor**, apply `supabase/migrations/20260825110000_admin_cms.sql` once, after all earlier timestamped migrations.
-2. In Vercel, add the Stage 10 environment value described below to **Production**, **Preview**, and the intended local Development environment, then redeploy.
-3. Configure Supabase Auth URLs.
-4. Create and activate the first owner.
-5. Use that owner account to invite every later admin or editor from `/admin/users`.
+1. In Supabase **SQL Editor**, apply every pending migration once in timestamp order. The Stage 10 sequence is `20260825100000_add_social_media_marketing_service.sql`, `20260825110000_admin_cms.sql`, then `20260825120000_ensure_social_media_marketing_service.sql`.
+2. Run the static post-migration checks below before continuing.
+3. In Vercel, add the Stage 10 environment values described below to **Production**, **Preview**, and the intended local Development environment, then redeploy.
+4. Configure Supabase Auth URLs.
+5. Create and activate the first owner.
+6. Use that owner account to invite every later admin or editor from `/admin/users`.
+
+If `20260825110000_admin_cms.sql` was already applied while the catalog amendment was still missing, do not run the older amendment against the expanded schema and do not rerun the admin migration. Apply only `20260825120000_ensure_social_media_marketing_service.sql`, then run the static checks. The reconciliation is also safe at the end of a correctly ordered fresh migration sequence.
 
 Do not paste API keys into source files, SQL settings, CMS settings, issue comments, or chat. `SUPABASE_SECRET_KEY` must remain a Vercel/server secret.
 
