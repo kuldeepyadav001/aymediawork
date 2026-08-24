@@ -2,18 +2,26 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import { SERVICE_SLUGS } from "@/lib/constants/service-slugs";
+import { WORK_SLUGS } from "@/lib/constants/work-slugs";
 
-const serviceSlugSet = new Set<string>(SERVICE_SLUGS);
+const routeSlugSets: Readonly<Record<string, ReadonlySet<string>>> = {
+  services: new Set<string>(SERVICE_SLUGS),
+  work: new Set<string>(WORK_SLUGS),
+};
 
 export function proxy(request: NextRequest) {
   const segments = request.nextUrl.pathname.split("/").filter(Boolean);
-  const isServicesIndex = segments.length === 1;
-  const isKnownService =
+  const routeRoot = segments[0];
+  const routeSlugs = routeRoot ? routeSlugSets[routeRoot] : undefined;
+  const isIndex = Boolean(routeSlugs) && segments.length === 1;
+  const slug = segments[1];
+  const isKnownDetail =
+    Boolean(routeSlugs) &&
     segments.length === 2 &&
-    segments[1] !== undefined &&
-    serviceSlugSet.has(segments[1]);
+    slug !== undefined &&
+    routeSlugs?.has(slug);
 
-  if (isServicesIndex || isKnownService) {
+  if (isIndex || isKnownDetail) {
     return NextResponse.next();
   }
 
@@ -25,5 +33,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/services/:path*"],
+  matcher: ["/services/:path*", "/work/:path*"],
 };
