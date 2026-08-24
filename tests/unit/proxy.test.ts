@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { describe, expect, it } from "vitest";
 
+import { BLOG_SLUGS } from "@/lib/constants/blog-slugs";
 import { SERVICE_SLUGS } from "@/lib/constants/service-slugs";
 import { WORK_SLUGS } from "@/lib/constants/work-slugs";
 import { proxy } from "@/proxy";
@@ -25,9 +26,13 @@ function expectHardNotFound(pathname: string) {
 
 describe("catalog route boundaries", () => {
   it("allows both indexes and every approved detail slug", () => {
+    expectAllowed("/blog");
     expectAllowed("/services");
     expectAllowed("/work");
 
+    for (const slug of BLOG_SLUGS) {
+      expectAllowed(`/blog/${slug}`);
+    }
     for (const slug of SERVICE_SLUGS) {
       expectAllowed(`/services/${slug}`);
     }
@@ -38,6 +43,8 @@ describe("catalog route boundaries", () => {
 
   it("rewrites unknown or nested catalog paths to a hard 404", () => {
     for (const pathname of [
+      "/blog/not-an-article",
+      "/blog/one-idea-many-outputs/extra",
       "/services/not-a-service",
       "/services/video-editing/extra",
       "/work/not-a-study",
