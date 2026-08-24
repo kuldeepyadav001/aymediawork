@@ -1,10 +1,12 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
+import { BLOG_SLUGS } from "@/lib/constants/blog-slugs";
 import { SERVICE_SLUGS } from "@/lib/constants/service-slugs";
 import { WORK_SLUGS } from "@/lib/constants/work-slugs";
 
 const routeSlugSets: Readonly<Record<string, ReadonlySet<string>>> = {
+  blog: new Set<string>(BLOG_SLUGS),
   services: new Set<string>(SERVICE_SLUGS),
   work: new Set<string>(WORK_SLUGS),
 };
@@ -33,5 +35,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/services/:path*", "/work/:path*"],
+  matcher: ["/blog/:path*", "/services/:path*", "/work/:path*"],
 };
