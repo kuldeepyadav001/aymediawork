@@ -14,6 +14,7 @@ The Stage 2 visual system establishes a cinematic dark canvas, editorial typogra
 | Motion primitives                  | `components/animations/reveal.tsx` |
 | Motion timing                      | `lib/constants/motion.ts`          |
 | Production homepage composition    | `app/(public)/page.tsx`            |
+| Service page compositions          | `components/sections/services/`    |
 
 Use semantic tokens and existing variants before adding one-off values. Add a new token only when a value is repeated, purposeful, and belongs to the visual language.
 

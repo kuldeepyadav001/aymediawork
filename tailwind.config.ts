@@ -24,8 +24,9 @@ const config = {
     extend: {
       animation: {
         float: "float 7s ease-in-out infinite",
+        "hero-card-float": "hero-card-float 6.5s ease-in-out infinite",
         "hero-drift": "hero-drift 16s ease-in-out infinite alternate",
-        marquee: "marquee 30s linear infinite",
+        marquee: "marquee 38s linear infinite",
         "pulse-glow": "pulse-glow 4s ease-in-out infinite",
         shimmer: "shimmer 2.4s linear infinite",
       },
@@ -167,6 +168,10 @@ const config = {
         float: {
           "0%, 100%": { transform: "translate3d(0, 0, 0)" },
           "50%": { transform: "translate3d(0, -0.75rem, 0)" },
+        },
+        "hero-card-float": {
+          "0%, 100%": { transform: "translate3d(0, 0, 0)" },
+          "50%": { transform: "translate3d(0, -0.45rem, 0)" },
         },
         "hero-drift": {
           "0%": { transform: "translate3d(-0.5%, 0, 0) scale(1.035)" },

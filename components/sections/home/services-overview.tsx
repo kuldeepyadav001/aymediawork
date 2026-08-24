@@ -20,9 +20,9 @@ export function ServicesOverview() {
           </Reveal>
           <Reveal className="lg:pb-1" delay={0.08}>
             <p className="max-w-copy text-pretty text-lead text-muted-foreground">
-              Every cut, frame, movement, and thumbnail has a job: sharpen the
-              idea and carry it further. Our capabilities meet inside one clear
-              creative direction.
+              Every cut, frame, campaign, and digital system has a job: sharpen
+              the idea and carry it further. Our capabilities meet inside one
+              clear creative direction.
             </p>
           </Reveal>
         </div>

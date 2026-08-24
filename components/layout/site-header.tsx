@@ -44,13 +44,17 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-40 border-b transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300",
+        "fixed inset-x-0 top-0 isolate z-40 overflow-hidden border-b backdrop-blur-2xl backdrop-saturate-150 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300",
         isScrolled
-          ? "border-white/[0.08] bg-background/85 shadow-[0_16px_60px_-36px_rgba(0,0,0,0.9)] backdrop-blur-xl"
-          : "border-transparent bg-background/25",
+          ? "border-white/10 bg-background/80 shadow-[0_18px_48px_-34px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(255,255,255,0.07)]"
+          : "border-white/[0.07] bg-background/[0.58] shadow-[inset_0_1px_0_rgba(255,255,255,0.055)]",
       )}
     >
-      <Container className="flex h-20 items-center justify-between gap-6 sm:h-24">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(115deg,rgba(255,255,255,0.055),transparent_26%,rgba(74,108,255,0.05)_68%,transparent)]"
+      />
+      <Container className="relative z-10 flex h-16 items-center justify-between gap-5 sm:h-[4.5rem]">
         <Link
           aria-label="AY Media Work — home"
           className="shrink-0 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -69,7 +73,7 @@ export function SiteHeader() {
                   <Link
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "relative inline-flex h-10 items-center rounded-full px-3 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring xl:px-4",
+                      "relative inline-flex h-9 items-center rounded-full px-3 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring xl:px-4",
                       active && "text-foreground",
                     )}
                     href={item.href}
@@ -90,7 +94,12 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button asChild className="hidden xl:inline-flex" variant="outline">
+          <Button
+            asChild
+            className="hidden xl:inline-flex"
+            size="sm"
+            variant="outline"
+          >
             <Link href="/contact">
               Start a project
               <ArrowUpRight aria-hidden="true" />
