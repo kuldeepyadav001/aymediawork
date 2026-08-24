@@ -32,10 +32,10 @@ describe("production homepage", () => {
     ).toHaveAttribute("href", "/contact?type=partner");
   });
 
-  it("exposes all nine proposed services through stable routes", () => {
+  it("exposes all ten approved services through stable routes", () => {
     render(<HomePage />);
 
-    expect(HOMEPAGE_SERVICES).toHaveLength(9);
+    expect(HOMEPAGE_SERVICES).toHaveLength(10);
     for (const service of HOMEPAGE_SERVICES) {
       expect(
         screen.getByRole("link", { name: new RegExp(service.title) }),

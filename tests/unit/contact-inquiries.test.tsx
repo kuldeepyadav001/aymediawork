@@ -18,8 +18,8 @@ const serviceIds = SERVICE_CATALOG.map(({ id }) => id);
 
 describe("contact and inquiry journeys", () => {
   it("assigns a stable database ID to every approved service", () => {
-    expect(SERVICE_CATALOG).toHaveLength(9);
-    expect(new Set(serviceIds).size).toBe(9);
+    expect(SERVICE_CATALOG).toHaveLength(10);
+    expect(new Set(serviceIds).size).toBe(10);
 
     for (const service of SERVICE_CATALOG) {
       expect(service.id).toMatch(
@@ -109,7 +109,7 @@ describe("contact and inquiry journeys", () => {
     expect(
       screen.getByRole("checkbox", { name: initialService.title }),
     ).toBeChecked();
-    expect(screen.getAllByRole("checkbox", { name: /./ })).toHaveLength(11);
+    expect(screen.getAllByRole("checkbox", { name: /./ })).toHaveLength(12);
     expect(
       screen.queryByLabelText(/budget|price|payment/i),
     ).not.toBeInTheDocument();

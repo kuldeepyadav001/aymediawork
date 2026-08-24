@@ -4,7 +4,7 @@ import { ServicesIndex } from "@/components/sections/services/services-index";
 
 const title = "Creative Services";
 const description =
-  "Explore AY Media Work across video editing, animation, SaaS video, graphic design, web development, AI automation, Meta ads, CGI, and VFX.";
+  "Explore AY Media Work across video editing, animation, SaaS video, graphic design, web development, AI automation, organic social media marketing, Meta ads, CGI, and VFX.";
 
 export const metadata: Metadata = {
   title,

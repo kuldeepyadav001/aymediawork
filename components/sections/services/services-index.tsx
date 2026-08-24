@@ -56,7 +56,7 @@ export function ServicesIndex() {
               className="mt-5 max-w-5xl text-balance text-display-lg sm:mt-6"
               id="services-title"
             >
-              One studio. Nine ways to
+              One studio. Ten ways to
               <span className="text-gradient-brand block">move an idea.</span>
             </h1>
           </Reveal>

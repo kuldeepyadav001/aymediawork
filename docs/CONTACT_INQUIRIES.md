@@ -10,7 +10,7 @@ Stage 9 provides two separate journeys on `/contact`:
 - email;
 - optional contact number;
 - optional company or brand;
-- one or more services selected from the nine approved service records;
+- one or more services selected from the ten approved service records;
 - preferred timeline;
 - project details;
 - required purpose-specific privacy consent; and
@@ -68,13 +68,14 @@ Inquiry email notification is secondary to persistence. If database storage succ
 
 ## Database migration
 
-Apply this versioned migration to the connected Supabase project before testing production submissions:
+Apply the versioned migrations to the connected Supabase project in timestamp order before testing production submissions:
 
 ```text
 supabase/migrations/20260824090000_contact_inquiries.sql
+supabase/migrations/20260825100000_add_social_media_marketing_service.sql
 ```
 
-It creates and secures:
+The first migration creates and secures:
 
 - `services`;
 - `inquiries`;
@@ -84,13 +85,15 @@ It creates and secures:
 - atomic inquiry and newsletter functions; and
 - the database-backed rate-limit function.
 
+The second, forward-only migration inserts Social Media Marketing with its stable UUID and updates the final display positions. The Stage 9 migration is already applied in production and must not be edited to add this service.
+
 ### Dashboard application steps
 
 1. Open the correct Supabase project.
 2. Open **SQL Editor** and create a new query.
-3. Copy the complete migration file above into the editor.
-4. Review that the target project name is correct, then select **Run** once.
-5. Open **Table Editor** and confirm that `services` contains exactly the nine approved rows.
+3. If Stage 9 is already installed, copy only `20260825100000_add_social_media_marketing_service.sql` into the editor. For a fresh database, apply both files in timestamp order.
+4. Review that the target project name is correct, then select **Run** once for each unapplied migration.
+5. Open **Table Editor** and confirm that `services` contains exactly the ten approved rows, including Social Media Marketing at sort order 8.
 6. In **Database → Policies**, confirm that every new table has RLS enabled and no public `anon` insert/select policy was added.
 
 Do not paste a database password, API key, or connection string into the SQL file.

@@ -17,18 +17,19 @@ const EXPECTED_SERVICE_SLUGS = [
   "ai-animation",
   "web-development",
   "ai-automation",
+  "social-media-marketing",
   "facebook-and-meta-ads",
   "cgi-and-vfx",
 ] as const;
 
 describe("services catalog", () => {
-  it("defines the nine approved service routes with original artwork", () => {
-    expect(SERVICE_CATALOG).toHaveLength(9);
+  it("defines the ten approved service routes with original artwork", () => {
+    expect(SERVICE_CATALOG).toHaveLength(10);
 
     const slugs = SERVICE_CATALOG.map(({ slug }) => slug);
     expect(slugs).toEqual(EXPECTED_SERVICE_SLUGS);
     expect(SERVICE_SLUGS).toEqual(EXPECTED_SERVICE_SLUGS);
-    expect(new Set(slugs).size).toBe(9);
+    expect(new Set(slugs).size).toBe(10);
     expect(generateStaticParams()).toEqual(slugs.map((slug) => ({ slug })));
 
     for (const service of SERVICE_CATALOG) {
@@ -47,7 +48,7 @@ describe("services catalog", () => {
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: /One studio.*Nine ways to.*move an idea/i,
+        name: /One studio.*Ten ways to.*move an idea/i,
       }),
     ).toBeInTheDocument();
 

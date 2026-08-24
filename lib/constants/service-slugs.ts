@@ -6,6 +6,7 @@ export const SERVICE_SLUGS = [
   "ai-animation",
   "web-development",
   "ai-automation",
+  "social-media-marketing",
   "facebook-and-meta-ads",
   "cgi-and-vfx",
 ] as const;
