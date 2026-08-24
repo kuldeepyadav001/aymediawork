@@ -54,7 +54,7 @@ export function SiteHeader() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(115deg,rgba(255,255,255,0.055),transparent_26%,rgba(74,108,255,0.05)_68%,transparent)]"
       />
-      <Container className="relative z-10 flex h-16 items-center justify-between gap-5 sm:h-[4.5rem]">
+      <Container className="relative z-10 flex h-14 items-center justify-between gap-5 sm:h-16">
         <Link
           aria-label="AY Media Work — home"
           className="shrink-0 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -117,7 +117,10 @@ export function SiteHeader() {
                 <Menu aria-hidden="true" />
               </Button>
             </DialogTrigger>
-            <DialogContent className="inset-0 h-dvh w-full max-w-none translate-x-0 translate-y-0 overflow-y-auto rounded-none border-0 bg-background p-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2">
+            <DialogContent
+              className="inset-0 h-dvh w-full max-w-none translate-x-0 translate-y-0 touch-pan-y overflow-y-auto overscroll-y-contain rounded-none border-0 bg-background p-0 [-webkit-overflow-scrolling:touch] data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2"
+              data-lenis-prevent=""
+            >
               <DialogTitle className="sr-only">Site navigation</DialogTitle>
               <DialogDescription className="sr-only">
                 Navigate to an AY Media Work page.

@@ -8,9 +8,12 @@ export const PRIMARY_NAVIGATION: readonly NavigationItem[] = [
   { href: "/services", label: "Services" },
   { href: "/work", label: "Work" },
   { href: "/about", label: "About" },
+  { href: "/testimonials", label: "Testimonials" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ];
+
+export const FOOTER_NAVIGATION: readonly NavigationItem[] = PRIMARY_NAVIGATION;
 
 export const LEGAL_NAVIGATION: readonly NavigationItem[] = [
   { href: "/privacy", label: "Privacy" },
