@@ -30,7 +30,10 @@ describe("global public layout", () => {
     ).toHaveAttribute("href", "#main-content");
     expect(screen.getByRole("banner")).toHaveClass("backdrop-blur-2xl");
     expect(screen.getByRole("main")).toHaveAttribute("id", "main-content");
-    expect(screen.getByRole("main")).toHaveClass("pt-16", "sm:pt-[4.5rem]");
+    expect(screen.getByRole("main")).toHaveClass("pt-14", "sm:pt-16");
+    expect(screen.getByRole("banner").querySelector(".h-14")).toHaveClass(
+      "sm:h-16",
+    );
     expect(screen.getByRole("contentinfo")).toBeInTheDocument();
   });
 
@@ -38,20 +41,29 @@ describe("global public layout", () => {
     const user = userEvent.setup();
     render(<SiteHeader />);
 
+    const primaryNavigation = screen.getByRole("navigation", {
+      name: "Primary",
+    });
     expect(
-      within(screen.getByRole("navigation", { name: "Primary" })).getByRole(
-        "link",
-        { name: "Services" },
-      ),
+      within(primaryNavigation).getByRole("link", { name: "Services" }),
     ).toHaveAttribute("aria-current", "page");
+    expect(
+      within(primaryNavigation).getByRole("link", { name: "Testimonials" }),
+    ).toHaveAttribute("href", "/testimonials");
 
     await user.click(screen.getByRole("button", { name: "Open navigation" }));
 
     const dialog = screen.getByRole("dialog", { name: "Site navigation" });
     expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveAttribute("data-lenis-prevent");
+    expect(dialog).toHaveClass("overflow-y-auto", "touch-pan-y");
+
+    const mobileNavigation = within(dialog).getByRole("navigation", {
+      name: "Mobile",
+    });
     expect(
-      within(dialog).getByRole("navigation", { name: "Mobile" }),
-    ).toBeInTheDocument();
+      within(mobileNavigation).getByRole("link", { name: /Testimonials/i }),
+    ).toHaveAttribute("href", "/testimonials");
 
     await user.click(within(dialog).getByRole("button", { name: "Close" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
