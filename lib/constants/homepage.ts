@@ -1,4 +1,5 @@
 import { SERVICE_CATALOG } from "@/lib/constants/services";
+import { WORK_STUDIES } from "@/lib/constants/work";
 
 export type HomepageService = {
   description: string;
@@ -11,6 +12,7 @@ export type CreativeStudy = {
   alt: string;
   category: string;
   description: string;
+  href: string;
   image: string;
   title: string;
 };
@@ -29,32 +31,17 @@ export const HOMEPAGE_SERVICES: readonly HomepageService[] =
     title,
   }));
 
-export const CREATIVE_STUDIES: readonly CreativeStudy[] = [
-  {
-    alt: "Layered film strips crossing inside a dark editing studio",
-    category: "Editing direction",
-    description:
-      "Rhythm, atmosphere, and narrative hierarchy brought into one composed frame.",
-    image: "/images/home/study-story-editing.jpg",
-    title: "Story in every cut",
-  },
-  {
-    alt: "Chrome rings and violet glass forms floating in a dark space",
-    category: "Motion exploration",
-    description:
-      "Dimensional form, controlled light, and movement designed to carry an idea.",
-    image: "/images/home/study-motion-worlds.jpg",
-    title: "Worlds in motion",
-  },
-  {
-    alt: "Blue and red geometric frames layered over torn paper textures",
-    category: "Social framing",
-    description:
-      "Bold composition and immediate visual hierarchy for the smallest, fastest screens.",
-    image: "/images/home/study-social-frames.jpg",
-    title: "Frames that hold attention",
-  },
-] as const;
+export const CREATIVE_STUDIES: readonly CreativeStudy[] = WORK_STUDIES.slice(
+  0,
+  3,
+).map(({ category, description, image, slug, title }) => ({
+  alt: image.alt,
+  category,
+  description,
+  href: `/work/${slug}`,
+  image: image.src,
+  title,
+}));
 
 export const PROCESS_STEPS: readonly ProcessStep[] = [
   {

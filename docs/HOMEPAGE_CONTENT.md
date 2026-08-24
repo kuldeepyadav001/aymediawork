@@ -24,14 +24,9 @@ These labels and routes reflect the agency's expanded focus. The later Supabase-
 
 ## Original homepage visuals
 
-The following abstract assets were generated specifically for AY Media Work during Stage 4 and contain no external client work:
+The hero uses `public/images/home/hero-cinematic-frame.jpg`, generated specifically for AY Media Work during Stage 4. Stage 6 connects the homepage creative-study grid to the first three entries in the centralized work archive, including their original artwork and detail routes.
 
-- `public/images/home/hero-cinematic-frame.jpg`
-- `public/images/home/study-story-editing.jpg`
-- `public/images/home/study-motion-worlds.jpg`
-- `public/images/home/study-social-frames.jpg`
-
-The homepage identifies the three supporting images as original studio concepts, not client case studies. Confirmed client media will be introduced only after the client supplies or approves the source, attribution, claims, and publication rights.
+The homepage identifies all supporting images as original studio concepts, not client case studies. Confirmed client media will be introduced only after the client supplies or approves the source, attribution, claims, and publication rights. The earlier Stage 4 study assets remain in the repository as original source material but are no longer rendered by the homepage.
 
 ## Hero composition, motion, and interaction
 
