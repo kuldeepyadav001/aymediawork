@@ -12,6 +12,11 @@ export const PRIMARY_NAVIGATION: readonly NavigationItem[] = [
   { href: "/contact", label: "Contact" },
 ];
 
+export const FOOTER_NAVIGATION: readonly NavigationItem[] = [
+  ...PRIMARY_NAVIGATION,
+  { href: "/testimonials", label: "Testimonials" },
+];
+
 export const LEGAL_NAVIGATION: readonly NavigationItem[] = [
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },

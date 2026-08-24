@@ -11,8 +11,8 @@ import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import {
   BRAND_LINE,
+  FOOTER_NAVIGATION,
   LEGAL_NAVIGATION,
-  PRIMARY_NAVIGATION,
 } from "@/lib/constants/navigation";
 import { SOCIAL_LINKS } from "@/lib/constants/social";
 
@@ -69,7 +69,7 @@ export function SiteFooter() {
           <nav aria-label="Footer">
             <p className="editorial-kicker mb-5">Explore</p>
             <ul className="space-y-3">
-              {PRIMARY_NAVIGATION.map((item) => (
+              {FOOTER_NAVIGATION.map((item) => (
                 <li key={item.href}>
                   <Link
                     className="text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
