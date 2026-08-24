@@ -14,7 +14,10 @@ Do not open a public GitHub issue containing exploit details, credentials, perso
 
 - Never commit `.env.local`, API keys, database passwords, access tokens, private keys, or customer data.
 - Browser variables must use the `NEXT_PUBLIC_` prefix only when they are intentionally public.
-- Supabase service-role credentials and Resend, Turnstile, and revalidation secrets are server-only.
+- Supabase secret/service-role credentials and Resend, Turnstile, rate-limit, and revalidation secrets are server-only.
+- Public inquiry and newsletter writes must continue through validated same-origin server handlers; never grant public table writes to bypass them.
+- Raw visitor network addresses are not persisted for Stage 9 rate limiting; only HMAC-pseudonymised identifiers are stored.
+- Inquiry and newsletter records are personal data. Keep production access role-restricted, audited, and limited to approved operational users.
 - Rotate a credential immediately if it is accidentally exposed.
 
 ## Supported code

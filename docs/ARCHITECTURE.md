@@ -4,9 +4,9 @@
 
 - **Public application:** SEO-focused Next.js routes under `app/(public)`.
 - **Admin application:** authentication at `app/admin/(auth)` and protected management routes at `app/admin/(protected)`.
-- **Server endpoints:** validated handlers under `app/api` for inquiries, revalidation, and generated media.
-- **Data platform:** Supabase PostgreSQL, Auth, and Storage, introduced when the data layer is implemented.
-- **Email:** server-only Resend integration, introduced with inquiry notifications.
+- **Server endpoints:** validated handlers under `app/api`; public inquiry and newsletter writes are implemented as same-origin server routes.
+- **Data platform:** Supabase PostgreSQL is the Stage 9 persistence boundary. Auth and Storage join this boundary in the admin stage.
+- **Email:** server-only Resend inquiry notifications are decoupled from successful database persistence.
 - **Hosting:** Vercel-compatible build and runtime; the client selects the commercial Vercel plan before production launch.
 
 ## Route protection correction
@@ -26,10 +26,10 @@ Only the `(protected)` layout will enforce authentication and role authorization
 ## Security boundaries
 
 - Secrets are server-only and excluded from Git.
-- Client and server input will share Zod schemas.
+- Client and server input share Zod schemas.
 - PostgreSQL Row Level Security remains the final authorization boundary.
 - Admin authorization will use protected app metadata or a dedicated role table, not editable user metadata.
-- Public inquiry submission will include server validation, anti-spam verification, and rate controls.
+- Public inquiry/newsletter submissions use same-origin checks, honeypots, Turnstile action and hostname verification, HMAC-pseudonymised identifiers, database rate controls, and server-only Supabase RPCs.
 - User-provided Markdown will be rendered through a sanitizing pipeline; database content will not execute as MDX.
 
 ## Delivery workflow

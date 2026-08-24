@@ -6,6 +6,7 @@ export type ServiceApproachStep = {
 };
 
 export type Service = {
+  id: string;
   approach: readonly ServiceApproachStep[];
   description: string;
   disciplines: readonly string[];
@@ -25,6 +26,7 @@ export type Service = {
 export const SERVICE_CATALOG: readonly Service[] = [
   {
     index: "01",
+    id: "8f40a393-06f3-49c6-9d98-350a278f6c03",
     slug: "video-editing",
     title: "Video Editing",
     description:
@@ -76,6 +78,7 @@ export const SERVICE_CATALOG: readonly Service[] = [
   },
   {
     index: "02",
+    id: "42e81676-4c0e-421b-abce-fcc8304fb249",
     slug: "2d-and-3d-animation",
     title: "2D & 3D Animation",
     description:
@@ -127,6 +130,7 @@ export const SERVICE_CATALOG: readonly Service[] = [
   },
   {
     index: "03",
+    id: "4c29dc24-07cf-4812-92b3-a80317b34da1",
     slug: "saas-video",
     title: "SaaS Video",
     description:
@@ -178,6 +182,7 @@ export const SERVICE_CATALOG: readonly Service[] = [
   },
   {
     index: "04",
+    id: "08016a2d-beff-4d52-8423-8fcbca37aecb",
     slug: "graphic-design",
     title: "Graphic Design",
     description:
@@ -229,6 +234,7 @@ export const SERVICE_CATALOG: readonly Service[] = [
   },
   {
     index: "05",
+    id: "16459520-5f00-4673-8f8d-60559a9fdb25",
     slug: "ai-animation",
     title: "AI Animation",
     description:
@@ -280,6 +286,7 @@ export const SERVICE_CATALOG: readonly Service[] = [
   },
   {
     index: "06",
+    id: "4531277e-0d26-4994-b632-13f3245ee328",
     slug: "web-development",
     title: "Web Development",
     description:
@@ -331,6 +338,7 @@ export const SERVICE_CATALOG: readonly Service[] = [
   },
   {
     index: "07",
+    id: "e1738033-c5ab-4fa2-8da4-71e6a6e8bfac",
     slug: "ai-automation",
     title: "AI Automation",
     description:
@@ -382,6 +390,7 @@ export const SERVICE_CATALOG: readonly Service[] = [
   },
   {
     index: "08",
+    id: "bef5495e-b88a-4c97-b2a6-3bb370e6a962",
     slug: "facebook-and-meta-ads",
     title: "Facebook & Meta Ads",
     description:
@@ -433,6 +442,7 @@ export const SERVICE_CATALOG: readonly Service[] = [
   },
   {
     index: "09",
+    id: "e3e68584-f56c-4225-9077-863b798f67be",
     slug: "cgi-and-vfx",
     title: "CGI & VFX",
     description:
