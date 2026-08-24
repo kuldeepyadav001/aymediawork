@@ -6,6 +6,7 @@ import {
   Clapperboard,
 } from "lucide-react";
 
+import { NewsletterForm } from "@/components/forms/newsletter-form";
 import { BrandLogo } from "@/components/layout/brand";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
@@ -50,6 +51,28 @@ export function SiteFooter() {
               <ArrowUpRight aria-hidden="true" />
             </Link>
           </Button>
+        </section>
+
+        <section
+          aria-labelledby="newsletter-title"
+          className="grid gap-7 border-b border-white/[0.08] py-10 sm:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)] sm:items-start sm:py-12"
+        >
+          <div className="max-w-xl">
+            <p className="editorial-kicker mb-3">Studio notes</p>
+            <h2
+              className="font-display text-2xl tracking-[-0.035em]"
+              id="newsletter-title"
+            >
+              Ideas on craft, systems, and work in motion.
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              An occasional note from AY Media Work, offered through a separate
+              and explicit opt-in.
+            </p>
+          </div>
+          <NewsletterForm
+            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+          />
         </section>
 
         <div className="grid gap-12 py-14 sm:grid-cols-2 sm:py-16 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(9rem,0.55fr))] lg:gap-10">

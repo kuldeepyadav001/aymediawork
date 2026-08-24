@@ -13,7 +13,12 @@ if (process.env.NODE_ENV === "production") {
   securityHeaders.push({ key: "X-Frame-Options", value: "DENY" });
 }
 
+const allowedDevOrigins = process.env.ALLOWED_DEV_ORIGINS?.split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 const nextConfig: NextConfig = {
+  ...(allowedDevOrigins?.length ? { allowedDevOrigins } : {}),
   poweredByHeader: false,
   reactStrictMode: true,
   images: {

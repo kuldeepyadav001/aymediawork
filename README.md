@@ -4,9 +4,9 @@ Production website and content management platform for AY Media Work, a creative
 
 ## Project status
 
-**Stage 5 — Services**
+**Stage 9 — Contact & Inquiries (review candidate)**
 
-The production foundation, shared visual language, public application shell, cinematic homepage, and service architecture are configured. The service experience includes an overview, nine detail routes, original non-client artwork, non-factual capability copy, connected-service discovery, route-level metadata, and inquiry links that preserve the selected service slug. The current catalog reflects the agency's expanded focus across creative production, digital experiences, automation, and advertising.
+The production foundation and public experiences through Home, Services, Work, About, Testimonials, Studio Journal, and Contact are configured. Stage 9 adds separate client and partner journeys, stable service-interest IDs, explicit newsletter consent, Turnstile anti-spam verification, database rate controls, secure Supabase persistence, and failure-isolated Resend notifications. Production activation still requires the client-managed migration and provider setup documented below.
 
 ## Compatibility baseline
 
@@ -39,7 +39,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-No real credentials are required for the current public homepage. Never commit `.env.local` or other secret-bearing files.
+Public presentation routes can render locally without real credentials. Persisted form submissions require the Stage 9 provider configuration. Never commit `.env.local` or any secret-bearing file.
 
 ## Quality commands
 
@@ -90,6 +90,7 @@ The Supabase project URL and publishable key may be used by browser code when Ro
 - [Design system](docs/DESIGN_SYSTEM.md)
 - [Homepage content and provenance](docs/HOMEPAGE_CONTENT.md)
 - [Services content and provenance](docs/SERVICES_CONTENT.md)
+- [Contact, inquiries, and provider setup](docs/CONTACT_INQUIRIES.md)
 - [Security policy](SECURITY.md)
 - [Deployment baseline](DEPLOYMENT.md)
 
