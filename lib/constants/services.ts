@@ -1,5 +1,3 @@
-import type { ServiceSlug } from "@/lib/constants/service-slugs";
-
 export type ServiceApproachStep = {
   description: string;
   title: string;
@@ -17,8 +15,8 @@ export type Service = {
   };
   index: string;
   metaDescription: string;
-  relatedSlugs: readonly ServiceSlug[];
-  slug: ServiceSlug;
+  relatedSlugs: readonly string[];
+  slug: string;
   title: string;
   usefulFor: readonly string[];
 };

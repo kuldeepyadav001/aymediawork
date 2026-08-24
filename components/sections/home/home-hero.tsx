@@ -7,7 +7,11 @@ import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { CREATIVE_DISCIPLINES } from "@/lib/constants/homepage";
 
-export function HomeHero() {
+export function HomeHero({
+  disciplines = CREATIVE_DISCIPLINES,
+}: {
+  disciplines?: readonly string[];
+}) {
   return (
     <section
       aria-labelledby="home-hero-title"
@@ -120,7 +124,7 @@ export function HomeHero() {
 
       <div className="border-t border-white/[0.08] bg-background/65 py-4">
         <div
-          aria-label={`Creative disciplines: ${CREATIVE_DISCIPLINES.join(", ")}`}
+          aria-label={`Creative disciplines: ${disciplines.join(", ")}`}
           className="mask-fade-x overflow-hidden"
           role="group"
         >
@@ -131,7 +135,7 @@ export function HomeHero() {
                 className="flex shrink-0 items-center"
                 key={group}
               >
-                {CREATIVE_DISCIPLINES.map((discipline) => (
+                {disciplines.map((discipline) => (
                   <span
                     className="flex items-center whitespace-nowrap px-5 font-display text-sm font-medium uppercase tracking-[0.18em] text-white/55 sm:px-8"
                     key={discipline}

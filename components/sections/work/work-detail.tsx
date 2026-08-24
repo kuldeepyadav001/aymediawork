@@ -13,14 +13,23 @@ import {
 import { Reveal, Stagger, StaggerItem } from "@/components/animations/reveal";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
-import { getNextWorkStudy, type WorkStudy } from "@/lib/constants/work";
-import { getServiceBySlug, type Service } from "@/lib/constants/services";
+import { SERVICE_CATALOG, type Service } from "@/lib/constants/services";
+import { WORK_STUDIES, type WorkStudy } from "@/lib/constants/work";
 
-export function WorkDetail({ study }: { study: WorkStudy }) {
+export function WorkDetail({
+  catalog = SERVICE_CATALOG,
+  studies = WORK_STUDIES,
+  study,
+}: {
+  catalog?: readonly Service[];
+  studies?: readonly WorkStudy[];
+  study: WorkStudy;
+}) {
   const services = study.services
-    .map((slug) => getServiceBySlug(slug))
+    .map((slug) => catalog.find((service) => service.slug === slug))
     .filter((service): service is Service => Boolean(service));
-  const nextStudy = getNextWorkStudy(study.slug);
+  const currentIndex = studies.findIndex((item) => item.slug === study.slug);
+  const nextStudy = studies[(currentIndex + 1) % studies.length] ?? study;
 
   return (
     <>

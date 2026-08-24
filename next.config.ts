@@ -17,12 +17,33 @@ const allowedDevOrigins = process.env.ALLOWED_DEV_ORIGINS?.split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+function getSupabaseStoragePattern() {
+  const configuredUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  if (!configuredUrl) return [];
+
+  try {
+    const url = new URL(configuredUrl);
+    if (url.protocol !== "https:" && url.protocol !== "http:") return [];
+    return [
+      {
+        hostname: url.hostname,
+        pathname: "/storage/v1/object/public/admin-media/**",
+        port: url.port,
+        protocol: url.protocol.slice(0, -1) as "http" | "https",
+      },
+    ];
+  } catch {
+    return [];
+  }
+}
+
 const nextConfig: NextConfig = {
   ...(allowedDevOrigins?.length ? { allowedDevOrigins } : {}),
   poweredByHeader: false,
   reactStrictMode: true,
   images: {
     formats: ["image/avif", "image/webp"],
+    remotePatterns: getSupabaseStoragePattern(),
   },
   async headers() {
     return [

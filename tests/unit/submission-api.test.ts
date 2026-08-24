@@ -102,16 +102,19 @@ describe("submission API boundaries", () => {
     );
   });
 
-  it("rejects unknown service IDs before persistence", async () => {
+  it("accepts a well-formed dynamic CMS service ID for database validation", async () => {
+    const dynamicServiceId = "408a3e11-847d-49dc-b9e4-1eafbf927f04";
     const response = await submitInquiry(
       createRequest("/api/inquiries", {
         ...validClientInquiry,
-        serviceIds: ["408a3e11-847d-49dc-b9e4-1eafbf927f04"],
+        serviceIds: [dynamicServiceId],
       }),
     );
 
-    expect(response.status).toBe(400);
-    expect(storeMocks.createInquiry).not.toHaveBeenCalled();
+    expect(response.status).toBe(200);
+    expect(storeMocks.createInquiry).toHaveBeenCalledWith(
+      expect.objectContaining({ serviceIds: [dynamicServiceId] }),
+    );
   });
 
   it("silently accepts a filled honeypot without storing personal data", async () => {

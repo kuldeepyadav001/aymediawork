@@ -1,6 +1,3 @@
-import type { BlogSlug } from "@/lib/constants/blog-slugs";
-import type { ServiceSlug } from "@/lib/constants/service-slugs";
-
 export const BLOG_CATEGORIES = [
   "Creative Direction",
   "Motion & Design",
@@ -11,9 +8,9 @@ export const BLOG_CATEGORIES = [
 export type BlogCategory = (typeof BLOG_CATEGORIES)[number];
 
 export type BlogArticle = {
-  author: "AY Media Work";
+  author: string;
   body: string;
-  category: BlogCategory;
+  category: string;
   excerpt: string;
   featured: boolean;
   id: string;
@@ -24,8 +21,8 @@ export type BlogArticle = {
   metaDescription: string;
   publishedAt: string;
   readingMinutes: number;
-  relatedServices: readonly ServiceSlug[];
-  slug: BlogSlug;
+  relatedServices: readonly string[];
+  slug: string;
   tags: readonly string[];
   takeaways: readonly string[];
   title: string;
@@ -441,7 +438,7 @@ export function getBlogArticleBySlug(slug: string) {
   return BLOG_ARTICLES.find((article) => article.slug === slug);
 }
 
-export function getNextBlogArticle(slug: BlogSlug): BlogArticle {
+export function getNextBlogArticle(slug: string): BlogArticle {
   const currentIndex = BLOG_ARTICLES.findIndex(
     (article) => article.slug === slug,
   );

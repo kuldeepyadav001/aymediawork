@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { WorkIndex } from "@/components/sections/work/work-index";
+import { getPublishedProjects } from "@/lib/supabase/queries/public";
 
 const title = "Work & Original Studio Concepts";
 const description =
@@ -38,6 +39,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function WorkPage() {
-  return <WorkIndex />;
+export default async function WorkPage() {
+  const studies = await getPublishedProjects();
+  return <WorkIndex studies={studies} />;
 }

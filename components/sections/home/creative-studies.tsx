@@ -6,10 +6,15 @@ import { Reveal, Stagger, StaggerItem } from "@/components/animations/reveal";
 import { Container } from "@/components/shared/container";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { Button } from "@/components/ui/button";
+import type { CreativeStudy } from "@/lib/constants/homepage";
 import { CREATIVE_STUDIES } from "@/lib/constants/homepage";
 import { cn } from "@/lib/utils/cn";
 
-export function CreativeStudies() {
+export function CreativeStudies({
+  studies = CREATIVE_STUDIES,
+}: {
+  studies?: readonly CreativeStudy[];
+}) {
   return (
     <section className="border-y border-white/[0.08] bg-surface/55 py-section">
       <Container>
@@ -30,7 +35,7 @@ export function CreativeStudies() {
         </div>
 
         <Stagger className="mt-12 grid gap-4 lg:grid-cols-12 lg:grid-rows-2">
-          {CREATIVE_STUDIES.map((study, index) => (
+          {studies.map((study, index) => (
             <StaggerItem
               className={cn(
                 "relative min-h-80 sm:min-h-[26rem]",

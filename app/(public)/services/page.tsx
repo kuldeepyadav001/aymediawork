@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { ServicesIndex } from "@/components/sections/services/services-index";
+import { getPublishedServices } from "@/lib/supabase/queries/public";
 
 const title = "Creative Services";
 const description =
@@ -25,6 +26,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ServicesPage() {
-  return <ServicesIndex />;
+export default async function ServicesPage() {
+  const services = await getPublishedServices();
+  return <ServicesIndex services={services} />;
 }

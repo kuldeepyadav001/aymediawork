@@ -5,8 +5,8 @@ import HomePage from "@/app/(public)/page";
 import { cn } from "@/lib/utils/cn";
 
 describe("project foundation", () => {
-  it("renders the production homepage entry point", () => {
-    render(<HomePage />);
+  it("renders the production homepage entry point", async () => {
+    render(await HomePage());
 
     expect(
       screen.getByRole("heading", {

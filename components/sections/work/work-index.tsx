@@ -5,7 +5,7 @@ import { Reveal } from "@/components/animations/reveal";
 import { FilterableWorkGrid } from "@/components/sections/work/filterable-work-grid";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
-import { WORK_STUDIES } from "@/lib/constants/work";
+import { WORK_STUDIES, type WorkStudy } from "@/lib/constants/work";
 
 const ARCHIVE_LENSES = [
   {
@@ -28,7 +28,14 @@ const ARCHIVE_LENSES = [
   },
 ] as const;
 
-export function WorkIndex() {
+export function WorkIndex({
+  studies = WORK_STUDIES,
+}: {
+  studies?: readonly WorkStudy[];
+}) {
+  const studyCount = studies.length;
+  const studyCountLabel = studyCount === 6 ? "Six" : String(studyCount);
+
   return (
     <>
       <section
@@ -59,9 +66,9 @@ export function WorkIndex() {
 
           <Reveal delay={0.08}>
             <p className="max-w-copy text-pretty text-lead text-muted-foreground">
-              Six self-initiated studies across film, motion, product stories,
-              campaigns, digital systems, and emerging visuals—each showing the
-              rules behind the frame.
+              {studyCountLabel} self-initiated studies across film, motion,
+              product stories, campaigns, digital systems, and emerging
+              visuals—each showing the rules behind the frame.
             </p>
             <div className="mt-7 rounded-xl border border-white/[0.1] bg-surface/65 p-5 text-sm leading-6 text-muted-foreground shadow-panel backdrop-blur-md">
               <p className="font-semibold text-foreground">Content note</p>
@@ -86,7 +93,7 @@ export function WorkIndex() {
             <div>
               <p className="editorial-kicker">Selected directions</p>
               <h2 className="mt-5 max-w-3xl text-balance text-heading-xl">
-                Six routes through one connected studio.
+                {studyCountLabel} routes through one connected studio.
               </h2>
             </div>
             <p className="max-w-md text-sm leading-6 text-muted-foreground lg:text-right">
@@ -95,7 +102,7 @@ export function WorkIndex() {
             </p>
           </Reveal>
 
-          <FilterableWorkGrid studies={WORK_STUDIES} />
+          <FilterableWorkGrid studies={studies} />
         </Container>
       </section>
 

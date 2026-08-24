@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { BLOG_SLUGS } from "@/lib/constants/blog-slugs";
 import { SERVICE_SLUGS } from "@/lib/constants/service-slugs";
@@ -10,47 +10,77 @@ function request(pathname: string) {
   return new NextRequest(`https://aymediawork.example${pathname}`);
 }
 
-function expectAllowed(pathname: string) {
-  const response = proxy(request(pathname));
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
+
+async function expectAllowed(pathname: string) {
+  const response = await proxy(request(pathname));
   expect(response.status).toBe(200);
   expect(response.headers.get("x-middleware-next")).toBe("1");
 }
 
-function expectHardNotFound(pathname: string) {
-  const response = proxy(request(pathname));
+async function expectHardNotFound(pathname: string) {
+  const response = await proxy(request(pathname));
   expect(response.status).toBe(404);
   expect(response.headers.get("x-middleware-rewrite")).toBe(
     "https://aymediawork.example/_not-found",
   );
 }
 
-describe("catalog route boundaries", () => {
-  it("allows both indexes and every approved detail slug", () => {
-    expectAllowed("/blog");
-    expectAllowed("/services");
-    expectAllowed("/work");
+describe("admin route boundaries", () => {
+  it("allows public authentication pages without Supabase configuration", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "");
 
-    for (const slug of BLOG_SLUGS) {
-      expectAllowed(`/blog/${slug}`);
-    }
-    for (const slug of SERVICE_SLUGS) {
-      expectAllowed(`/services/${slug}`);
-    }
-    for (const slug of WORK_SLUGS) {
-      expectAllowed(`/work/${slug}`);
-    }
+    await expectAllowed("/admin/login");
+    await expectAllowed("/admin/reset-password");
   });
 
-  it("rewrites unknown or nested catalog paths to a hard 404", () => {
+  it("redirects protected pages when Supabase configuration is invalid", async () => {
+    vi.stubEnv(
+      "NEXT_PUBLIC_SUPABASE_URL",
+      "https://user:secret@project.supabase.co",
+    );
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "publishable-key");
+
+    const response = await proxy(request("/admin/dashboard?view=recent"));
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "https://aymediawork.example/admin/login?next=%2Fadmin%2Fdashboard%3Fview%3Drecent&error=configuration",
+    );
+  });
+});
+
+describe("catalog route boundaries", () => {
+  it("allows indexes, seeded slugs, and dynamic CMS detail slugs", async () => {
+    await expectAllowed("/blog");
+    await expectAllowed("/services");
+    await expectAllowed("/work");
+
+    for (const slug of BLOG_SLUGS) {
+      await expectAllowed(`/blog/${slug}`);
+    }
+    for (const slug of SERVICE_SLUGS) {
+      await expectAllowed(`/services/${slug}`);
+    }
+    for (const slug of WORK_SLUGS) {
+      await expectAllowed(`/work/${slug}`);
+    }
+
+    await expectAllowed("/blog/new-cms-article");
+    await expectAllowed("/services/new-cms-service");
+    await expectAllowed("/work/new-cms-project");
+  });
+
+  it("rewrites nested catalog paths to a hard 404", async () => {
     for (const pathname of [
-      "/blog/not-an-article",
       "/blog/one-idea-many-outputs/extra",
-      "/services/not-a-service",
       "/services/video-editing/extra",
-      "/work/not-a-study",
       "/work/signal-in-the-noise/extra",
     ]) {
-      expectHardNotFound(pathname);
+      await expectHardNotFound(pathname);
     }
   });
 });

@@ -5,7 +5,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
 import { Reveal, Stagger, StaggerItem } from "@/components/animations/reveal";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
-import { SERVICE_CATALOG } from "@/lib/constants/services";
+import { SERVICE_CATALOG, type Service } from "@/lib/constants/services";
 
 const CONNECTED_PROCESS = [
   {
@@ -34,7 +34,14 @@ const CONNECTED_PROCESS = [
   },
 ] as const;
 
-export function ServicesIndex() {
+export function ServicesIndex({
+  services = SERVICE_CATALOG,
+}: {
+  services?: readonly Service[];
+}) {
+  const serviceCount = services.length;
+  const serviceCountLabel = serviceCount === 10 ? "Ten" : String(serviceCount);
+
   return (
     <>
       <section
@@ -56,7 +63,7 @@ export function ServicesIndex() {
               className="mt-5 max-w-5xl text-balance text-display-lg sm:mt-6"
               id="services-title"
             >
-              One studio. Ten ways to
+              One studio. {serviceCountLabel} ways to
               <span className="text-gradient-brand block">move an idea.</span>
             </h1>
           </Reveal>
@@ -93,7 +100,7 @@ export function ServicesIndex() {
           </Reveal>
 
           <Stagger className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {SERVICE_CATALOG.map((service) => (
+            {services.map((service) => (
               <StaggerItem className="min-h-full" key={service.slug}>
                 <Link
                   className="group relative flex h-full min-h-[29rem] flex-col overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel transition-[border-color,box-shadow,transform] duration-400 ease-cinematic hover:border-primary/30 hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-safe:hover:-translate-y-1"

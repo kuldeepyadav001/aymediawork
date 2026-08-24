@@ -15,6 +15,7 @@ import {
   FOOTER_NAVIGATION,
   LEGAL_NAVIGATION,
 } from "@/lib/constants/navigation";
+import type { SocialLink } from "@/lib/constants/social";
 import { SOCIAL_LINKS } from "@/lib/constants/social";
 
 const SOCIAL_ICONS = {
@@ -23,7 +24,15 @@ const SOCIAL_ICONS = {
   YTJobs: Clapperboard,
 } as const;
 
-export function SiteFooter() {
+type SiteFooterProps = {
+  brandLine?: string;
+  socialLinks?: readonly SocialLink[];
+};
+
+export function SiteFooter({
+  brandLine = BRAND_LINE,
+  socialLinks = SOCIAL_LINKS,
+}: SiteFooterProps = {}) {
   return (
     <footer className="relative overflow-hidden border-t border-white/[0.08] bg-[hsl(230_34%_3%)]">
       <div
@@ -84,9 +93,11 @@ export function SiteFooter() {
             >
               <BrandLogo />
             </Link>
-            <p className="mt-5 text-sm leading-6 text-muted-foreground">
-              {BRAND_LINE}
-            </p>
+            {brandLine ? (
+              <p className="mt-5 text-sm leading-6 text-muted-foreground">
+                {brandLine}
+              </p>
+            ) : null}
           </div>
 
           <nav aria-label="Footer">
@@ -124,7 +135,7 @@ export function SiteFooter() {
           <nav aria-label="Social media">
             <p className="editorial-kicker mb-5">Connect</p>
             <ul className="space-y-2">
-              {SOCIAL_LINKS.map((item) => {
+              {socialLinks.map((item) => {
                 const Icon = SOCIAL_ICONS[item.label];
                 const content = (
                   <>
@@ -176,7 +187,7 @@ export function SiteFooter() {
 
         <div className="flex flex-col gap-2 border-t border-white/[0.08] py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} AY Media Work.</p>
-          <p>{BRAND_LINE}</p>
+          {brandLine ? <p>{brandLine}</p> : null}
         </div>
       </Container>
     </footer>

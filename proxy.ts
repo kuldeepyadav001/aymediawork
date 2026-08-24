@@ -1,39 +1,101 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 
-import { BLOG_SLUGS } from "@/lib/constants/blog-slugs";
-import { SERVICE_SLUGS } from "@/lib/constants/service-slugs";
-import { WORK_SLUGS } from "@/lib/constants/work-slugs";
+import { getSupabasePublicConfig } from "@/lib/supabase/config";
+import type { Database } from "@/types/database";
 
-const routeSlugSets: Readonly<Record<string, ReadonlySet<string>>> = {
-  blog: new Set<string>(BLOG_SLUGS),
-  services: new Set<string>(SERVICE_SLUGS),
-  work: new Set<string>(WORK_SLUGS),
-};
+const CATALOG_ROOTS = new Set(["blog", "services", "work"]);
+const PUBLIC_ADMIN_PATHS = new Set([
+  "/admin/auth/callback",
+  "/admin/login",
+  "/admin/reset-password",
+]);
 
-export function proxy(request: NextRequest) {
-  const segments = request.nextUrl.pathname.split("/").filter(Boolean);
-  const routeRoot = segments[0];
-  const routeSlugs = routeRoot ? routeSlugSets[routeRoot] : undefined;
-  const isIndex = Boolean(routeSlugs) && segments.length === 1;
-  const slug = segments[1];
-  const isKnownDetail =
-    Boolean(routeSlugs) &&
-    segments.length === 2 &&
-    slug !== undefined &&
-    routeSlugs?.has(slug);
-
-  if (isIndex || isKnownDetail) {
-    return NextResponse.next();
-  }
-
+function hardNotFound(request: NextRequest) {
   const notFoundUrl = request.nextUrl.clone();
   notFoundUrl.pathname = "/_not-found";
   notFoundUrl.search = "";
-
   return NextResponse.rewrite(notFoundUrl, { status: 404 });
 }
 
+function loginRedirect(request: NextRequest, reason?: "configuration") {
+  const loginUrl = request.nextUrl.clone();
+  loginUrl.pathname = "/admin/login";
+  loginUrl.search = "";
+
+  if (request.nextUrl.pathname !== "/admin") {
+    loginUrl.searchParams.set(
+      "next",
+      `${request.nextUrl.pathname}${request.nextUrl.search}`,
+    );
+  }
+  if (reason) loginUrl.searchParams.set("error", reason);
+
+  return NextResponse.redirect(loginUrl);
+}
+
+export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const segments = pathname.split("/").filter(Boolean);
+  const routeRoot = segments[0];
+
+  if (routeRoot && CATALOG_ROOTS.has(routeRoot)) {
+    return segments.length <= 2 ? NextResponse.next() : hardNotFound(request);
+  }
+
+  if (!pathname.startsWith("/admin")) return NextResponse.next();
+  if (PUBLIC_ADMIN_PATHS.has(pathname)) return NextResponse.next();
+
+  let publicConfig: ReturnType<typeof getSupabasePublicConfig>;
+  try {
+    publicConfig = getSupabasePublicConfig();
+  } catch {
+    return loginRedirect(request, "configuration");
+  }
+
+  let response = NextResponse.next({ request });
+  const supabase = createServerClient<Database>(
+    publicConfig.url,
+    publicConfig.publishableKey,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          for (const { name, value } of cookiesToSet) {
+            request.cookies.set(name, value);
+          }
+          response = NextResponse.next({ request });
+          for (const { name, options, value } of cookiesToSet) {
+            response.cookies.set(name, value, options);
+          }
+        },
+      },
+    },
+  );
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return loginRedirect(request);
+  if (pathname === "/admin") {
+    const dashboardUrl = request.nextUrl.clone();
+    dashboardUrl.pathname = "/admin/dashboard";
+    dashboardUrl.search = "";
+    return NextResponse.redirect(dashboardUrl);
+  }
+
+  return response;
+}
+
 export const config = {
-  matcher: ["/blog/:path*", "/services/:path*", "/work/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/blog/:path*",
+    "/services/:path*",
+    "/work/:path*",
+  ],
 };

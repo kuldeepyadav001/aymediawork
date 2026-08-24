@@ -4,9 +4,6 @@ import {
   PARTNER_AVAILABILITY_VALUES,
   PROJECT_TIMELINE_VALUES,
 } from "@/lib/constants/inquiries";
-import { SERVICE_CATALOG } from "@/lib/constants/services";
-
-const serviceIdSet = new Set(SERVICE_CATALOG.map(({ id }) => id));
 
 const nameSchema = z
   .string()
@@ -38,12 +35,10 @@ const optionalShortTextSchema = z
 const serviceIdsSchema = z
   .array(z.string().uuid("Choose a valid service."))
   .min(1, "Choose at least one service.")
-  .max(SERVICE_CATALOG.length, "Choose only the available services.")
+  .max(50, "Choose only the available services.")
   .refine(
-    (serviceIds) =>
-      new Set(serviceIds).size === serviceIds.length &&
-      serviceIds.every((serviceId) => serviceIdSet.has(serviceId)),
-    "Choose only the available services.",
+    (serviceIds) => new Set(serviceIds).size === serviceIds.length,
+    "Choose each service only once.",
   );
 
 const privacyConsentSchema = z

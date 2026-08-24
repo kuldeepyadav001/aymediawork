@@ -11,15 +11,19 @@ import {
 import { Reveal, Stagger, StaggerItem } from "@/components/animations/reveal";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
-import { getServiceBySlug, type Service } from "@/lib/constants/services";
+import { SERVICE_CATALOG, type Service } from "@/lib/constants/services";
 
 type ServiceDetailProps = {
+  catalog?: readonly Service[];
   service: Service;
 };
 
-export function ServiceDetail({ service }: ServiceDetailProps) {
+export function ServiceDetail({
+  catalog = SERVICE_CATALOG,
+  service,
+}: ServiceDetailProps) {
   const relatedServices = service.relatedSlugs
-    .map((slug) => getServiceBySlug(slug))
+    .map((slug) => catalog.find((item) => item.slug === slug))
     .filter((related): related is Service => Boolean(related));
 
   return (

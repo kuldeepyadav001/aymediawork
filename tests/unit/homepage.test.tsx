@@ -12,8 +12,8 @@ import {
 afterEach(cleanup);
 
 describe("production homepage", () => {
-  it("presents one clear page heading and the primary conversion paths", () => {
-    render(<HomePage />);
+  it("presents one clear page heading and the primary conversion paths", async () => {
+    render(await HomePage());
 
     expect(
       screen.getByRole("heading", {
@@ -32,8 +32,8 @@ describe("production homepage", () => {
     ).toHaveAttribute("href", "/contact?type=partner");
   });
 
-  it("exposes all ten approved services through stable routes", () => {
-    render(<HomePage />);
+  it("exposes all ten approved services through stable routes", async () => {
+    render(await HomePage());
 
     expect(HOMEPAGE_SERVICES).toHaveLength(10);
     for (const service of HOMEPAGE_SERVICES) {
@@ -43,8 +43,8 @@ describe("production homepage", () => {
     }
   });
 
-  it("keeps the hero glass message in subtle motion and the ticker in sync", () => {
-    render(<HomePage />);
+  it("keeps the hero glass message in subtle motion and the ticker in sync", async () => {
+    render(await HomePage());
 
     expect(CREATIVE_DISCIPLINES).toEqual(
       HOMEPAGE_SERVICES.map(({ title }) => title),
@@ -61,8 +61,8 @@ describe("production homepage", () => {
     expect(glassMessage).toBeInTheDocument();
   });
 
-  it("labels original visual studies transparently and avoids client attribution", () => {
-    render(<HomePage />);
+  it("labels original visual studies transparently and avoids client attribution", async () => {
+    render(await HomePage());
 
     for (const study of CREATIVE_STUDIES) {
       expect(screen.getByRole("img", { name: study.alt })).toBeInTheDocument();
@@ -79,8 +79,8 @@ describe("production homepage", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders the complete four-step studio process", () => {
-    render(<HomePage />);
+  it("renders the complete four-step studio process", async () => {
+    render(await HomePage());
 
     expect(PROCESS_STEPS).toHaveLength(4);
     for (const step of PROCESS_STEPS) {
