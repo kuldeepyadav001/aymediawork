@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { motion, useReducedMotion } from "motion/react";
 
 import {
   MOTION_DISTANCE,
@@ -11,27 +10,59 @@ import {
 } from "@/lib/constants/motion";
 import { cn } from "@/lib/utils/cn";
 
-type MotionDivProps = React.ComponentPropsWithoutRef<typeof motion.div>;
 type RevealDirection = "up" | "down" | "left" | "right" | "none";
+type MotionStyle = React.CSSProperties & Record<`--${string}`, string>;
 
-interface RevealProps extends Omit<
-  MotionDivProps,
-  "initial" | "transition" | "viewport" | "whileInView"
-> {
+interface VisibilityOptions {
+  amount: number;
+  once: boolean;
+}
+
+function useElementVisibility({ amount, once }: VisibilityOptions) {
+  const elementRef = React.useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const element = elementRef.current;
+    if (!element) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      const frame = requestAnimationFrame(() => setIsVisible(true));
+      return () => cancelAnimationFrame(frame);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setIsVisible(true);
+          if (once) observer.disconnect();
+        } else if (!once) {
+          setIsVisible(false);
+        }
+      },
+      { threshold: amount },
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [amount, once]);
+
+  return { elementRef, isVisible };
+}
+
+interface RevealProps extends React.ComponentPropsWithoutRef<"div"> {
   delay?: number;
   direction?: RevealDirection;
   distance?: number;
   once?: boolean;
 }
 
-const directionOffset: Record<
-  Exclude<RevealDirection, "none">,
-  { x: number; y: number }
-> = {
-  up: { x: 0, y: 1 },
+const directionOffset: Record<RevealDirection, { x: number; y: number }> = {
   down: { x: 0, y: -1 },
   left: { x: 1, y: 0 },
+  none: { x: 0, y: 0 },
   right: { x: -1, y: 0 },
+  up: { x: 0, y: 1 },
 };
 
 function Reveal({
@@ -41,42 +72,37 @@ function Reveal({
   direction = "up",
   distance = MOTION_DISTANCE.base,
   once = true,
+  style,
   ...props
 }: RevealProps) {
-  const reduceMotion = useReducedMotion();
-  const offset =
-    direction === "none" ? { x: 0, y: 0 } : directionOffset[direction];
+  const { elementRef, isVisible } = useElementVisibility({
+    amount: 0.2,
+    once,
+  });
+  const offset = directionOffset[direction];
+  const motionStyle: MotionStyle = {
+    ...style,
+    "--reveal-delay": `${delay}s`,
+    "--reveal-duration": `${MOTION_DURATION.slow}s`,
+    "--reveal-ease": `cubic-bezier(${MOTION_EASE.enter.join(",")})`,
+    "--reveal-x": `${offset.x * distance}px`,
+    "--reveal-y": `${offset.y * distance}px`,
+  };
 
   return (
-    <motion.div
-      className={cn(className)}
-      initial={
-        reduceMotion
-          ? false
-          : {
-              opacity: 0,
-              x: offset.x * distance,
-              y: offset.y * distance,
-            }
-      }
-      transition={{
-        delay: reduceMotion ? 0 : delay,
-        duration: reduceMotion ? 0 : MOTION_DURATION.slow,
-        ease: MOTION_EASE.enter,
-      }}
-      viewport={{ amount: 0.2, once }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
+    <div
+      className={cn("reveal-motion", className)}
+      data-in-view={isVisible}
+      ref={elementRef}
+      style={motionStyle}
       {...props}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
-interface StaggerProps extends Omit<
-  MotionDivProps,
-  "initial" | "transition" | "variants" | "viewport" | "whileInView"
-> {
+interface StaggerProps extends React.ComponentPropsWithoutRef<"div"> {
   once?: boolean;
   stagger?: number;
 }
@@ -88,42 +114,50 @@ function Stagger({
   stagger = MOTION_STAGGER.base,
   ...props
 }: StaggerProps) {
-  const reduceMotion = useReducedMotion();
+  const { elementRef, isVisible } = useElementVisibility({
+    amount: 0.15,
+    once,
+  });
+  const staggeredChildren = React.Children.map(children, (child, index) => {
+    if (!React.isValidElement<{ style?: React.CSSProperties }>(child)) {
+      return child;
+    }
+
+    const childStyle: MotionStyle = {
+      ...child.props.style,
+      "--stagger-delay": `${MOTION_STAGGER.tight + index * stagger}s`,
+    };
+    return React.cloneElement(child, { style: childStyle });
+  });
 
   return (
-    <motion.div
-      className={cn(className)}
-      initial={reduceMotion ? false : "hidden"}
-      variants={{
-        hidden: {},
-        visible: {
-          transition: {
-            delayChildren: MOTION_STAGGER.tight,
-            staggerChildren: reduceMotion ? 0 : stagger,
-          },
-        },
-      }}
-      viewport={{ amount: 0.15, once }}
-      whileInView="visible"
+    <div
+      className={cn("stagger-motion", className)}
+      data-in-view={isVisible}
+      ref={elementRef}
       {...props}
     >
-      {children}
-    </motion.div>
+      {staggeredChildren}
+    </div>
   );
 }
 
-function StaggerItem({ className, ...props }: MotionDivProps) {
+function StaggerItem({
+  className,
+  style,
+  ...props
+}: React.ComponentPropsWithoutRef<"div">) {
+  const motionStyle: MotionStyle = {
+    ...style,
+    "--stagger-duration": `${MOTION_DURATION.slow}s`,
+    "--stagger-ease": `cubic-bezier(${MOTION_EASE.enter.join(",")})`,
+    "--stagger-y": `${MOTION_DISTANCE.subtle}px`,
+  };
+
   return (
-    <motion.div
-      className={cn(className)}
-      transition={{
-        duration: MOTION_DURATION.slow,
-        ease: MOTION_EASE.enter,
-      }}
-      variants={{
-        hidden: { opacity: 0, y: MOTION_DISTANCE.subtle },
-        visible: { opacity: 1, y: 0 },
-      }}
+    <div
+      className={cn("stagger-item-motion", className)}
+      style={motionStyle}
       {...props}
     />
   );

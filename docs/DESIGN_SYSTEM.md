@@ -70,7 +70,7 @@ All controls must retain visible labels or accessible names. Do not remove focus
 
 ## Motion
 
-Use `Reveal`, `Stagger`, and `StaggerItem` for lightweight entrance choreography. Durations, easing curves, distances, and stagger intervals live in `lib/constants/motion.ts`.
+Use `Reveal`, `Stagger`, and `StaggerItem` for lightweight entrance choreography. The primitives use native `IntersectionObserver` and CSS rather than a general animation runtime. Durations, easing curves, distances, and stagger intervals live in `lib/constants/motion.ts`.
 
 ```tsx
 <Reveal direction="up">...</Reveal>

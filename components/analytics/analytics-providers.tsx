@@ -8,70 +8,22 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import type { AnalyticsConfiguration } from "@/lib/analytics/config";
 import { hasStoredAnalyticsConsent } from "@/lib/analytics/consent";
+import {
+  DENIED_GOOGLE_CONSENT,
+  disableGoogleAnalytics,
+  googleAnalyticsWindow,
+  GRANTED_ANALYTICS_CONSENT,
+} from "@/lib/analytics/google-consent";
 
-declare global {
-  interface Window {
-    dataLayer?: unknown[][];
-    gtag?: (...args: unknown[]) => void;
-  }
-}
+export { disableGoogleAnalytics } from "@/lib/analytics/google-consent";
 
 const GOOGLE_COOKIE_MAX_AGE_SECONDS = 180 * 24 * 60 * 60;
-const DENIED_GOOGLE_CONSENT = {
-  ad_personalization: "denied",
-  ad_storage: "denied",
-  ad_user_data: "denied",
-  analytics_storage: "denied",
-} as const;
-const GRANTED_ANALYTICS_CONSENT = {
-  ...DENIED_GOOGLE_CONSENT,
-  analytics_storage: "granted",
-} as const;
-
-function googleWindow() {
-  return window as unknown as Window & Record<string, unknown>;
-}
-
-function deleteGoogleAnalyticsCookies() {
-  const cookieNames = document.cookie
-    .split(";")
-    .map((cookie) => cookie.split("=")[0]?.trim())
-    .filter((name): name is string => Boolean(name))
-    .filter((name) => name === "_ga" || name.startsWith("_ga_"));
-  const hostname = window.location.hostname;
-  const hostnameParts = hostname.split(".");
-  const registrableDomain =
-    hostnameParts.length > 2 ? hostnameParts.slice(-2).join(".") : hostname;
-  const domains = [
-    "",
-    hostname,
-    `.${hostname}`,
-    registrableDomain,
-    `.${registrableDomain}`,
-  ];
-
-  for (const name of cookieNames) {
-    for (const domain of new Set(domains)) {
-      const domainAttribute = domain ? `; domain=${domain}` : "";
-      document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax${domainAttribute}`;
-      document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax; Secure${domainAttribute}`;
-    }
-  }
-}
-
-export function disableGoogleAnalytics(measurementId?: string) {
-  if (!measurementId || typeof window === "undefined") return;
-
-  googleWindow()[`ga-disable-${measurementId}`] = true;
-  window.gtag?.("consent", "update", DENIED_GOOGLE_CONSENT);
-  deleteGoogleAnalyticsCookies();
-}
 
 function GoogleAnalytics({ measurementId }: { measurementId: string }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    const runtimeWindow = googleWindow();
+    const runtimeWindow = googleAnalyticsWindow();
     runtimeWindow[`ga-disable-${measurementId}`] = false;
     window.dataLayer ??= [];
     window.gtag ??= (...args: unknown[]) => {

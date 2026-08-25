@@ -1,13 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import Link from "next/link";
 import { BarChart3, LockKeyhole } from "lucide-react";
 
-import {
-  AnalyticsProviders,
-  disableGoogleAnalytics,
-} from "@/components/analytics/analytics-providers";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -31,6 +34,13 @@ import {
   readConsentPreference,
   type AnalyticsConsentPreference,
 } from "@/lib/analytics/consent";
+import { disableGoogleAnalytics } from "@/lib/analytics/google-consent";
+
+const AnalyticsProviders = lazy(() =>
+  import("@/components/analytics/analytics-providers").then((module) => ({
+    default: module.AnalyticsProviders,
+  })),
+);
 
 export function AnalyticsConsentManager({
   config,
@@ -133,7 +143,11 @@ export function AnalyticsConsentManager({
 
   return (
     <>
-      {analyticsAllowed ? <AnalyticsProviders config={config} /> : null}
+      {analyticsAllowed ? (
+        <Suspense fallback={null}>
+          <AnalyticsProviders config={config} />
+        </Suspense>
+      ) : null}
 
       {showBanner ? (
         <section
