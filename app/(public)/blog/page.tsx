@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+import { Reveal } from "@/components/animations/reveal";
 import { BlogArchiveGrid } from "@/components/blog/blog-archive-grid";
 import { Container } from "@/components/shared/container";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -71,23 +72,53 @@ export default async function BlogPage() {
     <>
       <JsonLd data={collectionSchema} />
 
-      <section className="relative overflow-hidden pb-16 pt-24 sm:pb-20 sm:pt-32 lg:pt-36">
+      <section className="relative isolate overflow-hidden border-b border-white/[0.08]">
         <div
-          className="pointer-events-none absolute left-1/2 top-0 h-[28rem] w-[50rem] -translate-x-1/2 rounded-full bg-brand-blue/10 blur-[120px]"
+          aria-hidden="true"
+          className="ambient-grid pointer-events-none absolute inset-0 -z-20 opacity-20"
+        />
+        <div
+          className="pointer-events-none absolute -left-52 -top-60 -z-10 size-[46rem] rounded-full bg-brand-blue/15 blur-[150px]"
           aria-hidden="true"
         />
-        <Container className="relative">
-          <div className="max-w-4xl">
-            <p className="editorial-kicker">Studio Journal</p>
-            <h1 className="mt-6 max-w-3xl font-display text-5xl font-semibold leading-[0.98] tracking-[-0.055em] text-white sm:text-6xl lg:text-8xl">
-              Ideas for work that <span className="text-primary">moves.</span>
+        <Container className="grid min-h-[clamp(34rem,72svh,50rem)] content-center gap-12 py-14 sm:py-16 lg:grid-cols-[minmax(0,0.86fr)_minmax(28rem,1.14fr)] lg:items-center lg:gap-14 lg:py-20">
+          <Reveal>
+            <p className="editorial-kicker">Blog / Studio journal</p>
+            <h1 className="mt-5 max-w-5xl text-balance text-display-lg sm:mt-6">
+              Ideas for work that{" "}
+              <span className="text-gradient-brand block">moves.</span>
             </h1>
-            <p className="mt-7 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+            <p className="mt-6 max-w-copy text-pretty text-lead text-muted-foreground">
               Original notes on creative direction, motion craft, digital
               systems, and responsible automation—written to make the thinking
               behind the output more useful.
             </p>
-          </div>
+          </Reveal>
+
+          <Reveal delay={0.1} direction="left">
+            <figure>
+              <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel">
+                <Image
+                  fill
+                  priority
+                  alt="Translucent glass pages suspended in a dark space with cobalt streaks of light flowing across them"
+                  className="object-cover"
+                  sizes="(max-width: 1023px) 92vw, 55vw"
+                  src="/images/blog/blog-hero.jpg"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(4,6,12,0.58))]"
+                />
+                <span className="absolute bottom-5 left-5 rounded-full border border-white/15 bg-background/60 px-3 py-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.17em] text-white/75 backdrop-blur-md sm:bottom-6 sm:left-6">
+                  Original studio artwork
+                </span>
+              </div>
+              <figcaption className="mt-3 text-right text-xs text-muted-foreground">
+                A visual study of thinking made visible on the page
+              </figcaption>
+            </figure>
+          </Reveal>
         </Container>
       </section>
 

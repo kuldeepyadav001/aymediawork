@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowRight, Layers3, Route, ScanLine } from "lucide-react";
 
@@ -50,7 +51,7 @@ export function WorkIndex({
           aria-hidden="true"
           className="bg-brand-violet/12 pointer-events-none absolute -right-48 -top-56 -z-10 size-[44rem] rounded-full blur-[150px]"
         />
-        <Container className="grid min-h-[clamp(31rem,64svh,44rem)] content-center items-center gap-10 py-14 sm:py-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.6fr)] lg:gap-16 lg:py-20">
+        <Container className="grid min-h-[clamp(34rem,72svh,50rem)] content-center gap-12 py-14 sm:py-16 lg:grid-cols-[minmax(0,0.86fr)_minmax(28rem,1.14fr)] lg:items-center lg:gap-14 lg:py-20">
           <Reveal>
             <p className="editorial-kicker">Work / Original studies</p>
             <h1
@@ -62,27 +63,43 @@ export function WorkIndex({
                 Thinking you can follow.
               </span>
             </h1>
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <p className="max-w-copy text-pretty text-lead text-muted-foreground">
+            <p className="mt-6 max-w-copy text-pretty text-lead text-muted-foreground">
               {studyCountLabel} self-initiated studies across film, motion,
               product stories, campaigns, digital systems, and emerging
               visuals—each showing the rules behind the frame.
             </p>
-            <div className="mt-7 rounded-xl border border-white/[0.1] bg-surface/65 p-5 text-sm leading-6 text-muted-foreground shadow-panel backdrop-blur-md">
-              <p className="font-semibold text-foreground">Content note</p>
-              <p className="mt-2">
-                These are original AY Media Work studio concepts, not attributed
-                client projects or commercial result claims.
-              </p>
-            </div>
-            <Button asChild className="mt-7" size="lg" variant="outline">
+            <Button asChild className="mt-8" size="lg" variant="outline">
               <a href="#work-archive">
                 Explore the archive
                 <ArrowDown aria-hidden="true" />
               </a>
             </Button>
+          </Reveal>
+
+          <Reveal delay={0.1} direction="left">
+            <figure>
+              <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel">
+                <Image
+                  fill
+                  priority
+                  alt="Floating film frames and glass panels receding into a dark gallery corridor with one frame lit in cobalt blue"
+                  className="object-cover"
+                  sizes="(max-width: 1023px) 92vw, 55vw"
+                  src="/images/work/work-hero.jpg"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(4,6,12,0.58))]"
+                />
+                <span className="absolute bottom-5 left-5 rounded-full border border-white/15 bg-background/60 px-3 py-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.17em] text-white/75 backdrop-blur-md sm:bottom-6 sm:left-6">
+                  Original studio artwork
+                </span>
+              </div>
+              <figcaption className="mt-3 text-right text-xs text-muted-foreground">
+                Original AY Media Work studio concepts, not attributed client
+                projects or commercial result claims.
+              </figcaption>
+            </figure>
           </Reveal>
         </Container>
       </section>

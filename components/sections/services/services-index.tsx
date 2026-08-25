@@ -56,7 +56,7 @@ export function ServicesIndex({
           aria-hidden="true"
           className="pointer-events-none absolute -right-52 -top-64 -z-10 size-[46rem] rounded-full bg-brand-blue/15 blur-[150px]"
         />
-        <Container className="grid min-h-[clamp(30rem,62svh,42rem)] content-center items-center gap-10 py-12 sm:py-16 lg:grid-cols-[minmax(0,1.15fr)_minmax(20rem,0.55fr)] lg:gap-14 lg:py-20">
+        <Container className="grid min-h-[clamp(34rem,72svh,50rem)] content-center gap-12 py-14 sm:py-16 lg:grid-cols-[minmax(0,0.86fr)_minmax(28rem,1.14fr)] lg:items-center lg:gap-14 lg:py-20">
           <Reveal>
             <p className="editorial-kicker">Services / Connected craft</p>
             <h1
@@ -66,10 +66,7 @@ export function ServicesIndex({
               One studio. {serviceCountLabel} ways to
               <span className="text-gradient-brand block">move an idea.</span>
             </h1>
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <p className="max-w-copy text-pretty text-lead text-muted-foreground">
+            <p className="mt-6 max-w-copy text-pretty text-lead text-muted-foreground">
               Bring us a single frame, a digital product, a campaign, or a
               connected workflow. We combine creative craft and practical
               technology around what the brief actually needs.
@@ -80,6 +77,31 @@ export function ServicesIndex({
                 <ArrowDown aria-hidden="true" />
               </a>
             </Button>
+          </Reveal>
+
+          <Reveal delay={0.1} direction="left">
+            <figure>
+              <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel">
+                <Image
+                  fill
+                  priority
+                  alt="Translucent creative tool shapes orbiting one glowing hub connected by cobalt light beams"
+                  className="object-cover"
+                  sizes="(max-width: 1023px) 92vw, 55vw"
+                  src="/images/services/services-hero.jpg"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(4,6,12,0.58))]"
+                />
+                <span className="absolute bottom-5 left-5 rounded-full border border-white/15 bg-background/60 px-3 py-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.17em] text-white/75 backdrop-blur-md sm:bottom-6 sm:left-6">
+                  Original studio artwork
+                </span>
+              </div>
+              <figcaption className="mt-3 text-right text-xs text-muted-foreground">
+                A visual study of connected capabilities around one idea
+              </figcaption>
+            </figure>
           </Reveal>
         </Container>
       </section>

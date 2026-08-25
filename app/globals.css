@@ -161,6 +161,11 @@
     );
     background-clip: text;
     color: transparent;
+    /* Tight display line-heights clip descenders (y, g, p) when the text is
+       painted through background-clip. Extend the painted box downward and
+       pull the layout back so rhythm is unchanged. */
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
   }
 
   .ambient-grid {

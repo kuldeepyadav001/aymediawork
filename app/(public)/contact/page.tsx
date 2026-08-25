@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { ArrowDown, Handshake, ShieldCheck, Sparkles } from "lucide-react";
 
 import { ContactJourneys } from "@/components/forms/contact-journeys";
@@ -63,37 +64,57 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
           className="pointer-events-none absolute inset-0 -z-10 opacity-25 [background-image:linear-gradient(hsl(0_0%_100%/0.055)_1px,transparent_1px),linear-gradient(90deg,hsl(0_0%_100%/0.055)_1px,transparent_1px)] [background-size:72px_72px] [mask-image:linear-gradient(to_bottom,black,transparent_88%)]"
         />
 
-        <Container className="py-20 sm:py-28 lg:py-36">
-          <div className="grid gap-14 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.65fr)] lg:items-end">
-            <Reveal>
-              <p className="editorial-kicker mb-6">Contact the studio</p>
-              <h1 className="max-w-5xl text-balance font-display text-display-xl">
-                Two ways in. One clear place to begin.
-              </h1>
-              <p className="mt-7 max-w-2xl text-pretty text-base leading-8 text-muted-foreground sm:text-lg">
-                Bring a project that needs shape, or introduce the specialist
-                craft you want to contribute. Choose the route that fits and
-                share only the details available now.
-              </p>
-            </Reveal>
+        <Container className="grid min-h-[clamp(34rem,72svh,50rem)] content-center gap-12 py-14 sm:py-16 lg:grid-cols-[minmax(0,0.86fr)_minmax(28rem,1.14fr)] lg:items-center lg:gap-14 lg:py-20">
+          <Reveal>
+            <p className="editorial-kicker">Contact the studio</p>
+            <h1 className="mt-5 max-w-5xl text-balance text-display-lg sm:mt-6">
+              Two ways in. One clear place to begin.
+            </h1>
+            <p className="mt-6 max-w-copy text-pretty text-lead text-muted-foreground">
+              Bring a project that needs shape, or introduce the specialist
+              craft you want to contribute. Choose the route that fits and share
+              only the details available now.
+            </p>
+            <a
+              className="group mt-8 flex w-fit items-center gap-5 rounded-2xl border border-white/[0.1] bg-white/[0.035] p-5 text-sm text-foreground backdrop-blur-xl transition-[border-color,background-color] hover:border-primary/35 hover:bg-primary/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              href="#inquiry-journeys"
+            >
+              <span>
+                <span className="block font-semibold">Choose a journey</span>
+                <span className="mt-1 block text-xs text-muted-foreground">
+                  Project or collaboration
+                </span>
+              </span>
+              <span className="flex size-11 items-center justify-center rounded-full bg-foreground text-background transition-transform duration-300 group-hover:translate-y-1">
+                <ArrowDown aria-hidden="true" className="size-4" />
+              </span>
+            </a>
+          </Reveal>
 
-            <Reveal delay={0.08}>
-              <a
-                className="group flex items-center justify-between gap-5 rounded-2xl border border-white/[0.1] bg-white/[0.035] p-5 text-sm text-foreground backdrop-blur-xl transition-[border-color,background-color] hover:border-primary/35 hover:bg-primary/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                href="#inquiry-journeys"
-              >
-                <span>
-                  <span className="block font-semibold">Choose a journey</span>
-                  <span className="mt-1 block text-xs text-muted-foreground">
-                    Project or collaboration
-                  </span>
+          <Reveal delay={0.1} direction="left">
+            <figure>
+              <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel">
+                <Image
+                  fill
+                  priority
+                  alt="Two luminous paths of blue and violet light converging toward a glowing doorway in a dark space"
+                  className="object-cover"
+                  sizes="(max-width: 1023px) 92vw, 55vw"
+                  src="/images/contact/contact-hero.jpg"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(4,6,12,0.58))]"
+                />
+                <span className="absolute bottom-5 left-5 rounded-full border border-white/15 bg-background/60 px-3 py-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.17em] text-white/75 backdrop-blur-md sm:bottom-6 sm:left-6">
+                  Original studio artwork
                 </span>
-                <span className="flex size-11 items-center justify-center rounded-full bg-foreground text-background transition-transform duration-300 group-hover:translate-y-1">
-                  <ArrowDown aria-hidden="true" className="size-4" />
-                </span>
-              </a>
-            </Reveal>
-          </div>
+              </div>
+              <figcaption className="mt-3 text-right text-xs text-muted-foreground">
+                Two routes into the studio, one clear place to begin
+              </figcaption>
+            </figure>
+          </Reveal>
         </Container>
       </section>
 
