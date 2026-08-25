@@ -5,33 +5,28 @@ import { ArrowRight } from "lucide-react";
 
 import { BlogArchiveGrid } from "@/components/blog/blog-archive-grid";
 import { Container } from "@/components/shared/container";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Button } from "@/components/ui/button";
 import type { BlogArticleSummary } from "@/lib/constants/blog";
+import { createPageMetadata } from "@/lib/seo/metadata";
 import { getPublishedBlogArticles } from "@/lib/supabase/queries/public";
 import { formatBlogDate } from "@/lib/utils/blog";
 import { getSiteUrl } from "@/lib/utils/site-url";
 
-export const metadata: Metadata = {
+const description =
+  "Original notes from AY Media Work on creative direction, motion craft, digital systems, and responsible AI-assisted workflows.";
+
+export const metadata: Metadata = createPageMetadata({
+  description,
+  image: {
+    alt: "The AY Media Work Studio Journal",
+    height: 816,
+    src: "/images/blog/one-idea-many-outputs.jpg",
+    width: 1312,
+  },
+  path: "/blog",
   title: "Studio Journal",
-  description:
-    "Original notes from AY Media Work on creative direction, motion craft, digital systems, and responsible AI-assisted workflows.",
-  alternates: {
-    canonical: "/blog",
-  },
-  openGraph: {
-    title: "Studio Journal | AY Media Work",
-    description:
-      "Ideas and practical notes across creative craft, digital systems, and responsible automation.",
-    images: [
-      {
-        url: "/images/blog/one-idea-many-outputs.jpg",
-        width: 1312,
-        height: 816,
-        alt: "The AY Media Work Studio Journal",
-      },
-    ],
-  },
-};
+});
 
 export default async function BlogPage() {
   const articles = await getPublishedBlogArticles();
@@ -74,12 +69,7 @@ export default async function BlogPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(collectionSchema).replace(/</g, "\\u003c"),
-        }}
-      />
+      <JsonLd data={collectionSchema} />
 
       <section className="relative overflow-hidden pb-16 pt-24 sm:pb-20 sm:pt-32 lg:pt-36">
         <div

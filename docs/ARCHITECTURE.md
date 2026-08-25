@@ -5,9 +5,10 @@
 - **Public application:** SEO-focused Next.js routes under `app/(public)`.
 - **Admin application:** authentication at `app/admin/(auth)` and protected management routes at `app/admin/(protected)`.
 - **Server endpoints:** validated handlers under `app/api`; public inquiry and newsletter writes are implemented as same-origin server routes.
-- **Data platform:** Supabase PostgreSQL is the Stage 9 persistence boundary. Auth and Storage join this boundary in the admin stage.
+- **Data platform:** Supabase PostgreSQL, Auth, and Storage provide the persisted content, inquiry, role, audit, authentication, and media boundaries.
 - **Email:** server-only Resend inquiry notifications are decoupled from successful database persistence.
-- **Hosting:** Vercel-compatible build and runtime; the client selects the commercial Vercel plan before production launch.
+- **Analytics:** optional Google Analytics, Vercel Web Analytics, and Speed Insights providers mount only after a versioned visitor opt-in.
+- **Hosting:** Vercel-compatible build and runtime; the client selects the commercial Vercel plan before final handover.
 
 ## Route protection correction
 
@@ -21,16 +22,18 @@ app/admin/(protected)/dashboard/    -> /admin/dashboard
 app/admin/(protected)/projects/     -> /admin/projects
 ```
 
-Only the `(protected)` layout will enforce authentication and role authorization.
+Only the `(protected)` layout enforces authentication and role authorization. PostgreSQL RLS and server-action role checks remain the final mutation boundaries.
 
 ## Security boundaries
 
 - Secrets are server-only and excluded from Git.
 - Client and server input share Zod schemas.
 - PostgreSQL Row Level Security remains the final authorization boundary.
-- Admin authorization will use protected app metadata or a dedicated role table, not editable user metadata.
+- Admin authorization uses protected `admin_profiles` role data and database policies, not editable user metadata.
 - Public inquiry/newsletter submissions use same-origin checks, honeypots, Turnstile action and hostname verification, HMAC-pseudonymised identifiers, database rate controls, and server-only Supabase RPCs.
-- User-provided Markdown will be rendered through a sanitizing pipeline; database content will not execute as MDX.
+- User-provided Markdown is rendered through a sanitizing pipeline; database content does not execute as MDX.
+- Optional analytics providers are absent before consent; malformed, expired, future-dated, or unwritable consent fails closed.
+- Admin and API surfaces use page metadata and response headers to prevent indexing.
 
 ## Delivery workflow
 

@@ -93,6 +93,7 @@ function ensurePublishPermission(
 
 function revalidateContent(...paths: string[]) {
   revalidatePath("/", "layout");
+  revalidatePath("/sitemap.xml");
   for (const path of paths) revalidatePath(path);
 }
 

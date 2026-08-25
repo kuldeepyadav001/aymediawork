@@ -9,6 +9,13 @@ const securityHeaders = [
   },
 ];
 
+const privateIndexingHeaders = [
+  {
+    key: "X-Robots-Tag",
+    value: "noindex, nofollow, noarchive",
+  },
+];
+
 if (process.env.NODE_ENV === "production") {
   securityHeaders.push({ key: "X-Frame-Options", value: "DENY" });
 }
@@ -50,6 +57,14 @@ const nextConfig: NextConfig = {
       {
         source: "/:path*",
         headers: securityHeaders,
+      },
+      {
+        source: "/admin/:path*",
+        headers: privateIndexingHeaders,
+      },
+      {
+        source: "/api/:path*",
+        headers: privateIndexingHeaders,
       },
     ];
   },

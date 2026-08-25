@@ -2,7 +2,10 @@ import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { generateStaticParams } from "@/app/(public)/work/[slug]/page";
+import WorkStudyPage, {
+  generateMetadata,
+  generateStaticParams,
+} from "@/app/(public)/work/[slug]/page";
 import { WorkDetail } from "@/components/sections/work/work-detail";
 import { WorkIndex } from "@/components/sections/work/work-index";
 import { getServiceBySlug } from "@/lib/constants/services";
@@ -98,6 +101,35 @@ describe("work archive", () => {
     expect(
       screen.queryByRole("link", { name: /Signal in the Noise/i }),
     ).not.toBeInTheDocument();
+  });
+
+  it("publishes canonical work metadata and honest CreativeWork JSON-LD", async () => {
+    const study = WORK_STUDIES[0];
+    expect(study).toBeDefined();
+    if (!study) throw new Error("Expected an approved work study");
+
+    const params = Promise.resolve({ slug: study.slug });
+    const pageMetadata = await generateMetadata({ params });
+    const { container } = render(await WorkStudyPage({ params }));
+    const schema = JSON.parse(
+      container.querySelector('script[type="application/ld+json"]')
+        ?.textContent ?? "{}",
+    );
+
+    expect(pageMetadata.alternates?.canonical).toBe(`/work/${study.slug}`);
+    expect(pageMetadata.openGraph).toMatchObject({
+      siteName: "AY Media Work",
+      type: "article",
+      url: `/work/${study.slug}`,
+    });
+    expect(schema).toMatchObject({
+      "@type": "CreativeWork",
+      abstract: study.description,
+      description: study.metaDescription,
+      name: study.title,
+    });
+    expect(schema).not.toHaveProperty("client");
+    expect(schema).not.toHaveProperty("award");
   });
 
   it("renders a complete study without invented commercial claims", () => {

@@ -4,7 +4,9 @@ import { ArrowDown, Handshake, ShieldCheck, Sparkles } from "lucide-react";
 import { ContactJourneys } from "@/components/forms/contact-journeys";
 import { Reveal } from "@/components/animations/reveal";
 import { Container } from "@/components/shared/container";
+import { JsonLd } from "@/components/seo/json-ld";
 import type { InquiryType } from "@/lib/constants/inquiries";
+import { createPageMetadata } from "@/lib/seo/metadata";
 import { getPublishedServices } from "@/lib/supabase/queries/public";
 import { getSiteUrl } from "@/lib/utils/site-url";
 
@@ -12,22 +14,11 @@ const title = "Contact the Studio";
 const description =
   "Start a project or introduce your creative practice through the dedicated AY Media Work client and collaborator inquiry journeys.";
 
-export const metadata: Metadata = {
-  title,
+export const metadata: Metadata = createPageMetadata({
   description,
-  alternates: { canonical: "/contact" },
-  openGraph: {
-    title: `${title} | AY Media Work`,
-    description,
-    type: "website",
-    url: "/contact",
-  },
-  twitter: {
-    card: "summary",
-    title: `${title} | AY Media Work`,
-    description,
-  },
-};
+  path: "/contact",
+  title,
+});
 
 type ContactPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -47,26 +38,20 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
   const initialService = requestedService
     ? services.find((service) => service.slug === requestedService)
     : undefined;
-  const pageUrl = new URL("contact", getSiteUrl()).toString();
+  const siteUrl = getSiteUrl();
+  const pageUrl = new URL("contact", siteUrl).toString();
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
     description,
-    mainEntity: {
-      "@type": "Organization",
-      name: "AY Media Work",
-      url: getSiteUrl().toString(),
-    },
+    mainEntity: { "@id": new URL("/#organization", siteUrl).toString() },
     name: title,
     url: pageUrl,
   };
 
   return (
     <>
-      <script
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        type="application/ld+json"
-      />
+      <JsonLd data={structuredData} />
 
       <section className="relative isolate overflow-hidden border-b border-white/[0.08]">
         <div

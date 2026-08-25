@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { WorkIndex } from "@/components/sections/work/work-index";
+import { createPageMetadata } from "@/lib/seo/metadata";
 import { getPublishedProjects } from "@/lib/supabase/queries/public";
 
 const title = "Work & Original Studio Concepts";
@@ -11,33 +12,17 @@ const socialImage = {
   src: "/images/work/signal-in-the-noise.jpg",
 };
 
-export const metadata: Metadata = {
-  title,
+export const metadata: Metadata = createPageMetadata({
   description,
-  alternates: {
-    canonical: "/work",
+  image: {
+    alt: socialImage.alt,
+    height: 816,
+    src: socialImage.src,
+    width: 1312,
   },
-  openGraph: {
-    title: `${title} | AY Media Work`,
-    description,
-    images: [
-      {
-        alt: socialImage.alt,
-        height: 816,
-        url: socialImage.src,
-        width: 1312,
-      },
-    ],
-    type: "website",
-    url: "/work",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${title} | AY Media Work`,
-    description,
-    images: [socialImage.src],
-  },
-};
+  path: "/work",
+  title,
+});
 
 export default async function WorkPage() {
   const studies = await getPublishedProjects();

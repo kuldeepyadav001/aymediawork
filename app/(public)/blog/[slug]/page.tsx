@@ -6,8 +6,10 @@ import { ArrowLeft, ArrowRight, Check, Clock3 } from "lucide-react";
 
 import { SafeMarkdown } from "@/components/blog/safe-markdown";
 import { Container } from "@/components/shared/container";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Button } from "@/components/ui/button";
 import { BLOG_ARTICLES } from "@/lib/constants/blog";
+import { SITE_NAME } from "@/lib/seo/metadata";
 import {
   getPublishedBlogArticleBySlug,
   getPublishedBlogArticles,
@@ -50,6 +52,7 @@ export async function generateMetadata({
       type: "article",
       title: `${title} | AY Media Work`,
       description: article.metaDescription,
+      siteName: "AY Media Work",
       url: canonical,
       publishedTime: article.publishedAt,
       authors: [article.author],
@@ -95,7 +98,7 @@ export default async function BlogArticlePage({
     )
     .filter((service) => service !== undefined);
   const articleUrl = new URL(`/blog/${article.slug}`, siteUrl).toString();
-  const organizationUrl = siteUrl.toString();
+  const organizationId = new URL("/#organization", siteUrl).toString();
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -103,28 +106,16 @@ export default async function BlogArticlePage({
     description: article.metaDescription,
     image: new URL(article.image.src, siteUrl).toString(),
     datePublished: article.publishedAt,
-    dateModified: article.publishedAt,
     mainEntityOfPage: articleUrl,
-    author: {
-      "@type": "Organization",
-      name: article.author,
-      url: organizationUrl,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "AY Media Work",
-      url: organizationUrl,
-    },
+    ...(article.author === SITE_NAME
+      ? { author: { "@id": organizationId } }
+      : {}),
+    publisher: { "@id": organizationId },
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(articleSchema).replace(/</g, "\\u003c"),
-        }}
-      />
+      <JsonLd data={articleSchema} />
 
       <article>
         <header className="relative isolate overflow-hidden border-b border-white/[0.08] pb-16 pt-24 sm:pb-20 sm:pt-28 lg:pt-32">
