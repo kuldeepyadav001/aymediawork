@@ -155,10 +155,15 @@ describe("contact and inquiry journeys", () => {
     expect(
       screen.getByText(/Do not send passwords, private keys/i),
     ).toBeInTheDocument();
-    expect(
+    const structuredData = JSON.parse(
       container.querySelector('script[type="application/ld+json"]')
-        ?.textContent,
-    ).toContain('"@type":"ContactPage"');
+        ?.textContent ?? "{}",
+    );
+    expect(structuredData).toMatchObject({
+      "@type": "ContactPage",
+      mainEntity: { "@id": "http://localhost:3000/#organization" },
+      name: "Contact the Studio",
+    });
   });
 
   it("requires explicit standalone newsletter consent", async () => {

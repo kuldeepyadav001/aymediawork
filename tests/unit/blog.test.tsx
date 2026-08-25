@@ -188,7 +188,10 @@ describe("Studio Journal article experience", () => {
     const structuredData = JSON.parse(schema?.textContent ?? "{}");
     expect(structuredData["@type"]).toBe("Article");
     expect(structuredData.headline).toBe(article.title);
-    expect(structuredData.author.name).toBe("AY Media Work");
+    expect(structuredData.author).toEqual({
+      "@id": "http://localhost:3000/#organization",
+    });
+    expect(structuredData.publisher).toEqual(structuredData.author);
 
     expect(document.body).not.toHaveTextContent(
       /pricing|starting (?:at|from)|per month|₹|\$\d|\d+(?:\.\d+)?m views/i,
@@ -211,9 +214,11 @@ describe("Studio Journal article experience", () => {
     expect(articleMetadata.alternates?.canonical).toBe(`/blog/${article.slug}`);
     expect(articleMetadata.authors).toEqual([{ name: "AY Media Work" }]);
     expect(articleMetadata.openGraph).toMatchObject({
+      siteName: "AY Media Work",
       type: "article",
       publishedTime: article.publishedAt,
     });
+    expect(articleMetadata.openGraph).not.toHaveProperty("modifiedTime");
   });
 
   it("sanitizes runtime Markdown instead of executing embedded HTML or unsafe URLs", () => {

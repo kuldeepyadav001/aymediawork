@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 
+import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/seo/metadata";
 import { getSiteUrl } from "@/lib/utils/site-url";
 
 import "lenis/dist/lenis.css";
@@ -19,13 +20,13 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
+  applicationName: SITE_NAME,
+  description: SITE_DESCRIPTION,
   metadataBase: getSiteUrl(),
   title: {
-    default: "AY Media Work",
-    template: "%s | AY Media Work",
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "AY Media Work creates premium visual content and digital experiences for brands, businesses, and creators.",
 };
 
 export const viewport: Viewport = {

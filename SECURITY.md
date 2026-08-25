@@ -18,6 +18,8 @@ Do not open a public GitHub issue containing exploit details, credentials, perso
 - Public inquiry and newsletter writes must continue through validated same-origin server handlers; never grant public table writes to bypass them.
 - Raw visitor network addresses are not persisted for Stage 9 rate limiting; only HMAC-pseudonymised identifiers are stored.
 - Inquiry and newsletter records are personal data. Keep production access role-restricted, audited, and limited to approved operational users.
+- Optional analytics must remain gated behind an explicit, valid visitor preference. A provider ID or deployment flag must never bypass the consent manager.
+- Keep admin and API noindex headers in place; crawler controls are defense in depth and do not replace authorization.
 - Rotate a credential immediately if it is accidentally exposed.
 
 ## Supported code

@@ -1,7 +1,10 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { generateStaticParams } from "@/app/(public)/services/[slug]/page";
+import ServicePage, {
+  generateMetadata,
+  generateStaticParams,
+} from "@/app/(public)/services/[slug]/page";
 import { ServiceDetail } from "@/components/sections/services/service-detail";
 import { ServicesIndex } from "@/components/sections/services/services-index";
 import { SERVICE_SLUGS } from "@/lib/constants/service-slugs";
@@ -64,6 +67,38 @@ describe("services catalog", () => {
     expect(
       screen.getByText(/original studio concept artwork/i),
     ).toBeInTheDocument();
+  });
+
+  it("publishes canonical service metadata and verified-data Service JSON-LD", async () => {
+    const service = SERVICE_CATALOG[0];
+    expect(service).toBeDefined();
+    if (!service) throw new Error("Expected an approved service");
+
+    const params = Promise.resolve({ slug: service.slug });
+    const pageMetadata = await generateMetadata({ params });
+    const { container } = render(await ServicePage({ params }));
+    const schema = JSON.parse(
+      container.querySelector('script[type="application/ld+json"]')
+        ?.textContent ?? "{}",
+    );
+
+    expect(pageMetadata.alternates?.canonical).toBe(
+      `/services/${service.slug}`,
+    );
+    expect(pageMetadata.openGraph).toMatchObject({
+      siteName: "AY Media Work",
+      type: "website",
+      url: `/services/${service.slug}`,
+    });
+    expect(schema).toMatchObject({
+      "@type": "Service",
+      description: service.metaDescription,
+      name: service.title,
+      serviceType: service.title,
+    });
+    expect(schema.provider).toEqual({
+      "@id": "http://localhost:3000/#organization",
+    });
   });
 
   it("renders a complete service page within the approved content boundary", () => {

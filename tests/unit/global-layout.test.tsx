@@ -35,6 +35,28 @@ describe("global public layout", () => {
       "sm:h-16",
     );
     expect(screen.getByRole("contentinfo")).toBeInTheDocument();
+
+    const schema = JSON.parse(
+      document.querySelector('script[type="application/ld+json"]')
+        ?.textContent ?? "[]",
+    );
+    expect(schema).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          "@type": "Organization",
+          name: "AY Media Work",
+          sameAs: expect.arrayContaining([
+            "https://www.instagram.com/aymediawork_/",
+            "https://ytjobs.co/talent/profile/439676?r=253",
+          ]),
+        }),
+        expect.objectContaining({
+          "@type": "WebSite",
+          name: "AY Media Work",
+        }),
+      ]),
+    );
+    expect(JSON.stringify(schema)).not.toContain("linkedin.com");
   });
 
   it("identifies the current route and exposes an accessible mobile menu", async () => {
@@ -80,6 +102,9 @@ describe("global public layout", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole("navigation", { name: "Legal" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Analytics preferences" }),
     ).toBeInTheDocument();
 
     const socialNavigation = screen.getByRole("navigation", {

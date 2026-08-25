@@ -8,6 +8,7 @@ import {
 
 import { NewsletterForm } from "@/components/forms/newsletter-form";
 import { BrandLogo } from "@/components/layout/brand";
+import { PrivacySettingsButton } from "@/components/privacy/privacy-settings-button";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import {
@@ -129,6 +130,9 @@ export function SiteFooter({
                   </Link>
                 </li>
               ))}
+              <li>
+                <PrivacySettingsButton />
+              </li>
             </ul>
           </nav>
 

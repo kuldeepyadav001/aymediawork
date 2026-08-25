@@ -4,9 +4,9 @@ Production website and content management platform for AY Media Work, a creative
 
 ## Project status
 
-**Stage 9 — Contact & Inquiries (review candidate)**
+**Stage 11 — SEO, Analytics & Consent (review candidate)**
 
-The production foundation and public experiences through Home, Services, Work, About, Testimonials, Studio Journal, and Contact are configured. Stage 9 adds separate client and partner journeys, stable service-interest IDs, explicit newsletter consent, Turnstile anti-spam verification, database rate controls, secure Supabase persistence, and failure-isolated Resend notifications. Production activation still requires the client-managed migration and provider setup documented below.
+The public website, secure inquiries, role-aware Supabase CMS, and protected administration system through Stage 10 are production-active. Stage 11 adds consistent route metadata and social previews, verified-data JSON-LD, native sitemap and robots routes, Privacy and Terms pages, private-surface noindex controls, and fail-closed consent-aware analytics. Stage 12 final QA, performance review, and handover have not started.
 
 ## Compatibility baseline
 
@@ -67,7 +67,7 @@ emails/                  Transactional email templates
 lib/                     Supabase, validation, constants, hooks, and utilities
 public/                  Fonts, images, and optimized video assets
 supabase/migrations/     Versioned PostgreSQL migrations
-tests/                   Unit, integration, and end-to-end tests
+tests/                   Vitest unit and integration-oriented component tests
 types/                   Shared TypeScript types
 ```
 
@@ -79,7 +79,7 @@ The separated admin route groups ensure `/admin/login` remains accessible while 
 
 - Supabase database, authentication, and storage
 - Resend email notifications and Turnstile anti-spam protection
-- Consent-aware analytics
+- Consent-aware Google Analytics, Vercel Web Analytics, and Speed Insights
 - Vercel preview and production environments
 
 The Supabase project URL and publishable key may be used by browser code when Row Level Security is enabled. Supabase secret keys, email, anti-spam, and revalidation secrets are server-only.
@@ -91,6 +91,11 @@ The Supabase project URL and publishable key may be used by browser code when Ro
 - [Homepage content and provenance](docs/HOMEPAGE_CONTENT.md)
 - [Services content and provenance](docs/SERVICES_CONTENT.md)
 - [Contact, inquiries, and provider setup](docs/CONTACT_INQUIRIES.md)
+- [Admin dashboard and CMS operations](docs/ADMIN_CMS.md)
+- [SEO, analytics, consent, and legal operations](docs/SEO_ANALYTICS_PRIVACY.md)
+- [Work content and provenance](docs/WORK_CONTENT.md)
+- [About and testimonials content](docs/ABOUT_TESTIMONIALS_CONTENT.md)
+- [Studio Journal content](docs/BLOG_CONTENT.md)
 - [Security policy](SECURITY.md)
 - [Deployment baseline](DEPLOYMENT.md)
 

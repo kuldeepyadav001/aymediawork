@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ServiceDetail } from "@/components/sections/services/service-detail";
+import { JsonLd } from "@/components/seo/json-ld";
 import { SERVICE_CATALOG } from "@/lib/constants/services";
 import {
   getPublishedServiceBySlug,
   getPublishedServices,
 } from "@/lib/supabase/queries/public";
+import { getSiteUrl } from "@/lib/utils/site-url";
 
 type ServicePageProps = {
   params: Promise<{
@@ -40,6 +42,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${title} | AY Media Work`,
       description: service.metaDescription,
+      siteName: "AY Media Work",
       images: [
         {
           alt: service.image.alt,
@@ -67,5 +70,24 @@ export default async function ServicePage({ params }: ServicePageProps) {
   }
 
   const catalog = await getPublishedServices();
-  return <ServiceDetail catalog={catalog} service={service} />;
+  const siteUrl = getSiteUrl();
+  const serviceUrl = new URL(`/services/${service.slug}`, siteUrl).toString();
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@id": `${serviceUrl}#service`,
+    "@type": "Service",
+    description: service.metaDescription,
+    image: new URL(service.image.src, siteUrl).toString(),
+    name: service.title,
+    provider: { "@id": new URL("/#organization", siteUrl).toString() },
+    serviceType: service.title,
+    url: serviceUrl,
+  };
+
+  return (
+    <>
+      <JsonLd data={structuredData} />
+      <ServiceDetail catalog={catalog} service={service} />
+    </>
+  );
 }
