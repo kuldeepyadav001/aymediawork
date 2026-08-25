@@ -112,7 +112,20 @@ export function TestimonialCollection({
   );
 }
 
-export function TestimonialsIndex() {
+type ClientLogo = {
+  destinationUrl?: string;
+  id: string;
+  image: { alt: string; src: string };
+  name: string;
+};
+
+export function TestimonialsIndex({
+  clientLogos = [],
+  testimonials = APPROVED_TESTIMONIALS,
+}: {
+  clientLogos?: readonly ClientLogo[];
+  testimonials?: readonly PublishedTestimonial[];
+} = {}) {
   return (
     <>
       <section
@@ -189,8 +202,52 @@ export function TestimonialsIndex() {
           </Reveal>
 
           <Reveal className="mt-10" delay={0.05}>
-            <TestimonialCollection testimonials={APPROVED_TESTIMONIALS} />
+            <TestimonialCollection testimonials={testimonials} />
           </Reveal>
+
+          {clientLogos.length > 0 ? (
+            <Reveal
+              className="mt-16 border-t border-white/[0.08] pt-10"
+              delay={0.08}
+            >
+              <p className="editorial-kicker">Approved client marks</p>
+              <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {clientLogos.map((logo) => {
+                  const artwork = (
+                    <span className="relative block h-24 w-full">
+                      <Image
+                        fill
+                        alt={logo.image.alt}
+                        className="object-contain p-4"
+                        sizes="(max-width: 639px) 92vw, (max-width: 1023px) 46vw, 22vw"
+                        src={logo.image.src}
+                      />
+                    </span>
+                  );
+                  return logo.destinationUrl ? (
+                    <a
+                      className="rounded-xl border border-white/[0.1] bg-surface/45 transition-colors hover:border-primary/30"
+                      href={logo.destinationUrl}
+                      key={logo.id}
+                      rel="noreferrer"
+                      target="_blank"
+                      title={logo.name}
+                    >
+                      {artwork}
+                    </a>
+                  ) : (
+                    <div
+                      className="rounded-xl border border-white/[0.1] bg-surface/45"
+                      key={logo.id}
+                      title={logo.name}
+                    >
+                      {artwork}
+                    </div>
+                  );
+                })}
+              </div>
+            </Reveal>
+          ) : null}
         </Container>
       </section>
 

@@ -18,11 +18,11 @@ vi.mock("@/components/providers/smooth-scroll-provider", () => ({
 afterEach(cleanup);
 
 describe("global public layout", () => {
-  it("provides the landmark shell and keyboard skip navigation", () => {
+  it("provides the landmark shell and keyboard skip navigation", async () => {
     render(
-      <PublicLayout>
-        <p>Page content</p>
-      </PublicLayout>,
+      await PublicLayout({
+        children: <p>Page content</p>,
+      }),
     );
 
     expect(

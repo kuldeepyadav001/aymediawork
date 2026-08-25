@@ -31,6 +31,11 @@ type ApiResponse = {
   ok?: boolean;
 };
 
+const DEFAULT_SERVICE_OPTIONS = SERVICE_CATALOG.map(({ id, title }) => ({
+  id,
+  title,
+}));
+
 const selectClassName =
   "flex h-12 w-full rounded-lg border border-input bg-surface/70 px-4 py-2 text-sm text-foreground shadow-[inset_0_1px_0_hsl(0_0%_100%/0.025)] transition-[border-color,background-color,box-shadow] duration-300 hover:border-foreground/20 focus-visible:border-primary/60 focus-visible:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 disabled:cursor-not-allowed disabled:opacity-45 aria-[invalid=true]:border-destructive aria-[invalid=true]:ring-destructive/20";
 
@@ -102,8 +107,10 @@ function Field({
 function ServiceChecklist({
   error,
   registerService,
+  services,
 }: {
   error?: string;
+  services: readonly { id: string; title: string }[];
   registerService: (serviceId: string) => {
     name: "serviceIds";
     onBlur: React.FocusEventHandler<HTMLInputElement>;
@@ -120,7 +127,7 @@ function ServiceChecklist({
         Select every relevant area. You can refine the details later.
       </p>
       <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-        {SERVICE_CATALOG.map((service) => (
+        {services.map((service) => (
           <label className="group relative cursor-pointer" key={service.id}>
             <input
               className="peer sr-only"
@@ -217,9 +224,11 @@ function FormStatus({ status }: { status: SubmitStatus }) {
 
 export function ClientInquiryForm({
   initialServiceId,
+  services = DEFAULT_SERVICE_OPTIONS,
   turnstileSiteKey,
 }: {
   initialServiceId?: string;
+  services?: readonly { id: string; title: string }[];
   turnstileSiteKey?: string;
 }) {
   const defaultValues = useMemo<ClientInquiryInput>(
@@ -350,6 +359,7 @@ export function ClientInquiryForm({
       <ServiceChecklist
         error={errors.serviceIds?.message}
         registerService={() => register("serviceIds")}
+        services={services}
       />
 
       <Field
@@ -428,8 +438,10 @@ export function ClientInquiryForm({
 }
 
 export function PartnerInquiryForm({
+  services = DEFAULT_SERVICE_OPTIONS,
   turnstileSiteKey,
 }: {
+  services?: readonly { id: string; title: string }[];
   turnstileSiteKey?: string;
 }) {
   const defaultValues = useMemo<PartnerInquiryInput>(
@@ -600,6 +612,7 @@ export function PartnerInquiryForm({
       <ServiceChecklist
         error={errors.serviceIds?.message}
         registerService={() => register("serviceIds")}
+        services={services}
       />
 
       <Field

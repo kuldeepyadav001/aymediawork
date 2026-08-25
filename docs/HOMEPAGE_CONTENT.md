@@ -17,8 +17,9 @@ The homepage derives its capability cards from the current Stage 5 service catal
 5. AI Animation — `/services/ai-animation`
 6. Web Development — `/services/web-development`
 7. AI Automation — `/services/ai-automation`
-8. Facebook & Meta Ads — `/services/facebook-and-meta-ads`
-9. CGI & VFX — `/services/cgi-and-vfx`
+8. Social Media Marketing — `/services/social-media-marketing`
+9. Facebook & Meta Ads — `/services/facebook-and-meta-ads`
+10. CGI & VFX — `/services/cgi-and-vfx`
 
 These labels and routes reflect the agency's expanded focus. The later Supabase-backed service manager will assign stable database IDs, support additional services, and keep display content editable without using labels as relationships.
 

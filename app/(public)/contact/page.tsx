@@ -5,7 +5,7 @@ import { ContactJourneys } from "@/components/forms/contact-journeys";
 import { Reveal } from "@/components/animations/reveal";
 import { Container } from "@/components/shared/container";
 import type { InquiryType } from "@/lib/constants/inquiries";
-import { getServiceBySlug } from "@/lib/constants/services";
+import { getPublishedServices } from "@/lib/supabase/queries/public";
 import { getSiteUrl } from "@/lib/utils/site-url";
 
 const title = "Contact the Studio";
@@ -43,8 +43,9 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
   const initialType: InquiryType =
     requestedType === "partner" ? "partner" : "client";
   const requestedService = getSingleValue(query.service);
+  const services = await getPublishedServices();
   const initialService = requestedService
-    ? getServiceBySlug(requestedService)
+    ? services.find((service) => service.slug === requestedService)
     : undefined;
   const pageUrl = new URL("contact", getSiteUrl()).toString();
   const structuredData = {
@@ -156,6 +157,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
             <Reveal>
               <div className="glass-panel rounded-2xl p-5 sm:p-8 lg:p-10">
                 <ContactJourneys
+                  services={services.map(({ id, title }) => ({ id, title }))}
                   initialServiceId={
                     initialType === "client" ? initialService?.id : undefined
                   }

@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { WorkDetail } from "@/components/sections/work/work-detail";
-import { getWorkStudyBySlug, WORK_STUDIES } from "@/lib/constants/work";
+import { WORK_STUDIES } from "@/lib/constants/work";
+import {
+  getPublishedProjectBySlug,
+  getPublishedProjects,
+  getPublishedServices,
+} from "@/lib/supabase/queries/public";
 
 type WorkStudyPageProps = {
   params: Promise<{
@@ -18,7 +23,7 @@ export async function generateMetadata({
   params,
 }: WorkStudyPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const study = getWorkStudyBySlug(slug);
+  const study = await getPublishedProjectBySlug(slug);
 
   if (!study) {
     notFound();
@@ -58,11 +63,15 @@ export async function generateMetadata({
 
 export default async function WorkStudyPage({ params }: WorkStudyPageProps) {
   const { slug } = await params;
-  const study = getWorkStudyBySlug(slug);
+  const study = await getPublishedProjectBySlug(slug);
 
   if (!study) {
     notFound();
   }
 
-  return <WorkDetail study={study} />;
+  const [catalog, studies] = await Promise.all([
+    getPublishedServices(),
+    getPublishedProjects(),
+  ]);
+  return <WorkDetail catalog={catalog} studies={studies} study={study} />;
 }

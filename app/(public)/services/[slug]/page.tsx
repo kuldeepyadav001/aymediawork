@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ServiceDetail } from "@/components/sections/services/service-detail";
-import { getServiceBySlug, SERVICE_CATALOG } from "@/lib/constants/services";
+import { SERVICE_CATALOG } from "@/lib/constants/services";
+import {
+  getPublishedServiceBySlug,
+  getPublishedServices,
+} from "@/lib/supabase/queries/public";
 
 type ServicePageProps = {
   params: Promise<{
@@ -18,7 +22,7 @@ export async function generateMetadata({
   params,
 }: ServicePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const service = getServiceBySlug(slug);
+  const service = await getPublishedServiceBySlug(slug);
 
   if (!service) {
     notFound();
@@ -56,11 +60,12 @@ export async function generateMetadata({
 
 export default async function ServicePage({ params }: ServicePageProps) {
   const { slug } = await params;
-  const service = getServiceBySlug(slug);
+  const service = await getPublishedServiceBySlug(slug);
 
   if (!service) {
     notFound();
   }
 
-  return <ServiceDetail service={service} />;
+  const catalog = await getPublishedServices();
+  return <ServiceDetail catalog={catalog} service={service} />;
 }

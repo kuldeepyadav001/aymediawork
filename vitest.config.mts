@@ -9,6 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": rootDirectory,
+      "server-only": path.resolve(rootDirectory, "tests/stubs/server-only.ts"),
     },
   },
   test: {

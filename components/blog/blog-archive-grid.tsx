@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import type { BlogArticleSummary, BlogCategory } from "@/lib/constants/blog";
+import type { BlogArticleSummary } from "@/lib/constants/blog";
 import { formatBlogDate } from "@/lib/utils/blog";
 
 const ALL_ARTICLES = "All stories" as const;
-type ActiveCategory = typeof ALL_ARTICLES | BlogCategory;
+type ActiveCategory = typeof ALL_ARTICLES | string;
 
 function JournalCard({ article }: { article: BlogArticleSummary }) {
   return (
@@ -70,7 +70,7 @@ export function BlogArchiveGrid({
   categories: editorialCategories,
 }: {
   articles: readonly BlogArticleSummary[];
-  categories: readonly BlogCategory[];
+  categories: readonly string[];
 }) {
   const [activeCategory, setActiveCategory] =
     useState<ActiveCategory>(ALL_ARTICLES);

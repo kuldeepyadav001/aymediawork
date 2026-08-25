@@ -82,8 +82,8 @@ describe("Studio Journal data", () => {
 });
 
 describe("Studio Journal archive", () => {
-  it("renders the archive, discoverable article links, and honest provenance", () => {
-    render(<BlogPage />);
+  it("renders the archive, discoverable article links, and honest provenance", async () => {
+    render(await BlogPage());
 
     expect(
       screen.getByRole("heading", {

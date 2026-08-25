@@ -7,12 +7,12 @@ import { ArrowLeft, ArrowRight, Check, Clock3 } from "lucide-react";
 import { SafeMarkdown } from "@/components/blog/safe-markdown";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
+import { BLOG_ARTICLES } from "@/lib/constants/blog";
 import {
-  BLOG_ARTICLES,
-  getBlogArticleBySlug,
-  getNextBlogArticle,
-} from "@/lib/constants/blog";
-import { SERVICE_CATALOG } from "@/lib/constants/services";
+  getPublishedBlogArticleBySlug,
+  getPublishedBlogArticles,
+  getPublishedServices,
+} from "@/lib/supabase/queries/public";
 import { formatBlogDate } from "@/lib/utils/blog";
 import { getSiteUrl } from "@/lib/utils/site-url";
 
@@ -30,7 +30,7 @@ export async function generateMetadata({
   params,
 }: BlogArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getBlogArticleBySlug(slug);
+  const article = await getPublishedBlogArticleBySlug(slug);
 
   if (!article) {
     notFound();
@@ -76,17 +76,22 @@ export default async function BlogArticlePage({
   params,
 }: BlogArticlePageProps) {
   const { slug } = await params;
-  const article = getBlogArticleBySlug(slug);
+  const article = await getPublishedBlogArticleBySlug(slug);
 
   if (!article) {
     notFound();
   }
 
   const siteUrl = getSiteUrl();
-  const nextArticle = getNextBlogArticle(article.slug);
+  const [articles, catalog] = await Promise.all([
+    getPublishedBlogArticles(),
+    getPublishedServices(),
+  ]);
+  const currentIndex = articles.findIndex((item) => item.slug === article.slug);
+  const nextArticle = articles[(currentIndex + 1) % articles.length] ?? article;
   const relatedServices = article.relatedServices
     .map((relatedSlug) =>
-      SERVICE_CATALOG.find((service) => service.slug === relatedSlug),
+      catalog.find((service) => service.slug === relatedSlug),
     )
     .filter((service) => service !== undefined);
   const articleUrl = new URL(`/blog/${article.slug}`, siteUrl).toString();

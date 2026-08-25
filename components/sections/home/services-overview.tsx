@@ -4,9 +4,14 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Reveal, Stagger, StaggerItem } from "@/components/animations/reveal";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
+import type { HomepageService } from "@/lib/constants/homepage";
 import { HOMEPAGE_SERVICES } from "@/lib/constants/homepage";
 
-export function ServicesOverview() {
+export function ServicesOverview({
+  services = HOMEPAGE_SERVICES,
+}: {
+  services?: readonly HomepageService[];
+}) {
   return (
     <section className="relative py-section" id="home-services">
       <Container>
@@ -43,7 +48,7 @@ export function ServicesOverview() {
         </div>
 
         <Stagger className="mt-10 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {HOMEPAGE_SERVICES.map((service) => (
+          {services.map((service) => (
             <StaggerItem className="min-h-full" key={service.slug}>
               <Link
                 className="group relative z-0 flex h-full min-h-64 flex-col rounded-xl border border-white/[0.1] bg-background p-6 shadow-panel transition-[background-color,border-color,box-shadow,transform] duration-400 ease-cinematic hover:z-10 hover:border-primary/30 hover:bg-surface hover:shadow-glow focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-safe:hover:-translate-y-1 motion-safe:hover:scale-[1.01] motion-safe:focus-visible:-translate-y-1 motion-safe:focus-visible:scale-[1.01] sm:p-8"

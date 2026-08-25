@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
 import { TestimonialsIndex } from "@/components/sections/testimonials/testimonials-index";
+import {
+  getPublishedClientLogos,
+  getPublishedTestimonials,
+} from "@/lib/supabase/queries/public";
 
 const title = "Testimonials";
 const description =
@@ -34,6 +38,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function TestimonialsPage() {
-  return <TestimonialsIndex />;
+export default async function TestimonialsPage() {
+  const [clientLogos, testimonials] = await Promise.all([
+    getPublishedClientLogos(),
+    getPublishedTestimonials(),
+  ]);
+  return (
+    <TestimonialsIndex clientLogos={clientLogos} testimonials={testimonials} />
+  );
 }

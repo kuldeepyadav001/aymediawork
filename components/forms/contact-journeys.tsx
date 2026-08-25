@@ -12,10 +12,12 @@ import type { InquiryType } from "@/lib/constants/inquiries";
 export function ContactJourneys({
   initialServiceId,
   initialType,
+  services,
   turnstileSiteKey,
 }: {
   initialServiceId?: string;
   initialType: InquiryType;
+  services?: readonly { id: string; title: string }[];
   turnstileSiteKey?: string;
 }) {
   return (
@@ -50,6 +52,7 @@ export function ContactJourneys({
           </p>
         </div>
         <ClientInquiryForm
+          services={services}
           initialServiceId={initialServiceId}
           turnstileSiteKey={turnstileSiteKey}
         />
@@ -65,7 +68,10 @@ export function ContactJourneys({
             collaborators interested in contributing to future work.
           </p>
         </div>
-        <PartnerInquiryForm turnstileSiteKey={turnstileSiteKey} />
+        <PartnerInquiryForm
+          services={services}
+          turnstileSiteKey={turnstileSiteKey}
+        />
       </TabsContent>
     </Tabs>
   );

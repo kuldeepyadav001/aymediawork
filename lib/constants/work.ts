@@ -1,6 +1,3 @@
-import type { ServiceSlug } from "@/lib/constants/service-slugs";
-import type { WorkSlug } from "@/lib/constants/work-slugs";
-
 export const WORK_CATEGORIES = [
   "Film & Motion",
   "Product Stories",
@@ -12,7 +9,7 @@ export const WORK_CATEGORIES = [
 export type WorkCategory = (typeof WORK_CATEGORIES)[number];
 
 export type WorkStudy = {
-  category: WorkCategory;
+  category: string;
   description: string;
   direction: string;
   experience: string;
@@ -34,8 +31,8 @@ export type WorkStudy = {
     question: string;
   };
   principle: string;
-  services: readonly ServiceSlug[];
-  slug: WorkSlug;
+  services: readonly string[];
+  slug: string;
   system: string;
   title: string;
   tone: readonly string[];
@@ -311,7 +308,7 @@ export function getWorkStudyBySlug(slug: string) {
   return WORK_STUDIES.find((study) => study.slug === slug);
 }
 
-export function getNextWorkStudy(slug: WorkSlug): WorkStudy {
+export function getNextWorkStudy(slug: string): WorkStudy {
   const currentIndex = WORK_STUDIES.findIndex((study) => study.slug === slug);
   const nextIndex = (currentIndex + 1) % WORK_STUDIES.length;
   const nextStudy = WORK_STUDIES[nextIndex];

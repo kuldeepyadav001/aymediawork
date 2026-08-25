@@ -1,5 +1,3 @@
-import type { ServiceSlug } from "@/lib/constants/service-slugs";
-
 export type ServiceApproachStep = {
   description: string;
   title: string;
@@ -17,8 +15,8 @@ export type Service = {
   };
   index: string;
   metaDescription: string;
-  relatedSlugs: readonly ServiceSlug[];
-  slug: ServiceSlug;
+  relatedSlugs: readonly string[];
+  slug: string;
   title: string;
   usefulFor: readonly string[];
 };
@@ -390,6 +388,59 @@ export const SERVICE_CATALOG: readonly Service[] = [
   },
   {
     index: "08",
+    id: "4d9b60c4-145b-4fc8-9195-9005dfe33cbf",
+    slug: "social-media-marketing",
+    title: "Social Media Marketing",
+    description:
+      "Organic social systems built around clear strategy, useful content rhythms, and consistent brand participation.",
+    heroTitle:
+      "Build a social presence that stays coherent from one post to the next.",
+    metaDescription:
+      "Organic social media marketing across strategy, content planning, calendars, publishing coordination, community coordination, reporting, and iteration.",
+    image: {
+      src: "/images/services/social-media-marketing.jpg",
+      alt: "Glass content tiles moving through a connected cobalt publishing system",
+    },
+    disciplines: [
+      "Organic social strategy",
+      "Channel and audience priorities",
+      "Content pillars and recurring formats",
+      "Editorial calendars and content planning",
+      "Publishing and community coordination",
+      "Performance reporting and iteration",
+    ],
+    usefulFor: [
+      "Brands building a consistent organic presence",
+      "Teams needing a practical publishing rhythm",
+      "Campaigns supported by ongoing social content",
+      "Channels ready for clearer learning loops",
+    ],
+    approach: [
+      {
+        title: "Set the channel direction",
+        description:
+          "Align the audience priorities, channel roles, brand guardrails, available resources, and outcomes organic social should support.",
+      },
+      {
+        title: "Shape the content system",
+        description:
+          "Translate the strategy into useful content pillars, recurring formats, editorial calendars, and a workable approval rhythm.",
+      },
+      {
+        title: "Coordinate the presence",
+        description:
+          "Prepare publishing inputs and community guidance so planned content and audience interactions stay connected to the brand.",
+      },
+      {
+        title: "Learn and refine",
+        description:
+          "Review audience signals and content performance in context, then turn the findings into focused improvements for the next cycle.",
+      },
+    ],
+    relatedSlugs: ["graphic-design", "video-editing", "facebook-and-meta-ads"],
+  },
+  {
+    index: "09",
     id: "bef5495e-b88a-4c97-b2a6-3bb370e6a962",
     slug: "facebook-and-meta-ads",
     title: "Facebook & Meta Ads",
@@ -441,7 +492,7 @@ export const SERVICE_CATALOG: readonly Service[] = [
     relatedSlugs: ["graphic-design", "video-editing", "ai-automation"],
   },
   {
-    index: "09",
+    index: "10",
     id: "e3e68584-f56c-4225-9077-863b798f67be",
     slug: "cgi-and-vfx",
     title: "CGI & VFX",
