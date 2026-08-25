@@ -18,6 +18,7 @@ import {
 } from "@/lib/constants/blog";
 import { BLOG_SLUGS } from "@/lib/constants/blog-slugs";
 import { getServiceBySlug } from "@/lib/constants/services";
+import { formatBlogDate } from "@/lib/utils/blog";
 
 afterEach(cleanup);
 
@@ -29,6 +30,12 @@ const EXPECTED_BLOG_SLUGS = [
 ] as const;
 
 describe("Studio Journal data", () => {
+  it("formats date-only and Supabase timestamp values without breaking prerendering", () => {
+    expect(formatBlogDate("2026-08-24")).toBe("24 Aug 2026");
+    expect(formatBlogDate("2026-08-24T00:00:00+00:00")).toBe("24 Aug 2026");
+    expect(formatBlogDate("not-a-date")).toBe("Date unavailable");
+  });
+
   it("defines four stable, CMS-ready article routes with original content", () => {
     expect(BLOG_ARTICLES).toHaveLength(4);
     expect(BLOG_SLUGS).toEqual(EXPECTED_BLOG_SLUGS);
