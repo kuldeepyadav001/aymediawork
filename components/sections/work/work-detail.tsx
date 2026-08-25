@@ -11,10 +11,12 @@ import {
 } from "lucide-react";
 
 import { Reveal, Stagger, StaggerItem } from "@/components/animations/reveal";
+import { WorkVideoPlayer } from "@/components/project/work-video-player";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { SERVICE_CATALOG, type Service } from "@/lib/constants/services";
 import { WORK_STUDIES, type WorkStudy } from "@/lib/constants/work";
+import { extractYouTubeVideoId } from "@/lib/utils/youtube";
 
 export function WorkDetail({
   catalog = SERVICE_CATALOG,
@@ -25,6 +27,7 @@ export function WorkDetail({
   studies?: readonly WorkStudy[];
   study: WorkStudy;
 }) {
+  const videoId = extractYouTubeVideoId(study.videoUrl);
   const services = study.services
     .map((slug) => catalog.find((service) => service.slug === slug))
     .filter((service): service is Service => Boolean(service));
@@ -101,29 +104,39 @@ export function WorkDetail({
           </div>
 
           <Reveal className="mt-12 sm:mt-14" delay={0.12}>
-            <figure>
-              <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel lg:aspect-[21/10]">
-                <Image
-                  fill
-                  priority
-                  alt={study.image.alt}
-                  className="object-cover"
-                  sizes="92vw"
-                  src={study.image.src}
-                />
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 bg-[linear-gradient(180deg,transparent_58%,rgba(4,6,12,0.55))]"
-                />
-                <span className="absolute bottom-5 left-5 rounded-full border border-white/15 bg-background/60 px-3 py-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.17em] text-white/75 backdrop-blur-md sm:bottom-7 sm:left-7">
-                  Self-initiated direction study
-                </span>
-              </div>
-              <figcaption className="mt-3 flex flex-col gap-1 text-xs leading-5 text-muted-foreground sm:flex-row sm:justify-between">
-                <span>Original visual artwork created for AY Media Work</span>
-                <span>No client attribution or performance claim</span>
-              </figcaption>
-            </figure>
+            {videoId ? (
+              <figure>
+                <WorkVideoPlayer title={study.title} videoId={videoId} />
+                <figcaption className="mt-3 flex flex-col gap-1 text-xs leading-5 text-muted-foreground sm:flex-row sm:justify-between">
+                  <span>Watch the work directly on this page</span>
+                  <span>Player loads only when you press play</span>
+                </figcaption>
+              </figure>
+            ) : (
+              <figure>
+                <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel lg:aspect-[21/10]">
+                  <Image
+                    fill
+                    priority
+                    alt={study.image.alt}
+                    className="object-cover"
+                    sizes="92vw"
+                    src={study.image.src}
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 bg-[linear-gradient(180deg,transparent_58%,rgba(4,6,12,0.55))]"
+                  />
+                  <span className="absolute bottom-5 left-5 rounded-full border border-white/15 bg-background/60 px-3 py-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.17em] text-white/75 backdrop-blur-md sm:bottom-7 sm:left-7">
+                    Self-initiated direction study
+                  </span>
+                </div>
+                <figcaption className="mt-3 flex flex-col gap-1 text-xs leading-5 text-muted-foreground sm:flex-row sm:justify-between">
+                  <span>Original visual artwork created for AY Media Work</span>
+                  <span>No client attribution or performance claim</span>
+                </figcaption>
+              </figure>
+            )}
           </Reveal>
         </Container>
       </section>

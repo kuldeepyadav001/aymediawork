@@ -36,6 +36,7 @@ export type WorkStudy = {
   system: string;
   title: string;
   tone: readonly string[];
+  videoUrl?: string | null;
 };
 
 export const WORK_STUDIES: readonly WorkStudy[] = [

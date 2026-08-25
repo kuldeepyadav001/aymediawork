@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { isYouTubeUrl } from "@/lib/utils/youtube";
+
 const requiredText = (label: string, maximum = 5000) =>
   z
     .string()
@@ -151,6 +153,16 @@ export const projectAdminSchema = z.object({
   system: requiredText("System", 5000),
   title: requiredText("Title", 160),
   tone: z.array(requiredText("Tone", 100)).min(1),
+  videoUrl: z
+    .string()
+    .trim()
+    .max(1000)
+    .refine((value) => value === "" || isYouTubeUrl(value), {
+      message:
+        "Use a YouTube link such as https://youtu.be/VIDEOID or https://www.youtube.com/watch?v=VIDEOID.",
+    })
+    .optional()
+    .default(""),
 });
 
 export const blogPostAdminSchema = z.object({

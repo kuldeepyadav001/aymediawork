@@ -159,6 +159,7 @@ export type Database = {
         tone: Json;
         updated_at: string;
         updated_by: string | null;
+        video_url: string | null;
       }>;
       services: TableDefinition<{
         approach: Json;

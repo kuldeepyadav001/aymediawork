@@ -330,6 +330,7 @@ export async function saveProjectAction(formData: FormData) {
     system: text(formData, "system"),
     title: text(formData, "title"),
     tone: lines(formData, "tone"),
+    videoUrl: text(formData, "videoUrl"),
   });
 
   if (!parsed.success)
@@ -374,6 +375,7 @@ export async function saveProjectAction(formData: FormData) {
     title: parsed.data.title,
     tone: parsed.data.tone,
     updated_by: context.userId,
+    video_url: parsed.data.videoUrl || null,
     ...(parsed.data.id
       ? { id: parsed.data.id }
       : { created_by: context.userId }),

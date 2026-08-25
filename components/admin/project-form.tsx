@@ -165,6 +165,20 @@ export function ProjectForm({
             required
           />
         </AdminField>
+        <AdminField
+          description="Optional. A YouTube link (https://youtu.be/… or watch?v=…) shows a lightweight player on the work page."
+          htmlFor="videoUrl"
+          label="YouTube video URL"
+        >
+          <Input
+            defaultValue={project?.video_url ?? ""}
+            id="videoUrl"
+            maxLength={1000}
+            name="videoUrl"
+            placeholder="https://youtu.be/VIDEOID"
+            type="url"
+          />
+        </AdminField>
       </AdminFormSection>
 
       <AdminFormSection title="Case study narrative">

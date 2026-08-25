@@ -19,6 +19,8 @@ import {
   COLLABORATION_VALUES,
   STUDIO_LAYERS,
 } from "@/lib/constants/about";
+import { StudioProof } from "@/components/sections/shared/studio-proof";
+import { STUDIO_STORY, STUDIO_TOOLKIT } from "@/lib/constants/studio-proof";
 
 const LAYER_ICONS = [Compass, Layers3, Network] as const;
 
@@ -111,6 +113,16 @@ export function AboutIndex() {
                   keep every output connected to the same central idea.
                 </p>
               </div>
+              <div className="mt-8 grid gap-6 border-t border-white/[0.08] pt-8 md:grid-cols-2 md:gap-10">
+                {STUDIO_STORY.map((paragraph) => (
+                  <p
+                    className="text-pretty text-base leading-8 text-muted-foreground"
+                    key={paragraph.slice(0, 32)}
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
             </Reveal>
           </div>
         </Container>
@@ -181,6 +193,48 @@ export function AboutIndex() {
               </Stagger>
             </div>
           </div>
+        </Container>
+      </section>
+
+      <StudioProof
+        eyebrow="Verified track record"
+        title="Proof the process works."
+      />
+
+      <section className="py-section">
+        <Container>
+          <Reveal className="max-w-4xl">
+            <p className="editorial-kicker">The toolkit</p>
+            <h2 className="mt-6 text-balance text-heading-xl">
+              Professional craft, modern instruments.
+            </h2>
+            <p className="mt-6 max-w-2xl text-pretty text-lead text-muted-foreground">
+              The studio works across an established editing, design, and 3D
+              stack, extended by an AI-assisted workflow that stays under human
+              direction.
+            </p>
+          </Reveal>
+          <Stagger className="mt-12 grid gap-5 md:grid-cols-2">
+            {STUDIO_TOOLKIT.map((group) => (
+              <StaggerItem className="min-h-full" key={group.title}>
+                <article className="flex h-full flex-col rounded-xl border border-white/[0.1] bg-surface/45 p-7 sm:p-9">
+                  <h3 className="font-display text-xl font-medium tracking-[-0.025em]">
+                    {group.title}
+                  </h3>
+                  <ul className="mt-5 flex flex-wrap gap-2">
+                    {group.items.map((item) => (
+                      <li
+                        className="rounded-full border border-white/[0.12] bg-background px-3.5 py-1.5 text-xs font-medium text-muted-foreground"
+                        key={item}
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              </StaggerItem>
+            ))}
+          </Stagger>
         </Container>
       </section>
 

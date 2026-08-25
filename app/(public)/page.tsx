@@ -4,6 +4,7 @@ import { CreativeStudies } from "@/components/sections/home/creative-studies";
 import { HomeHero } from "@/components/sections/home/home-hero";
 import { ServicesOverview } from "@/components/sections/home/services-overview";
 import { StudioProcess } from "@/components/sections/home/studio-process";
+import { StudioProof } from "@/components/sections/shared/studio-proof";
 import { createPageMetadata, SITE_DESCRIPTION } from "@/lib/seo/metadata";
 import {
   getPublishedProjects,
@@ -44,6 +45,7 @@ export default async function HomePage() {
     <div className="relative isolate overflow-hidden">
       <HomeHero disciplines={services.map((service) => service.title)} />
       <ServicesOverview services={homepageServices} />
+      <StudioProof />
       <CreativeStudies studies={creativeStudies} />
       <StudioProcess />
     </div>
