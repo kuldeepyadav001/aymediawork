@@ -17,7 +17,13 @@ const privateIndexingHeaders = [
 ];
 
 if (process.env.NODE_ENV === "production") {
-  securityHeaders.push({ key: "X-Frame-Options", value: "DENY" });
+  securityHeaders.push(
+    { key: "X-Frame-Options", value: "DENY" },
+    {
+      key: "Strict-Transport-Security",
+      value: "max-age=31536000",
+    },
+  );
 }
 
 const allowedDevOrigins = process.env.ALLOWED_DEV_ORIGINS?.split(",")

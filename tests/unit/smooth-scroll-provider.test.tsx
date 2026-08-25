@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { act, render, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
@@ -20,18 +20,36 @@ vi.mock("lenis", () => ({
   },
 }));
 
-function mockReducedMotion(matches: boolean) {
+function mockReducedMotion(initialMatches: boolean) {
+  let changeListener: ((event: MediaQueryListEvent) => void) | undefined;
+  let matches = initialMatches;
+  const media = "(prefers-reduced-motion: reduce)";
+  const mediaQuery = {
+    addEventListener: vi.fn(
+      (_type: string, listener: (event: MediaQueryListEvent) => void) => {
+        changeListener = listener;
+      },
+    ),
+    dispatchEvent: vi.fn(),
+    get matches() {
+      return matches;
+    },
+    media,
+    onchange: null,
+    removeEventListener: vi.fn(),
+  };
+
   Object.defineProperty(window, "matchMedia", {
     configurable: true,
-    value: vi.fn().mockReturnValue({
-      addEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-      matches,
-      media: "(prefers-reduced-motion: reduce)",
-      onchange: null,
-      removeEventListener: vi.fn(),
-    }),
+    value: vi.fn().mockReturnValue(mediaQuery),
   });
+
+  return {
+    change(nextMatches: boolean) {
+      matches = nextMatches;
+      changeListener?.({ matches, media } as MediaQueryListEvent);
+    },
+  };
 }
 
 describe("SmoothScrollProvider", () => {
@@ -40,7 +58,7 @@ describe("SmoothScrollProvider", () => {
     lenisSpies.destroy.mockClear();
   });
 
-  it("starts and cleans up Lenis when motion is allowed", () => {
+  it("starts and cleans up Lenis when motion is allowed", async () => {
     mockReducedMotion(false);
 
     const view = render(
@@ -49,8 +67,10 @@ describe("SmoothScrollProvider", () => {
       </SmoothScrollProvider>,
     );
 
-    expect(lenisSpies.create).toHaveBeenCalledWith(
-      expect.objectContaining({ autoRaf: true, smoothWheel: true }),
+    await waitFor(() =>
+      expect(lenisSpies.create).toHaveBeenCalledWith(
+        expect.objectContaining({ autoRaf: true, smoothWheel: true }),
+      ),
     );
 
     view.unmount();
@@ -67,5 +87,19 @@ describe("SmoothScrollProvider", () => {
     );
 
     expect(lenisSpies.create).not.toHaveBeenCalled();
+  });
+
+  it("returns to native scrolling when reduced motion changes live", async () => {
+    const preference = mockReducedMotion(false);
+    render(
+      <SmoothScrollProvider>
+        <div>Content</div>
+      </SmoothScrollProvider>,
+    );
+    await waitFor(() => expect(lenisSpies.create).toHaveBeenCalledOnce());
+
+    act(() => preference.change(true));
+
+    expect(lenisSpies.destroy).toHaveBeenCalledOnce();
   });
 });

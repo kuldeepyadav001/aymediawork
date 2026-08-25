@@ -8,6 +8,9 @@ const providerMocks = vi.hoisted(() => ({
 
 vi.mock("@/components/analytics/analytics-providers", () => ({
   AnalyticsProviders: () => <div data-testid="analytics-providers" />,
+}));
+
+vi.mock("@/lib/analytics/google-consent", () => ({
   disableGoogleAnalytics: providerMocks.disableGoogleAnalytics,
 }));
 

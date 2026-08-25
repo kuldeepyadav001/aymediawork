@@ -4,9 +4,9 @@ Production website and content management platform for AY Media Work, a creative
 
 ## Project status
 
-**Stage 11 — SEO, Analytics & Consent (review candidate)**
+**Stage 12 — Final QA, Performance & Handover (release candidate)**
 
-The public website, secure inquiries, role-aware Supabase CMS, and protected administration system through Stage 10 are production-active. Stage 11 adds consistent route metadata and social previews, verified-data JSON-LD, native sitemap and robots routes, Privacy and Terms pages, private-surface noindex controls, and fail-closed consent-aware analytics. Stage 12 final QA, performance review, and handover have not started.
+The public website, secure inquiries, role-aware Supabase CMS, and protected administration system through Stage 10 are production-active. The local release candidate completes SEO, structured data, indexing, legal routes, consent-gated analytics, final security and accessibility reconciliation, performance optimization, production budgets, all-route runtime auditing, and the operational handover. It remains subject to explicit owner approval before the final push/deployment.
 
 ## Compatibility baseline
 
@@ -47,12 +47,15 @@ Public presentation routes can render locally without real credentials. Persiste
 npm run format:check  # Verify formatting
 npm run lint          # ESLint and Next.js rules
 npm run typecheck     # Strict TypeScript check
-npm run test          # Unit tests
-npm run build         # Production build
-npm run validate      # Run the complete quality gate
+npm run test               # Unit and interaction-oriented component tests
+npm run build              # Production build
+npm run performance:check  # Enforce budgets against the production build
+npm run validate           # Formatting, lint, types, tests, build, and budgets
+npm run runtime:check      # Audit a running production build/origin
+npm audit --audit-level=high
 ```
 
-A Husky pre-commit hook runs lint-staged checks. GitHub Actions runs the complete quality gate for pull requests and pushes to `main`.
+`runtime:check` targets `http://localhost:3000` by default. Set `RUNTIME_AUDIT_BASE_URL` to audit an approved preview or production origin. A Husky pre-commit hook runs lint-staged checks. GitHub Actions runs the complete quality gate for pull requests and pushes to `main`.
 
 ## Current structure
 
@@ -75,14 +78,14 @@ The separated admin route groups ensure `/admin/login` remains accessible while 
 
 ## Environment variables
 
-`.env.example` documents every planned variable. Values are configured only when the corresponding integration is implemented:
+`.env.example` documents every supported application variable. Configure values only for the corresponding enabled integration:
 
 - Supabase database, authentication, and storage
 - Resend email notifications and Turnstile anti-spam protection
 - Consent-aware Google Analytics, Vercel Web Analytics, and Speed Insights
 - Vercel preview and production environments
 
-The Supabase project URL and publishable key may be used by browser code when Row Level Security is enabled. Supabase secret keys, email, anti-spam, and revalidation secrets are server-only.
+The Supabase project URL and publishable key may be used by browser code when Row Level Security is enabled. Supabase secret keys, email, and anti-spam secrets are server-only.
 
 ## Documentation
 
@@ -93,11 +96,13 @@ The Supabase project URL and publishable key may be used by browser code when Ro
 - [Contact, inquiries, and provider setup](docs/CONTACT_INQUIRIES.md)
 - [Admin dashboard and CMS operations](docs/ADMIN_CMS.md)
 - [SEO, analytics, consent, and legal operations](docs/SEO_ANALYTICS_PRIVACY.md)
+- [Final QA, performance, and handover](docs/FINAL_QA_HANDOVER.md)
+- [Real-content replacement specification](docs/REAL_CONTENT_REPLACEMENT.md)
 - [Work content and provenance](docs/WORK_CONTENT.md)
 - [About and testimonials content](docs/ABOUT_TESTIMONIALS_CONTENT.md)
 - [Studio Journal content](docs/BLOG_CONTENT.md)
 - [Security policy](SECURITY.md)
-- [Deployment baseline](DEPLOYMENT.md)
+- [Deployment, verification, and rollback](DEPLOYMENT.md)
 
 ## Ownership
 

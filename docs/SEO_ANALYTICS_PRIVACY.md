@@ -123,6 +123,10 @@ From the repository root with the pinned Node.js runtime:
 ```bash
 npm ci
 npm run validate
+npm audit --audit-level=high
+npm run start -- --hostname 0.0.0.0 --port 3000
+# In a second terminal:
+npm run runtime:check
 ```
 
-Focused Stage 11 coverage includes analytics configuration, consent parsing and expiry, fail-closed storage, provider gating and revocation, sitemap and robots output, private noindex controls, metadata consistency, legal routes, and JSON-LD escaping.
+Focused coverage includes analytics configuration, consent parsing and expiry, fail-closed storage, provider gating and revocation, sitemap and robots output, private noindex controls, metadata consistency, legal routes, JSON-LD escaping, all published sitemap routes, internal links, and missing-record hard 404s. After deployment, rerun the runtime check with `RUNTIME_AUDIT_BASE_URL` set to the canonical production origin.
