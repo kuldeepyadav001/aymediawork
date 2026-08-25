@@ -692,6 +692,28 @@ export async function deleteContentAction(formData: FormData) {
   mutationSuccess(config.path, "Record deleted.");
 }
 
+export async function deleteInquiryAction(formData: FormData) {
+  const context = await requireAdmin();
+  if (!canPublish(context.role))
+    mutationError("/admin/inquiries", "Editors cannot delete inquiries.");
+
+  const id = text(formData, "id");
+  const supabase = await createSupabaseServerClient();
+  const { data: deleted, error } = await supabase
+    .from("inquiries")
+    .delete()
+    .eq("id", id)
+    .select("id")
+    .maybeSingle();
+  if (error || !deleted) {
+    mutationError(
+      "/admin/inquiries",
+      error?.message ?? "The inquiry was not found or could not be deleted.",
+    );
+  }
+  mutationSuccess("/admin/inquiries", "Inquiry deleted.");
+}
+
 export async function updateInquiryAction(formData: FormData) {
   await requireAdmin();
   const id = text(formData, "id");

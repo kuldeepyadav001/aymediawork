@@ -26,6 +26,7 @@ vi.mock("@/lib/supabase/session", () => ({
 
 import {
   deleteContentAction,
+  deleteInquiryAction,
   deleteMediaAction,
   saveBlogPostAction,
   saveClientLogoAction,
@@ -302,6 +303,73 @@ describe("admin action hardening", () => {
     );
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/", "layout");
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/work/former-project");
+  });
+
+  it("refuses inquiry deletion for editors before calling Supabase", async () => {
+    mocks.getAdminContext.mockResolvedValue({
+      displayName: "Editor",
+      email: "editor@example.com",
+      role: "editor",
+      userId: "1f0cf5c7-92e9-4be2-91e2-bc11fc7999aa",
+    });
+
+    const formData = new FormData();
+    formData.set("id", "5d3e0668-06ce-45f2-8f0e-4fca17b3c9de");
+
+    await expect(deleteInquiryAction(formData)).rejects.toThrow(
+      "REDIRECT:/admin/inquiries?error=Editors%20cannot%20delete%20inquiries.",
+    );
+    expect(mocks.createServerClient).not.toHaveBeenCalled();
+  });
+
+  it("deletes an inquiry for a senior admin and reports success", async () => {
+    const deleteQuery = {
+      delete: vi.fn(),
+      eq: vi.fn(),
+      maybeSingle: vi.fn().mockResolvedValue({
+        data: { id: "5d3e0668-06ce-45f2-8f0e-4fca17b3c9de" },
+        error: null,
+      }),
+      select: vi.fn(),
+    };
+    deleteQuery.delete.mockReturnValue(deleteQuery);
+    deleteQuery.eq.mockReturnValue(deleteQuery);
+    deleteQuery.select.mockReturnValue(deleteQuery);
+    const from = vi.fn().mockReturnValue(deleteQuery);
+    mocks.createServerClient.mockResolvedValue({ from });
+
+    const formData = new FormData();
+    formData.set("id", "5d3e0668-06ce-45f2-8f0e-4fca17b3c9de");
+
+    await expect(deleteInquiryAction(formData)).rejects.toThrow(
+      "REDIRECT:/admin/inquiries?success=Inquiry%20deleted.",
+    );
+    expect(from).toHaveBeenCalledWith("inquiries");
+    expect(deleteQuery.eq).toHaveBeenCalledWith(
+      "id",
+      "5d3e0668-06ce-45f2-8f0e-4fca17b3c9de",
+    );
+  });
+
+  it("does not report inquiry deletion success when no row was removed", async () => {
+    const deleteQuery = {
+      delete: vi.fn(),
+      eq: vi.fn(),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+      select: vi.fn(),
+    };
+    deleteQuery.delete.mockReturnValue(deleteQuery);
+    deleteQuery.eq.mockReturnValue(deleteQuery);
+    deleteQuery.select.mockReturnValue(deleteQuery);
+    const from = vi.fn().mockReturnValue(deleteQuery);
+    mocks.createServerClient.mockResolvedValue({ from });
+
+    const formData = new FormData();
+    formData.set("id", "5d3e0668-06ce-45f2-8f0e-4fca17b3c9de");
+
+    await expect(deleteInquiryAction(formData)).rejects.toThrow(
+      "REDIRECT:/admin/inquiries?error=The%20inquiry%20was%20not%20found%20or%20could%20not%20be%20deleted.",
+    );
   });
 
   it("reports when both media metadata registration and orphan cleanup fail", async () => {

@@ -190,6 +190,10 @@ After the migration and Vercel values are configured:
 
 Never use real client confidential information for this setup test. Delete or clearly mark controlled test records after verification.
 
+## Permanent inquiry deletion
+
+Owners and admins can permanently delete an inquiry from `/admin/inquiries` using the Delete inquiry control, after a confirmation prompt. Deletion removes the inquiry row and its `inquiry_services` links through the existing cascade; the audit history keeps a non-PII deletion record (actor, action, entity id, timestamp). Editors cannot delete inquiries — the server action refuses them, and Supabase RLS independently denies the operation. Deletion is irreversible; close or mark inquiries as spam instead when a record should be retained.
+
 ## Replacement and legal checklist
 
 Before final launch, the client must approve:

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import {
+  deleteInquiryAction,
   updateInquiryAction,
   updateSubscriberAction,
 } from "@/app/admin/actions";
@@ -12,8 +13,12 @@ import {
   StatusBadge,
 } from "@/components/admin/admin-ui";
 import { adminSelectClassName } from "@/components/admin/admin-form";
-import { FormSubmitButton } from "@/components/admin/form-buttons";
+import {
+  ConfirmSubmitButton,
+  FormSubmitButton,
+} from "@/components/admin/form-buttons";
 import { getInquiryData } from "@/lib/supabase/queries/admin";
+import { canPublish, getAdminContext } from "@/lib/supabase/session";
 
 export const metadata: Metadata = { title: "Inquiries" };
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -25,7 +30,12 @@ export default async function InquiriesPage({
 }: {
   searchParams: SearchParams;
 }) {
-  const [data, query] = await Promise.all([getInquiryData(), searchParams]);
+  const [data, query, context] = await Promise.all([
+    getInquiryData(),
+    searchParams,
+    getAdminContext(),
+  ]);
+  const canDelete = context ? canPublish(context.role) : false;
 
   return (
     <>
@@ -111,6 +121,18 @@ export default async function InquiriesPage({
                       </FormSubmitButton>
                     </form>
                   </div>
+
+                  {canDelete ? (
+                    <form
+                      action={deleteInquiryAction}
+                      className="mt-3 flex justify-end"
+                    >
+                      <input name="id" type="hidden" value={inquiry.id} />
+                      <ConfirmSubmitButton message="Permanently delete this inquiry and its selected-service links? This cannot be undone.">
+                        Delete inquiry
+                      </ConfirmSubmitButton>
+                    </form>
+                  ) : null}
 
                   <p className="mt-5 whitespace-pre-wrap rounded-lg bg-white/[0.025] p-4 text-sm leading-6">
                     {message}
