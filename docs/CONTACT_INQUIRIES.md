@@ -194,6 +194,10 @@ Never use real client confidential information for this setup test. Delete or cl
 
 Owners and admins can permanently delete an inquiry from `/admin/inquiries` using the Delete inquiry control, after a confirmation prompt. Deletion removes the inquiry row and its `inquiry_services` links through the existing cascade; the audit history keeps a non-PII deletion record (actor, action, entity id, timestamp). Editors cannot delete inquiries — the server action refuses them, and Supabase RLS independently denies the operation. Deletion is irreversible; close or mark inquiries as spam instead when a record should be retained.
 
+## Permanent subscriber deletion
+
+Owners and admins can also permanently delete a newsletter subscriber record from the same page, after a confirmation prompt. Deletion erases the stored consent evidence, so the address can only return through a fresh explicit footer subscription; administrators still cannot resubscribe anyone manually. The audit history keeps a non-PII deletion record, and editors are refused by both the server action and RLS. Prefer Unsubscribe when a suppression record should be kept; use Delete for erasure requests or unwanted records.
+
 ## Replacement and legal checklist
 
 Before final launch, the client must approve:

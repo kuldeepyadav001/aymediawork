@@ -28,6 +28,7 @@ import {
   deleteContentAction,
   deleteInquiryAction,
   deleteMediaAction,
+  deleteSubscriberAction,
   saveBlogPostAction,
   saveClientLogoAction,
   saveProjectAction,
@@ -369,6 +370,73 @@ describe("admin action hardening", () => {
 
     await expect(deleteInquiryAction(formData)).rejects.toThrow(
       "REDIRECT:/admin/inquiries?error=The%20inquiry%20was%20not%20found%20or%20could%20not%20be%20deleted.",
+    );
+  });
+
+  it("refuses subscriber deletion for editors before calling Supabase", async () => {
+    mocks.getAdminContext.mockResolvedValue({
+      displayName: "Editor",
+      email: "editor@example.com",
+      role: "editor",
+      userId: "1f0cf5c7-92e9-4be2-91e2-bc11fc7999aa",
+    });
+
+    const formData = new FormData();
+    formData.set("id", "9a4b7c31-58dc-40d6-9f21-6f3b8f1f6a2c");
+
+    await expect(deleteSubscriberAction(formData)).rejects.toThrow(
+      "REDIRECT:/admin/inquiries?error=Editors%20cannot%20delete%20subscribers.",
+    );
+    expect(mocks.createServerClient).not.toHaveBeenCalled();
+  });
+
+  it("deletes a subscriber for a senior admin and reports success", async () => {
+    const deleteQuery = {
+      delete: vi.fn(),
+      eq: vi.fn(),
+      maybeSingle: vi.fn().mockResolvedValue({
+        data: { id: "9a4b7c31-58dc-40d6-9f21-6f3b8f1f6a2c" },
+        error: null,
+      }),
+      select: vi.fn(),
+    };
+    deleteQuery.delete.mockReturnValue(deleteQuery);
+    deleteQuery.eq.mockReturnValue(deleteQuery);
+    deleteQuery.select.mockReturnValue(deleteQuery);
+    const from = vi.fn().mockReturnValue(deleteQuery);
+    mocks.createServerClient.mockResolvedValue({ from });
+
+    const formData = new FormData();
+    formData.set("id", "9a4b7c31-58dc-40d6-9f21-6f3b8f1f6a2c");
+
+    await expect(deleteSubscriberAction(formData)).rejects.toThrow(
+      "REDIRECT:/admin/inquiries?success=Subscriber%20deleted.",
+    );
+    expect(from).toHaveBeenCalledWith("newsletter_subscribers");
+    expect(deleteQuery.eq).toHaveBeenCalledWith(
+      "id",
+      "9a4b7c31-58dc-40d6-9f21-6f3b8f1f6a2c",
+    );
+  });
+
+  it("does not report subscriber deletion success when no row was removed", async () => {
+    const deleteQuery = {
+      delete: vi.fn(),
+      eq: vi.fn(),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+      select: vi.fn(),
+    };
+    deleteQuery.delete.mockReturnValue(deleteQuery);
+    deleteQuery.eq.mockReturnValue(deleteQuery);
+    deleteQuery.select.mockReturnValue(deleteQuery);
+    const from = vi.fn().mockReturnValue(deleteQuery);
+    mocks.createServerClient.mockResolvedValue({ from });
+
+    const formData = new FormData();
+    formData.set("id", "9a4b7c31-58dc-40d6-9f21-6f3b8f1f6a2c");
+
+    await expect(deleteSubscriberAction(formData)).rejects.toThrow(
+      "REDIRECT:/admin/inquiries?error=The%20subscriber%20was%20not%20found%20or%20could%20not%20be%20deleted.",
     );
   });
 

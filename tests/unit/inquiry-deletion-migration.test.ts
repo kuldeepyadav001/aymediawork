@@ -21,6 +21,15 @@ const contactMigration = readFileSync(
 )
   .replace(/\s+/g, " ")
   .toLowerCase();
+const subscriberMigration = readFileSync(
+  join(
+    process.cwd(),
+    "supabase/migrations/20260825150000_secure_subscriber_deletion.sql",
+  ),
+  "utf8",
+)
+  .replace(/\s+/g, " ")
+  .toLowerCase();
 
 describe("secure inquiry deletion migration", () => {
   it("runs inside a single transaction", () => {
@@ -43,5 +52,23 @@ describe("secure inquiry deletion migration", () => {
     expect(contactMigration).toContain(
       "inquiry_id uuid not null references public.inquiries(id) on delete cascade",
     );
+  });
+});
+
+describe("secure subscriber deletion migration", () => {
+  it("runs inside a single transaction", () => {
+    expect(subscriberMigration).toContain(" begin; ");
+    expect(subscriberMigration.trimEnd().endsWith("commit;")).toBe(true);
+  });
+
+  it("grants deletion only through the senior-admin RLS policy", () => {
+    expect(subscriberMigration).toContain(
+      "create policy \"senior admins delete subscribers\" on public.newsletter_subscribers for delete to authenticated using (public.has_admin_role(array['owner', 'admin']))",
+    );
+    expect(subscriberMigration).toContain(
+      "grant delete on public.newsletter_subscribers to authenticated",
+    );
+    expect(subscriberMigration).not.toContain("to anon");
+    expect(subscriberMigration).not.toContain("using (true)");
   });
 });

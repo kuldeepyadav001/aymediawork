@@ -767,6 +767,28 @@ export async function updateSubscriberAction(formData: FormData) {
   mutationSuccess("/admin/inquiries", "Subscriber unsubscribed.");
 }
 
+export async function deleteSubscriberAction(formData: FormData) {
+  const context = await requireAdmin();
+  if (!canPublish(context.role))
+    mutationError("/admin/inquiries", "Editors cannot delete subscribers.");
+
+  const id = text(formData, "id");
+  const supabase = await createSupabaseServerClient();
+  const { data: deleted, error } = await supabase
+    .from("newsletter_subscribers")
+    .delete()
+    .eq("id", id)
+    .select("id")
+    .maybeSingle();
+  if (error || !deleted) {
+    mutationError(
+      "/admin/inquiries",
+      error?.message ?? "The subscriber was not found or could not be deleted.",
+    );
+  }
+  mutationSuccess("/admin/inquiries", "Subscriber deleted.");
+}
+
 export async function saveSettingAction(formData: FormData) {
   const context = await requireAdmin();
   if (!canManageUsers(context.role))

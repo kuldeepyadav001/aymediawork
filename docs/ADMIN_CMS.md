@@ -74,6 +74,7 @@ The app registers each invited profile and its audit entry in one database trans
 | Edit already published/archived content or active services    | Yes     | Yes     | No      |
 | Update inquiry operational state                              | Yes     | Yes     | Yes     |
 | Permanently delete an inquiry                                 | Yes     | Yes     | No      |
+| Permanently delete a newsletter subscriber                    | Yes     | Yes     | No      |
 | Upload media                                                  | Yes     | Yes     | Yes     |
 | Delete media                                                  | Yes     | Yes     | No      |
 | Manage public/private settings                                | Yes     | No      | No      |

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import {
   deleteInquiryAction,
+  deleteSubscriberAction,
   updateInquiryAction,
   updateSubscriberAction,
 } from "@/app/admin/actions";
@@ -253,30 +254,44 @@ export default async function InquiriesPage({
                       <StatusBadge status={subscriber.status} />
                     </td>
                     <td className="px-5 py-4">
-                      {subscriber.status === "subscribed" ? (
-                        <form action={updateSubscriberAction}>
-                          <input
-                            name="id"
-                            type="hidden"
-                            value={subscriber.id}
-                          />
-                          <input
-                            name="status"
-                            type="hidden"
-                            value="unsubscribed"
-                          />
-                          <FormSubmitButton
-                            pendingLabel="Unsubscribing…"
-                            variant="secondary"
-                          >
-                            Unsubscribe
-                          </FormSubmitButton>
-                        </form>
-                      ) : (
-                        <span className="text-xs leading-5 text-muted-foreground">
-                          Fresh explicit consent is required to resubscribe.
-                        </span>
-                      )}
+                      <div className="flex flex-wrap items-center gap-2">
+                        {subscriber.status === "subscribed" ? (
+                          <form action={updateSubscriberAction}>
+                            <input
+                              name="id"
+                              type="hidden"
+                              value={subscriber.id}
+                            />
+                            <input
+                              name="status"
+                              type="hidden"
+                              value="unsubscribed"
+                            />
+                            <FormSubmitButton
+                              pendingLabel="Unsubscribing…"
+                              variant="secondary"
+                            >
+                              Unsubscribe
+                            </FormSubmitButton>
+                          </form>
+                        ) : (
+                          <span className="text-xs leading-5 text-muted-foreground">
+                            Fresh explicit consent is required to resubscribe.
+                          </span>
+                        )}
+                        {canDelete ? (
+                          <form action={deleteSubscriberAction}>
+                            <input
+                              name="id"
+                              type="hidden"
+                              value={subscriber.id}
+                            />
+                            <ConfirmSubmitButton message="Permanently delete this subscriber record and its consent evidence? Re-adding this address will require fresh explicit consent. This cannot be undone.">
+                              Delete
+                            </ConfirmSubmitButton>
+                          </form>
+                        ) : null}
+                      </div>
                     </td>
                   </tr>
                 ))}
