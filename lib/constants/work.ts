@@ -11,8 +11,8 @@ export type WorkCategory = (typeof WORK_CATEGORIES)[number];
 export type WorkStudy = {
   category: string;
   description: string;
-  direction: string;
-  experience: string;
+  direction: string | null;
+  experience: string | null;
   explores: readonly string[];
   format: string;
   id: string;
@@ -27,13 +27,13 @@ export type WorkStudy = {
     name: string;
   }[];
   premise: {
-    context: string;
-    question: string;
+    context: string | null;
+    question: string | null;
   };
-  principle: string;
+  principle: string | null;
   services: readonly string[];
   slug: string;
-  system: string;
+  system: string | null;
   title: string;
   tone: readonly string[];
   videoUrl?: string | null;

@@ -32,6 +32,16 @@ export function WorkDetail({
 }) {
   const videoId = extractYouTubeVideoId(study.videoUrl);
   const platformLabel = externalPlatformLabel(study.externalUrl);
+  const narrativeLayers = [
+    { label: "Direction", copy: study.direction, icon: Sparkles },
+    { label: "System", copy: study.system, icon: Layers3 },
+    { label: "Experience", copy: study.experience, icon: ScanLine },
+  ].filter(
+    (layer): layer is { label: string; copy: string; icon: typeof Sparkles } =>
+      Boolean(layer.copy),
+  );
+  const hasFullNarrative = narrativeLayers.length === 3;
+  const isConcept = !study.videoUrl && !study.externalUrl;
   const services = study.services
     .map((slug) => catalog.find((service) => service.slug === slug))
     .filter((service): service is Service => Boolean(service));
@@ -93,16 +103,20 @@ export function WorkDetail({
               <dl className="divide-y divide-white/[0.08] border-y border-white/[0.08]">
                 <div className="grid grid-cols-[6rem_1fr] gap-4 py-4 text-sm">
                   <dt className="text-muted-foreground">Status</dt>
-                  <dd className="font-medium">Original studio concept</dd>
+                  <dd className="font-medium">
+                    {isConcept ? "Original studio concept" : "Client project"}
+                  </dd>
                 </div>
                 <div className="grid grid-cols-[6rem_1fr] gap-4 py-4 text-sm">
                   <dt className="text-muted-foreground">Format</dt>
                   <dd className="font-medium">{study.format}</dd>
                 </div>
-                <div className="grid grid-cols-[6rem_1fr] gap-4 py-4 text-sm">
-                  <dt className="text-muted-foreground">Tone</dt>
-                  <dd className="font-medium">{study.tone.join(" / ")}</dd>
-                </div>
+                {study.tone.length > 0 ? (
+                  <div className="grid grid-cols-[6rem_1fr] gap-4 py-4 text-sm">
+                    <dt className="text-muted-foreground">Tone</dt>
+                    <dd className="font-medium">{study.tone.join(" / ")}</dd>
+                  </div>
+                ) : null}
               </dl>
             </Reveal>
           </div>
@@ -133,12 +147,22 @@ export function WorkDetail({
                     className="absolute inset-0 bg-[linear-gradient(180deg,transparent_58%,rgba(4,6,12,0.55))]"
                   />
                   <span className="absolute bottom-5 left-5 rounded-full border border-white/15 bg-background/60 px-3 py-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.17em] text-white/75 backdrop-blur-md sm:bottom-7 sm:left-7">
-                    Self-initiated direction study
+                    {isConcept
+                      ? "Self-initiated direction study"
+                      : "Client project"}
                   </span>
                 </div>
                 <figcaption className="mt-3 flex flex-col gap-1 text-xs leading-5 text-muted-foreground sm:flex-row sm:justify-between">
-                  <span>Original visual artwork created for AY Media Work</span>
-                  <span>No client attribution or performance claim</span>
+                  {isConcept ? (
+                    <>
+                      <span>
+                        Original visual artwork created for AY Media Work
+                      </span>
+                      <span>No client attribution or performance claim</span>
+                    </>
+                  ) : (
+                    <span>Delivered work — shared with client permission</span>
+                  )}
                 </figcaption>
               </figure>
             ) : null}
@@ -156,176 +180,193 @@ export function WorkDetail({
         </Container>
       </section>
 
-      <section className="py-section">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-[minmax(16rem,0.48fr)_minmax(0,1.05fr)] lg:gap-20">
-            <Reveal>
-              <p className="editorial-kicker">Creative premise</p>
-              <div className="mt-7 flex size-12 items-center justify-center rounded-full border border-primary/25 bg-primary/10 text-primary">
-                <ScanLine aria-hidden="true" className="size-5" />
-              </div>
-            </Reveal>
-            <Reveal delay={0.06}>
-              <h2 className="max-w-4xl text-balance text-heading-xl">
-                {study.premise.question}
+      {study.premise.question ? (
+        <section className="py-section">
+          <Container>
+            <div className="grid gap-12 lg:grid-cols-[minmax(16rem,0.48fr)_minmax(0,1.05fr)] lg:gap-20">
+              <Reveal>
+                <p className="editorial-kicker">Creative premise</p>
+                <div className="mt-7 flex size-12 items-center justify-center rounded-full border border-primary/25 bg-primary/10 text-primary">
+                  <ScanLine aria-hidden="true" className="size-5" />
+                </div>
+              </Reveal>
+              <Reveal delay={0.06}>
+                <h2 className="max-w-4xl text-balance text-heading-xl">
+                  {study.premise.question}
+                </h2>
+                {study.premise.context ? (
+                  <p className="mt-7 max-w-3xl text-pretty text-base leading-8 text-muted-foreground">
+                    {study.premise.context}
+                  </p>
+                ) : null}
+              </Reveal>
+            </div>
+          </Container>
+        </section>
+      ) : null}
+
+      {narrativeLayers.length > 0 ? (
+        <section className="border-y border-white/[0.08] bg-surface/35 py-section">
+          <Container>
+            <Reveal className="max-w-4xl">
+              <p className="editorial-kicker">From question to direction</p>
+              <h2 className="mt-6 text-balance text-heading-xl">
+                The layers holding the idea together.
               </h2>
-              <p className="mt-7 max-w-3xl text-pretty text-base leading-8 text-muted-foreground">
-                {study.premise.context}
+            </Reveal>
+
+            <Stagger className="mt-12 grid gap-px overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.08] lg:grid-cols-3">
+              {narrativeLayers.map(({ copy, icon: Icon, label }, index) => (
+                <StaggerItem className="min-h-full bg-background" key={label}>
+                  <article className="flex h-full min-h-96 flex-col p-7 sm:p-8">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xs text-primary">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <Icon
+                        aria-hidden="true"
+                        className="size-4 text-muted-foreground"
+                      />
+                    </div>
+                    <div className="mt-auto pt-20">
+                      <h3 className="font-display text-2xl font-medium tracking-[-0.035em]">
+                        {label}
+                      </h3>
+                      <p className="mt-5 text-sm leading-7 text-muted-foreground">
+                        {copy}
+                      </p>
+                    </div>
+                  </article>
+                </StaggerItem>
+              ))}
+            </Stagger>
+          </Container>
+        </section>
+      ) : null}
+
+      {hasFullNarrative ? (
+        <section className="py-section">
+          <Container>
+            <Reveal className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+              <div>
+                <p className="editorial-kicker">Frame study</p>
+                <h2 className="mt-6 max-w-3xl text-balance text-heading-xl">
+                  One world, examined at different scales.
+                </h2>
+              </div>
+              <p className="max-w-md text-sm leading-6 text-muted-foreground lg:text-right">
+                These crops examine composition and material within the same
+                original concept artwork; they are not separate delivered
+                assets.
               </p>
             </Reveal>
-          </div>
-        </Container>
-      </section>
 
-      <section className="border-y border-white/[0.08] bg-surface/35 py-section">
-        <Container>
-          <Reveal className="max-w-4xl">
-            <p className="editorial-kicker">From question to direction</p>
-            <h2 className="mt-6 text-balance text-heading-xl">
-              Three layers holding the idea together.
-            </h2>
-          </Reveal>
-
-          <Stagger className="mt-12 grid gap-px overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.08] lg:grid-cols-3">
-            {[
-              { label: "Direction", copy: study.direction, icon: Sparkles },
-              { label: "System", copy: study.system, icon: Layers3 },
-              { label: "Experience", copy: study.experience, icon: ScanLine },
-            ].map(({ copy, icon: Icon, label }, index) => (
-              <StaggerItem className="min-h-full bg-background" key={label}>
-                <article className="flex h-full min-h-96 flex-col p-7 sm:p-8">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs text-primary">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <Icon
-                      aria-hidden="true"
-                      className="size-4 text-muted-foreground"
-                    />
-                  </div>
-                  <div className="mt-auto pt-20">
-                    <h3 className="font-display text-2xl font-medium tracking-[-0.035em]">
-                      {label}
-                    </h3>
-                    <p className="mt-5 text-sm leading-7 text-muted-foreground">
-                      {copy}
-                    </p>
-                  </div>
-                </article>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </Container>
-      </section>
-
-      <section className="py-section">
-        <Container>
-          <Reveal className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <p className="editorial-kicker">Frame study</p>
-              <h2 className="mt-6 max-w-3xl text-balance text-heading-xl">
-                One world, examined at different scales.
-              </h2>
-            </div>
-            <p className="max-w-md text-sm leading-6 text-muted-foreground lg:text-right">
-              These crops examine composition and material within the same
-              original concept artwork; they are not separate delivered assets.
-            </p>
-          </Reveal>
-
-          <Reveal
-            className="mt-12 grid gap-4 lg:grid-cols-12 lg:grid-rows-2"
-            delay={0.06}
-          >
-            <div className="relative min-h-80 overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel lg:col-span-8 lg:row-span-2 lg:min-h-[42rem]">
-              <Image
-                fill
-                aria-hidden="true"
-                alt=""
-                className="object-cover"
-                sizes="(max-width: 1023px) 92vw, 61vw"
-                src={study.image.src}
-              />
-            </div>
-            <div className="relative min-h-64 overflow-hidden rounded-xl border border-white/[0.1] bg-surface lg:col-span-4 lg:min-h-0">
-              <Image
-                fill
-                aria-hidden="true"
-                alt=""
-                className="scale-150 object-cover object-left"
-                sizes="(max-width: 1023px) 92vw, 31vw"
-                src={study.image.src}
-              />
-            </div>
-            <div className="relative min-h-64 overflow-hidden rounded-xl border border-white/[0.1] bg-surface lg:col-span-4 lg:min-h-0">
-              <Image
-                fill
-                aria-hidden="true"
-                alt=""
-                className="scale-150 object-cover object-right"
-                sizes="(max-width: 1023px) 92vw, 31vw"
-                src={study.image.src}
-              />
-            </div>
-          </Reveal>
-        </Container>
-      </section>
-
-      <section className="border-y border-white/[0.08] bg-surface/35 py-section">
-        <Container>
-          <div className="grid gap-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(18rem,0.5fr)] lg:gap-20">
-            <Reveal>
-              <p className="editorial-kicker">What this concept explores</p>
-              <h2 className="mt-6 max-w-3xl text-balance text-heading-xl">
-                Creative choices, not invented outcomes.
-              </h2>
-              <Stagger className="mt-10 grid gap-3 sm:grid-cols-2">
-                {study.explores.map((item) => (
-                  <StaggerItem key={item}>
-                    <div className="flex min-h-28 items-start gap-4 rounded-lg border border-white/[0.1] bg-background p-5">
-                      <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                        <Check aria-hidden="true" className="size-3.5" />
-                      </span>
-                      <p className="text-sm font-medium leading-6">{item}</p>
-                    </div>
-                  </StaggerItem>
-                ))}
-              </Stagger>
+            <Reveal
+              className="mt-12 grid gap-4 lg:grid-cols-12 lg:grid-rows-2"
+              delay={0.06}
+            >
+              <div className="relative min-h-80 overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel lg:col-span-8 lg:row-span-2 lg:min-h-[42rem]">
+                <Image
+                  fill
+                  aria-hidden="true"
+                  alt=""
+                  className="object-cover"
+                  sizes="(max-width: 1023px) 92vw, 61vw"
+                  src={study.image.src}
+                />
+              </div>
+              <div className="relative min-h-64 overflow-hidden rounded-xl border border-white/[0.1] bg-surface lg:col-span-4 lg:min-h-0">
+                <Image
+                  fill
+                  aria-hidden="true"
+                  alt=""
+                  className="scale-150 object-cover object-left"
+                  sizes="(max-width: 1023px) 92vw, 31vw"
+                  src={study.image.src}
+                />
+              </div>
+              <div className="relative min-h-64 overflow-hidden rounded-xl border border-white/[0.1] bg-surface lg:col-span-4 lg:min-h-0">
+                <Image
+                  fill
+                  aria-hidden="true"
+                  alt=""
+                  className="scale-150 object-cover object-right"
+                  sizes="(max-width: 1023px) 92vw, 31vw"
+                  src={study.image.src}
+                />
+              </div>
             </Reveal>
+          </Container>
+        </section>
+      ) : null}
 
-            <Reveal delay={0.08}>
-              <aside className="rounded-xl border border-white/[0.1] bg-background p-6 shadow-panel sm:p-8">
-                <p className="editorial-kicker">Design principle</p>
-                <blockquote className="mt-6 font-display text-2xl font-medium leading-snug tracking-[-0.035em]">
-                  “{study.principle}”
-                </blockquote>
-
-                <p className="mt-9 text-xs font-semibold uppercase tracking-[0.16em] text-foreground/70">
-                  Working palette
-                </p>
-                <ul className="mt-4 space-y-3">
-                  {study.palette.map((colour) => (
-                    <li
-                      className="flex items-center gap-3 text-xs text-muted-foreground"
-                      key={colour.hex}
-                    >
-                      <span
-                        aria-label={`${colour.name}: ${colour.hex}`}
-                        className="size-8 shrink-0 rounded-full border border-white/15"
-                        style={{ backgroundColor: colour.hex }}
-                      />
-                      <span className="flex-1 text-foreground/80">
-                        {colour.name}
-                      </span>
-                      <span className="font-mono">{colour.hex}</span>
-                    </li>
+      {study.explores.length > 0 || study.principle ? (
+        <section className="border-y border-white/[0.08] bg-surface/35 py-section">
+          <Container>
+            <div className="grid gap-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(18rem,0.5fr)] lg:gap-20">
+              <Reveal>
+                <p className="editorial-kicker">What this concept explores</p>
+                <h2 className="mt-6 max-w-3xl text-balance text-heading-xl">
+                  Creative choices, not invented outcomes.
+                </h2>
+                <Stagger className="mt-10 grid gap-3 sm:grid-cols-2">
+                  {study.explores.map((item) => (
+                    <StaggerItem key={item}>
+                      <div className="flex min-h-28 items-start gap-4 rounded-lg border border-white/[0.1] bg-background p-5">
+                        <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                          <Check aria-hidden="true" className="size-3.5" />
+                        </span>
+                        <p className="text-sm font-medium leading-6">{item}</p>
+                      </div>
+                    </StaggerItem>
                   ))}
-                </ul>
-              </aside>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
+                </Stagger>
+              </Reveal>
+
+              {study.principle || study.palette.length > 0 ? (
+                <Reveal delay={0.08}>
+                  <aside className="rounded-xl border border-white/[0.1] bg-background p-6 shadow-panel sm:p-8">
+                    {study.principle ? (
+                      <>
+                        <p className="editorial-kicker">Design principle</p>
+                        <blockquote className="mt-6 font-display text-2xl font-medium leading-snug tracking-[-0.035em]">
+                          “{study.principle}”
+                        </blockquote>
+                      </>
+                    ) : null}
+
+                    {study.palette.length > 0 ? (
+                      <>
+                        <p className="mt-9 text-xs font-semibold uppercase tracking-[0.16em] text-foreground/70">
+                          Working palette
+                        </p>
+                        <ul className="mt-4 space-y-3">
+                          {study.palette.map((colour) => (
+                            <li
+                              className="flex items-center gap-3 text-xs text-muted-foreground"
+                              key={colour.hex}
+                            >
+                              <span
+                                aria-label={`${colour.name}: ${colour.hex}`}
+                                className="size-8 shrink-0 rounded-full border border-white/15"
+                                style={{ backgroundColor: colour.hex }}
+                              />
+                              <span className="flex-1 text-foreground/80">
+                                {colour.name}
+                              </span>
+                              <span className="font-mono">{colour.hex}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : null}
+                  </aside>
+                </Reveal>
+              ) : null}
+            </div>
+          </Container>
+        </section>
+      ) : null}
 
       <section className="py-section">
         <Container>

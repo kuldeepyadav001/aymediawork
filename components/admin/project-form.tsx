@@ -195,14 +195,16 @@ export function ProjectForm({
         </AdminField>
       </AdminFormSection>
 
-      <AdminFormSection title="Case study narrative">
+      <AdminFormSection
+        description="Optional. Fill these for showcase entries that deserve a full case-study page; leave empty for quick card entries — empty sections simply don't render."
+        title="Case study narrative (showcase entries)"
+      >
         <div className="sm:col-span-2">
           <AdminField htmlFor="premiseQuestion" label="Premise question">
             <Textarea
               defaultValue={project?.premise_question}
               id="premiseQuestion"
               name="premiseQuestion"
-              required
             />
           </AdminField>
         </div>
@@ -212,7 +214,6 @@ export function ProjectForm({
               defaultValue={project?.premise_context}
               id="premiseContext"
               name="premiseContext"
-              required
             />
           </AdminField>
         </div>
@@ -222,7 +223,6 @@ export function ProjectForm({
               defaultValue={project?.direction}
               id="direction"
               name="direction"
-              required
             />
           </AdminField>
         </div>
@@ -232,7 +232,6 @@ export function ProjectForm({
               defaultValue={project?.system}
               id="system"
               name="system"
-              required
             />
           </AdminField>
         </div>
@@ -242,7 +241,6 @@ export function ProjectForm({
               defaultValue={project?.experience}
               id="experience"
               name="experience"
-              required
             />
           </AdminField>
         </div>
@@ -252,14 +250,13 @@ export function ProjectForm({
               defaultValue={project?.principle}
               id="principle"
               name="principle"
-              required
             />
           </AdminField>
         </div>
       </AdminFormSection>
 
       <AdminFormSection
-        description="Enter one exploration or tone per line. Palette must be a JSON array of name/hex objects."
+        description="Optional for card entries. One exploration or tone per line. Palette must be a JSON array of name/hex objects (use [] for none)."
         title="Structured details"
       >
         <AdminField htmlFor="explores" label="Explores">
@@ -267,16 +264,10 @@ export function ProjectForm({
             defaultValue={lines(project?.explores)}
             id="explores"
             name="explores"
-            required
           />
         </AdminField>
         <AdminField htmlFor="tone" label="Tone">
-          <Textarea
-            defaultValue={lines(project?.tone)}
-            id="tone"
-            name="tone"
-            required
-          />
+          <Textarea defaultValue={lines(project?.tone)} id="tone" name="tone" />
         </AdminField>
         <div className="sm:col-span-2">
           <AdminField htmlFor="palette" label="Palette JSON">

@@ -143,8 +143,12 @@ describe("work archive", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: study.title }),
     ).toBeInTheDocument();
+    expect(study.premise.question).toBeTruthy();
     expect(
-      screen.getByRole("heading", { level: 2, name: study.premise.question }),
+      screen.getByRole("heading", {
+        level: 2,
+        name: study.premise.question ?? undefined,
+      }),
     ).toBeInTheDocument();
     expect(
       screen.getByText("No client attribution or performance claim"),

@@ -125,13 +125,21 @@ export const serviceAdminSchema = z.object({
   usefulFor: z.array(requiredText("Useful-for item", 300)).min(1),
 });
 
+const optionalNarrative = (label: string, maximum = 5000) =>
+  z
+    .string()
+    .trim()
+    .max(maximum, `${label} is too long.`)
+    .optional()
+    .default("");
+
 export const projectAdminSchema = z.object({
   category: requiredText("Category", 100),
   externalUrl: optionalHttpUrlSchema.optional().default(""),
   description: requiredText("Description", 1000),
-  direction: requiredText("Direction", 5000),
-  experience: requiredText("Experience", 5000),
-  explores: z.array(requiredText("Exploration", 300)).min(1),
+  direction: optionalNarrative("Direction"),
+  experience: optionalNarrative("Experience"),
+  explores: z.array(requiredText("Exploration", 300)),
   featured: z.boolean(),
   formatLabel: requiredText("Format", 160),
   id: z.string().uuid().optional(),
@@ -144,16 +152,16 @@ export const projectAdminSchema = z.object({
       name: requiredText("Palette name", 100),
     }),
   ),
-  premiseContext: requiredText("Premise context", 5000),
-  premiseQuestion: requiredText("Premise question", 1000),
-  principle: requiredText("Principle", 1000),
+  premiseContext: optionalNarrative("Premise context"),
+  premiseQuestion: optionalNarrative("Premise question", 1000),
+  principle: optionalNarrative("Principle", 1000),
   serviceIds: z.array(z.string().uuid()),
   slug: slugSchema,
   sortOrder: z.number().int().min(1).max(999),
   status: publicationStatusSchema,
-  system: requiredText("System", 5000),
+  system: optionalNarrative("System"),
   title: requiredText("Title", 160),
-  tone: z.array(requiredText("Tone", 100)).min(1),
+  tone: z.array(requiredText("Tone", 100)),
   videoUrl: z
     .string()
     .trim()
