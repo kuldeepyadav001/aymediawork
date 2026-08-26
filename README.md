@@ -2,11 +2,15 @@
 
 Production website and content management platform for AY Media Work, a creative media agency serving brands, businesses, and creators.
 
+**Live site:** https://www.aymediawork.site
+
 ## Project status
 
-**Stage 12 — Final QA, Performance & Handover (release candidate)**
+**Launched — production live, maintenance and content phase.**
 
-The public website, secure inquiries, role-aware Supabase CMS, and protected administration system through Stage 10 are production-active. The local release candidate completes SEO, structured data, indexing, legal routes, consent-gated analytics, final security and accessibility reconciliation, performance optimization, production budgets, all-route runtime auditing, and the operational handover. It remains subject to explicit owner approval before the final push/deployment.
+All twelve delivery stages are complete and deployed: the public website, secure inquiry and newsletter pipeline (Cloudflare Turnstile, honeypot, rate limiting, Resend notifications), the role-aware Supabase CMS with protected administration, SEO/structured data/legal routes, consent-gated analytics, and the performance-budgeted production build. Post-launch additions include secure inquiry/subscriber deletion, YouTube playback and external platform links on work entries, related work on service pages, and the verified studio track-record modules.
+
+Content is owner-managed through `/admin` (services, work, blog, testimonials, client logos, media, inquiries, users, settings). Provisional concept content is replaced progressively with verified business content under [`docs/REAL_CONTENT_REPLACEMENT.md`](docs/REAL_CONTENT_REPLACEMENT.md).
 
 ## Compatibility baseline
 
@@ -39,7 +43,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-Public presentation routes can render locally without real credentials. Persisted form submissions require the Stage 9 provider configuration. Never commit `.env.local` or any secret-bearing file.
+Public presentation routes can render locally without real credentials (code-level fallback content is served when Supabase is not configured). Persisted form submissions and the admin CMS require the provider configuration documented in [`DEPLOYMENT.md`](DEPLOYMENT.md). Never commit `.env.local` or any secret-bearing file.
 
 ## Quality commands
 
@@ -57,53 +61,35 @@ npm audit --audit-level=high
 
 `runtime:check` targets `http://localhost:3000` by default. Set `RUNTIME_AUDIT_BASE_URL` to audit an approved preview or production origin. A Husky pre-commit hook runs lint-staged checks. GitHub Actions runs the complete quality gate for pull requests and pushes to `main`.
 
-## Current structure
+## Architecture at a glance
 
-```text
-app/                     Next.js App Router routes
-  (public)/              Public website routes
-  admin/(auth)/          Unprotected admin authentication routes
-  admin/(protected)/     Protected admin dashboard routes
-  api/                   Server endpoints
-components/              UI, sections, forms, animation, and admin components
-emails/                  Transactional email templates
-lib/                     Supabase, validation, constants, hooks, and utilities
-public/                  Fonts, images, and optimized video assets
-supabase/migrations/     Versioned PostgreSQL migrations
-tests/                   Vitest unit and integration-oriented component tests
-types/                   Shared TypeScript types
-```
+- **Framework:** Next.js App Router; static generation with on-demand revalidation from CMS saves.
+- **Data:** Supabase Postgres behind row-level security with column-scoped anonymous grants; all schema changes live as ordered, immutable migrations in `supabase/migrations/`.
+- **Auth:** Supabase Auth with an owner/admin/editor role model, one-time first-owner bootstrap, and owner-only invitations.
+- **Email:** Resend on a verified sending subdomain; inquiry persistence always precedes notification.
+- **Anti-spam:** Cloudflare Turnstile (server-side Siteverify), honeypot, and pseudonymised rate limiting.
+- **DNS:** Cloudflare authoritative with DNSSEC; Vercel serves the site directly (records unproxied).
 
-The separated admin route groups ensure `/admin/login` remains accessible while dashboard routes receive authentication enforcement.
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full picture and [`docs/FINAL_QA_HANDOVER.md`](docs/FINAL_QA_HANDOVER.md) for the operating runbook.
 
-## Environment variables
+## Operational notes
 
-`.env.example` documents every supported application variable. Configure values only for the corresponding enabled integration:
-
-- Supabase database, authentication, and storage
-- Resend email notifications and Turnstile anti-spam protection
-- Consent-aware Google Analytics, Vercel Web Analytics, and Speed Insights
-- Vercel preview and production environments
-
-The Supabase project URL and publishable key may be used by browser code when Row Level Security is enabled. Supabase secret keys, email, and anti-spam secrets are server-only.
+- Applied database migrations are never edited or re-run; corrections ship as new forward migrations.
+- Any new `public.projects` column consumed by the public site must also be added to the anonymous column-level `SELECT` grant, or public queries fail closed to fallback content.
+- Content inserted directly through SQL does not trigger page revalidation; finish with one CMS save or a redeploy.
+- Real client names, media, quotations, and logos are published only with recorded permission (enforced in the CMS for testimonials and client logos).
 
 ## Documentation
 
-- [Architecture](docs/ARCHITECTURE.md)
-- [Design system](docs/DESIGN_SYSTEM.md)
-- [Homepage content and provenance](docs/HOMEPAGE_CONTENT.md)
-- [Services content and provenance](docs/SERVICES_CONTENT.md)
-- [Contact, inquiries, and provider setup](docs/CONTACT_INQUIRIES.md)
-- [Admin dashboard and CMS operations](docs/ADMIN_CMS.md)
-- [SEO, analytics, consent, and legal operations](docs/SEO_ANALYTICS_PRIVACY.md)
-- [Final QA, performance, and handover](docs/FINAL_QA_HANDOVER.md)
-- [Real-content replacement specification](docs/REAL_CONTENT_REPLACEMENT.md)
-- [Work content and provenance](docs/WORK_CONTENT.md)
-- [About and testimonials content](docs/ABOUT_TESTIMONIALS_CONTENT.md)
-- [Studio Journal content](docs/BLOG_CONTENT.md)
-- [Security policy](SECURITY.md)
-- [Deployment, verification, and rollback](DEPLOYMENT.md)
+| Document                                                               | Purpose                                                 |
+| ---------------------------------------------------------------------- | ------------------------------------------------------- |
+| [`DEPLOYMENT.md`](DEPLOYMENT.md)                                       | Deployment, environment variables, rollback             |
+| [`SECURITY.md`](SECURITY.md)                                           | Security policy and boundaries                          |
+| [`docs/ADMIN_CMS.md`](docs/ADMIN_CMS.md)                               | Admin roles, first-owner bootstrap, publishing workflow |
+| [`docs/CONTACT_INQUIRIES.md`](docs/CONTACT_INQUIRIES.md)               | Inquiry pipeline, notifications, deletion runbook       |
+| [`docs/REAL_CONTENT_REPLACEMENT.md`](docs/REAL_CONTENT_REPLACEMENT.md) | Controlled process for verified business content        |
+| [`docs/FINAL_QA_HANDOVER.md`](docs/FINAL_QA_HANDOVER.md)               | QA evidence and operational handover                    |
 
-## Ownership
+## License
 
-This client project is unlicensed and proprietary. Source availability in a public repository does not grant permission to copy, modify, redistribute, or commercially use the code or supplied media.
+Proprietary client work — see [`LICENSE`](LICENSE). Not open source; no reuse without written permission.
