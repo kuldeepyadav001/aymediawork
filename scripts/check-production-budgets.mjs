@@ -7,7 +7,10 @@ const buildRoot = join(root, ".next");
 const publicImagesRoot = join(root, "public", "images");
 const limits = {
   image: 300 * 1024,
-  imageTotal: 4 * 1024 * 1024,
+  // Raised from 4 MiB with owner approval (26 Aug 2026) to hold the real
+  // client-work cover set; the per-image cap is unchanged, and visitors only
+  // download the optimized variants of images on the page they view.
+  imageTotal: 6.5 * 1024 * 1024,
   prerenderedHtml: 200 * 1024,
   publicRouteGzipJs: 250 * 1024,
   totalCss: 100 * 1024,
