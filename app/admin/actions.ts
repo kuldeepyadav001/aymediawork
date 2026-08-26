@@ -310,6 +310,7 @@ export async function saveProjectAction(formData: FormData) {
   const parsed = projectAdminSchema.safeParse({
     category: text(formData, "category"),
     description: text(formData, "description"),
+    externalUrl: text(formData, "externalUrl"),
     direction: text(formData, "direction"),
     experience: text(formData, "experience"),
     explores: lines(formData, "explores"),
@@ -373,6 +374,7 @@ export async function saveProjectAction(formData: FormData) {
     status: parsed.data.status,
     system: parsed.data.system,
     title: parsed.data.title,
+    external_url: parsed.data.externalUrl || null,
     tone: parsed.data.tone,
     updated_by: context.userId,
     video_url: parsed.data.videoUrl || null,

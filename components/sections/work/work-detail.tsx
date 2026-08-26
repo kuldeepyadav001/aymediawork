@@ -16,7 +16,10 @@ import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { SERVICE_CATALOG, type Service } from "@/lib/constants/services";
 import { WORK_STUDIES, type WorkStudy } from "@/lib/constants/work";
-import { extractYouTubeVideoId } from "@/lib/utils/youtube";
+import {
+  externalPlatformLabel,
+  extractYouTubeVideoId,
+} from "@/lib/utils/youtube";
 
 export function WorkDetail({
   catalog = SERVICE_CATALOG,
@@ -28,6 +31,7 @@ export function WorkDetail({
   study: WorkStudy;
 }) {
   const videoId = extractYouTubeVideoId(study.videoUrl);
+  const platformLabel = externalPlatformLabel(study.externalUrl);
   const services = study.services
     .map((slug) => catalog.find((service) => service.slug === slug))
     .filter((service): service is Service => Boolean(service));
@@ -112,7 +116,8 @@ export function WorkDetail({
                   <span>Player loads only when you press play</span>
                 </figcaption>
               </figure>
-            ) : (
+            ) : null}
+            {!videoId ? (
               <figure>
                 <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel lg:aspect-[21/10]">
                   <Image
@@ -136,7 +141,17 @@ export function WorkDetail({
                   <span>No client attribution or performance claim</span>
                 </figcaption>
               </figure>
-            )}
+            ) : null}
+            {platformLabel && study.externalUrl ? (
+              <div className="mt-6">
+                <Button asChild size="lg" variant="outline">
+                  <a href={study.externalUrl} rel="noreferrer" target="_blank">
+                    View on {platformLabel}
+                    <ArrowUpRight aria-hidden="true" />
+                  </a>
+                </Button>
+              </div>
+            ) : null}
           </Reveal>
         </Container>
       </section>

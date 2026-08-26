@@ -160,6 +160,7 @@ export type Database = {
         updated_at: string;
         updated_by: string | null;
         video_url: string | null;
+        external_url: string | null;
       }>;
       services: TableDefinition<{
         approach: Json;

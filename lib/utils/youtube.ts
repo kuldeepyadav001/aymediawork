@@ -10,3 +10,28 @@ export function extractYouTubeVideoId(url: string | null | undefined) {
 export function isYouTubeUrl(url: string) {
   return YOUTUBE_URL_PATTERN.test(url.trim());
 }
+
+const PLATFORM_LABELS: readonly [RegExp, string][] = [
+  [/(^|\.)instagram\.com$/, "Instagram"],
+  [/(^|\.)youtube\.com$|(^|\.)youtu\.be$/, "YouTube"],
+  [/(^|\.)vimeo\.com$/, "Vimeo"],
+  [/(^|\.)behance\.net$/, "Behance"],
+  [/(^|\.)dribbble\.com$/, "Dribbble"],
+  [/(^|\.)x\.com$|(^|\.)twitter\.com$/, "X"],
+  [/(^|\.)facebook\.com$/, "Facebook"],
+  [/(^|\.)linkedin\.com$/, "LinkedIn"],
+  [/(^|\.)tiktok\.com$/, "TikTok"],
+];
+
+export function externalPlatformLabel(url: string | null | undefined) {
+  if (!url) return null;
+  try {
+    const hostname = new URL(url).hostname.toLowerCase();
+    for (const [pattern, label] of PLATFORM_LABELS) {
+      if (pattern.test(hostname)) return label;
+    }
+    return hostname.replace(/^www\./, "");
+  } catch {
+    return null;
+  }
+}

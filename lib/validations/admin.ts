@@ -127,6 +127,7 @@ export const serviceAdminSchema = z.object({
 
 export const projectAdminSchema = z.object({
   category: requiredText("Category", 100),
+  externalUrl: optionalHttpUrlSchema.optional().default(""),
   description: requiredText("Description", 1000),
   direction: requiredText("Direction", 5000),
   experience: requiredText("Experience", 5000),

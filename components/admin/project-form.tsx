@@ -179,6 +179,20 @@ export function ProjectForm({
             type="url"
           />
         </AdminField>
+        <AdminField
+          description="Optional. Where the work lives on another platform (Instagram Reel, Vimeo, Behance…). Shows a 'View on platform' button on the work page."
+          htmlFor="externalUrl"
+          label="External platform URL"
+        >
+          <Input
+            defaultValue={project?.external_url ?? ""}
+            id="externalUrl"
+            maxLength={1000}
+            name="externalUrl"
+            placeholder="https://www.instagram.com/reel/…"
+            type="url"
+          />
+        </AdminField>
       </AdminFormSection>
 
       <AdminFormSection title="Case study narrative">

@@ -56,6 +56,7 @@ type ProjectRow = Pick<
   | "title"
   | "tone"
   | "video_url"
+  | "external_url"
 >;
 type ServiceRow = Pick<
   Database["public"]["Tables"]["services"]["Row"],
@@ -102,7 +103,7 @@ export type PublicSiteProfile = {
 };
 
 const PUBLIC_PROJECT_COLUMNS =
-  "id,slug,title,sort_order,featured,category,format_label,description,meta_description,image_path,image_alt,premise_context,premise_question,direction,system,experience,principle,explores,tone,palette,video_url" as const;
+  "id,slug,title,sort_order,featured,category,format_label,description,meta_description,image_path,image_alt,premise_context,premise_question,direction,system,experience,principle,explores,tone,palette,video_url,external_url" as const;
 const PUBLIC_BLOG_COLUMNS =
   "id,slug,title,excerpt,body,category,author,reading_minutes,image_path,image_alt,meta_description,tags,takeaways,featured,published_at,created_at" as const;
 const PUBLIC_TESTIMONIAL_COLUMNS =
@@ -246,6 +247,7 @@ function mapProject(row: ProjectRow, services: readonly string[]): WorkStudy {
     title: row.title,
     tone: stringArray(row.tone),
     videoUrl: row.video_url,
+    externalUrl: row.external_url,
   };
 }
 
