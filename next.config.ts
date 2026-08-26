@@ -54,6 +54,13 @@ const nextConfig: NextConfig = {
   ...(allowedDevOrigins?.length ? { allowedDevOrigins } : {}),
   poweredByHeader: false,
   reactStrictMode: true,
+  experimental: {
+    serverActions: {
+      // The media library accepts images up to 10 MB; Next.js otherwise
+      // rejects action bodies at its 1 MB default before our code runs.
+      bodySizeLimit: "12mb",
+    },
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: getSupabaseStoragePattern(),
