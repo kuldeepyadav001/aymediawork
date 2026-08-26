@@ -26,7 +26,9 @@ describe("definer function grant hardening migration", () => {
     expect(migration).toContain(
       "revoke all on function public.write_admin_audit_log() from public, anon, authenticated",
     );
-    expect(migration).not.toContain("grant execute on function public.protect_last_owner");
+    expect(migration).not.toContain(
+      "grant execute on function public.protect_last_owner",
+    );
     expect(migration).not.toContain(
       "grant execute on function public.write_admin_audit_log",
     );
@@ -38,7 +40,9 @@ describe("definer function grant hardening migration", () => {
       "public.is_active_admin()",
       "public.has_admin_role(text[])",
     ]) {
-      expect(migration).toContain(`revoke all on function ${helper} from public, anon`);
+      expect(migration).toContain(
+        `revoke all on function ${helper} from public, anon`,
+      );
       expect(migration).toContain(
         `grant execute on function ${helper} to authenticated, service_role`,
       );
