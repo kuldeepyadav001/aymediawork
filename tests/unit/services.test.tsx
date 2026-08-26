@@ -9,6 +9,7 @@ import { ServiceDetail } from "@/components/sections/services/service-detail";
 import { ServicesIndex } from "@/components/sections/services/services-index";
 import { SERVICE_SLUGS } from "@/lib/constants/service-slugs";
 import { getServiceBySlug, SERVICE_CATALOG } from "@/lib/constants/services";
+import { WORK_STUDIES } from "@/lib/constants/work";
 
 afterEach(cleanup);
 
@@ -129,5 +130,37 @@ describe("services catalog", () => {
     expect(document.body).not.toHaveTextContent(
       /pricing|starting (?:at|from)|per month|₹|\$\d/i,
     );
+  });
+
+  it("shows related work only when studies are supplied", () => {
+    const service = SERVICE_CATALOG.at(0);
+    const study = WORK_STUDIES.at(0);
+    expect(service).toBeDefined();
+    expect(study).toBeDefined();
+    if (!service || !study) {
+      throw new Error("Expected catalog and work fixtures");
+    }
+
+    const { unmount } = render(
+      <ServiceDetail relatedStudies={[study]} service={service} />,
+    );
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: `${service.title} in the archive.`,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: new RegExp(study.title) }),
+    ).toHaveAttribute("href", `/work/${study.slug}`);
+    unmount();
+
+    render(<ServiceDetail service={service} />);
+    expect(
+      screen.queryByRole("heading", {
+        level: 2,
+        name: `${service.title} in the archive.`,
+      }),
+    ).not.toBeInTheDocument();
   });
 });

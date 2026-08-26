@@ -81,7 +81,7 @@ export function FilterableWorkGrid({
         </p>
       </div>
 
-      <div className="mt-8 grid gap-5 md:grid-cols-2 lg:gap-6">
+      <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {visibleStudies.map((study, index) => (
           <WorkCard
             key={study.slug}

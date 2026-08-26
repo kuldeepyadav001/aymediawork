@@ -1,9 +1,18 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, type ReactNode } from "react";
 
 type SmoothScrollProviderProps = {
   children: ReactNode;
+};
+
+type LenisInstance = {
+  destroy: () => void;
+  scrollTo: (
+    target: number,
+    options?: { force?: boolean; immediate?: boolean },
+  ) => void;
 };
 
 type IdleWindow = Window &
@@ -16,6 +25,10 @@ type IdleWindow = Window &
   };
 
 export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
+  const lenisRef = useRef<LenisInstance | undefined>(undefined);
+  const pathname = usePathname();
+  const previousPathname = useRef(pathname);
+
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const idleWindow = window as IdleWindow;
@@ -23,7 +36,6 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     let generation = 0;
     let idleHandle: number | undefined;
     let timerHandle: number | undefined;
-    let lenis: { destroy: () => void } | undefined;
 
     const cancelScheduledStart = () => {
       if (idleHandle !== undefined) {
@@ -40,8 +52,8 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       generation += 1;
       const requestedGeneration = generation;
       cancelScheduledStart();
-      lenis?.destroy();
-      lenis = undefined;
+      lenisRef.current?.destroy();
+      lenisRef.current = undefined;
 
       if (reducedMotion.matches) return;
 
@@ -61,7 +73,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
           return;
         }
 
-        lenis = new Lenis({
+        lenisRef.current = new Lenis({
           anchors: { offset: -96 },
           autoRaf: true,
           duration: 1.05,
@@ -86,9 +98,21 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       generation += 1;
       cancelScheduledStart();
       reducedMotion.removeEventListener("change", configureScrolling);
-      lenis?.destroy();
+      lenisRef.current?.destroy();
+      lenisRef.current = undefined;
     };
   }, []);
+
+  useEffect(() => {
+    if (previousPathname.current === pathname) return;
+    previousPathname.current = pathname;
+    // New route: reset Lenis' internal position so the page opens at the
+    // top instead of restoring the previous page's scroll offset. Hash
+    // navigations keep their intended anchor target.
+    if (window.location.hash) return;
+    lenisRef.current?.scrollTo(0, { force: true, immediate: true });
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return children;
 }

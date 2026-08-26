@@ -22,13 +22,13 @@ export function WorkCard({
         className="flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.1] bg-surface/55 shadow-panel transition-[border-color,box-shadow,transform] duration-500 ease-cinematic hover:border-primary/30 hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-safe:hover:-translate-y-1"
         href={`/work/${study.slug}`}
       >
-        <div className="relative aspect-[16/10] overflow-hidden bg-background">
+        <div className="relative aspect-[3/2] overflow-hidden bg-background">
           <Image
             fill
             alt={study.image.alt}
             className="object-cover transition-transform duration-800 ease-cinematic motion-safe:group-hover:scale-[1.035]"
             priority={priority}
-            sizes="(max-width: 767px) 92vw, 46vw"
+            sizes="(max-width: 767px) 92vw, (max-width: 1279px) 46vw, 31vw"
             src={study.image.src}
           />
           <div

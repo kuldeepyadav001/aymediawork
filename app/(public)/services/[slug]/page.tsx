@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { SERVICE_CATALOG } from "@/lib/constants/services";
 import {
   getPublishedServiceBySlug,
+  getPublishedProjects,
   getPublishedServices,
 } from "@/lib/supabase/queries/public";
 import { getSiteUrl } from "@/lib/utils/site-url";
@@ -69,7 +70,13 @@ export default async function ServicePage({ params }: ServicePageProps) {
     notFound();
   }
 
-  const catalog = await getPublishedServices();
+  const [catalog, projects] = await Promise.all([
+    getPublishedServices(),
+    getPublishedProjects(),
+  ]);
+  const relatedStudies = projects
+    .filter((study) => study.services.includes(service.slug))
+    .slice(0, 6);
   const siteUrl = getSiteUrl();
   const serviceUrl = new URL(`/services/${service.slug}`, siteUrl).toString();
   const structuredData = {
@@ -87,7 +94,11 @@ export default async function ServicePage({ params }: ServicePageProps) {
   return (
     <>
       <JsonLd data={structuredData} />
-      <ServiceDetail catalog={catalog} service={service} />
+      <ServiceDetail
+        catalog={catalog}
+        relatedStudies={relatedStudies}
+        service={service}
+      />
     </>
   );
 }

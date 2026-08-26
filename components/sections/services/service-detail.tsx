@@ -12,14 +12,17 @@ import { Reveal, Stagger, StaggerItem } from "@/components/animations/reveal";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { SERVICE_CATALOG, type Service } from "@/lib/constants/services";
+import type { WorkStudy } from "@/lib/constants/work";
 
 type ServiceDetailProps = {
   catalog?: readonly Service[];
+  relatedStudies?: readonly WorkStudy[];
   service: Service;
 };
 
 export function ServiceDetail({
   catalog = SERVICE_CATALOG,
+  relatedStudies = [],
   service,
 }: ServiceDetailProps) {
   const relatedServices = service.relatedSlugs
@@ -196,6 +199,73 @@ export function ServiceDetail({
           </Stagger>
         </Container>
       </section>
+
+      {relatedStudies.length > 0 ? (
+        <section aria-labelledby="service-related-work" className="py-section">
+          <Container>
+            <Reveal className="flex flex-col gap-6 border-b border-white/[0.08] pb-10 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="editorial-kicker">Related work</p>
+                <h2
+                  className="mt-5 text-balance text-heading-lg"
+                  id="service-related-work"
+                >
+                  {service.title} in the archive.
+                </h2>
+              </div>
+              <Button asChild className="w-fit" variant="outline">
+                <Link href="/work">
+                  All work
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+              </Button>
+            </Reveal>
+
+            <Stagger className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {relatedStudies.map((study) => (
+                <StaggerItem className="min-h-full" key={study.slug}>
+                  <Link
+                    className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel transition-[border-color,box-shadow,transform] duration-400 ease-cinematic hover:border-primary/30 hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-safe:hover:-translate-y-1"
+                    href={`/work/${study.slug}`}
+                  >
+                    <div className="relative aspect-[3/2] overflow-hidden border-b border-white/[0.08] bg-background">
+                      <Image
+                        fill
+                        alt={study.image.alt}
+                        className="object-cover transition-transform duration-800 ease-cinematic motion-safe:group-hover:scale-[1.035]"
+                        sizes="(max-width: 767px) 92vw, (max-width: 1279px) 46vw, 31vw"
+                        src={study.image.src}
+                      />
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-0 bg-gradient-to-t from-background/55 via-transparent to-transparent"
+                      />
+                      <span className="absolute left-5 top-5 rounded-full border border-white/15 bg-background/55 px-3 py-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-white/75 backdrop-blur-md">
+                        {study.category}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-1 flex-col p-6 sm:p-7">
+                      <div className="flex items-start justify-between gap-4">
+                        <h3 className="text-heading-sm">{study.title}</h3>
+                        <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-white/[0.12] text-muted-foreground transition-[background-color,border-color,color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-primary/40 group-hover:bg-primary group-hover:text-background">
+                          <ArrowUpRight aria-hidden="true" className="size-4" />
+                        </span>
+                      </div>
+                      <p className="mt-4 text-sm leading-6 text-muted-foreground">
+                        {study.description}
+                      </p>
+                      <span className="mt-auto pt-8 text-xs font-semibold uppercase tracking-[0.16em] text-foreground/75">
+                        View the work
+                      </span>
+                    </div>
+                  </Link>
+                </StaggerItem>
+              ))}
+            </Stagger>
+          </Container>
+        </section>
+      ) : null}
 
       <section className="py-section">
         <Container>
