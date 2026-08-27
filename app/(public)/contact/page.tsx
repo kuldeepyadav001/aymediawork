@@ -6,7 +6,6 @@ import { ContactJourneys } from "@/components/forms/contact-journeys";
 import { Reveal } from "@/components/animations/reveal";
 import { Container } from "@/components/shared/container";
 import { JsonLd } from "@/components/seo/json-ld";
-import type { InquiryType } from "@/lib/constants/inquiries";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { getPublishedServices } from "@/lib/supabase/queries/public";
 import { getSiteUrl } from "@/lib/utils/site-url";
@@ -21,24 +20,8 @@ export const metadata: Metadata = createPageMetadata({
   title,
 });
 
-type ContactPageProps = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-
-function getSingleValue(value: string | string[] | undefined) {
-  return typeof value === "string" ? value : value?.[0];
-}
-
-export default async function ContactPage({ searchParams }: ContactPageProps) {
-  const query = await searchParams;
-  const requestedType = getSingleValue(query.type);
-  const initialType: InquiryType =
-    requestedType === "partner" ? "partner" : "client";
-  const requestedService = getSingleValue(query.service);
+export default async function ContactPage() {
   const services = await getPublishedServices();
-  const initialService = requestedService
-    ? services.find((service) => service.slug === requestedService)
-    : undefined;
   const siteUrl = getSiteUrl();
   const pageUrl = new URL("contact", siteUrl).toString();
   const structuredData = {
@@ -163,11 +146,11 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
             <Reveal>
               <div className="glass-panel rounded-2xl p-5 sm:p-8 lg:p-10">
                 <ContactJourneys
-                  services={services.map(({ id, title }) => ({ id, title }))}
-                  initialServiceId={
-                    initialType === "client" ? initialService?.id : undefined
-                  }
-                  initialType={initialType}
+                  services={services.map(({ id, slug, title }) => ({
+                    id,
+                    slug,
+                    title,
+                  }))}
                   turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
                 />
               </div>

@@ -1,6 +1,10 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => new URLSearchParams(),
+}));
 
 import ContactPage, { metadata } from "@/app/(public)/contact/page";
 import { ContactJourneys } from "@/components/forms/contact-journeys";
@@ -134,12 +138,7 @@ describe("contact and inquiry journeys", () => {
   });
 
   it("renders the contact metadata, canonical, structured data, and approved disclosure", async () => {
-    const page = await ContactPage({
-      searchParams: Promise.resolve({
-        service: "saas-video",
-        type: "client",
-      }),
-    });
+    const page = await ContactPage();
     const { container } = render(page);
 
     expect(metadata.alternates?.canonical).toBe("/contact");

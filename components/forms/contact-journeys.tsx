@@ -1,5 +1,7 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { Handshake, Sparkles } from "lucide-react";
 
 import {
@@ -9,17 +11,67 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { InquiryType } from "@/lib/constants/inquiries";
 
-export function ContactJourneys({
+type ContactJourneysProps = {
+  initialServiceId?: string;
+  initialType?: InquiryType;
+  services?: readonly { id: string; slug?: string; title: string }[];
+  turnstileSiteKey?: string;
+};
+
+/**
+ * Reads ?type= and ?service= in the browser so the contact page itself can
+ * stay fully static (CDN-cached). Falls back to the given props, which the
+ * tests and any future server-driven usage continue to support.
+ */
+function JourneysFromUrl(props: ContactJourneysProps) {
+  const searchParams = useSearchParams();
+  const requestedType = searchParams.get("type");
+  const requestedService = searchParams.get("service");
+  const initialType: InquiryType =
+    requestedType === "partner"
+      ? "partner"
+      : requestedType === "client"
+        ? "client"
+        : (props.initialType ?? "client");
+  const serviceFromUrl = requestedService
+    ? props.services?.find((service) => service.slug === requestedService)
+    : undefined;
+  const initialServiceId =
+    initialType === "client"
+      ? (serviceFromUrl?.id ?? props.initialServiceId)
+      : undefined;
+
+  return (
+    <JourneysView
+      {...props}
+      initialServiceId={initialServiceId}
+      initialType={initialType}
+    />
+  );
+}
+
+export function ContactJourneys(props: ContactJourneysProps) {
+  return (
+    <Suspense
+      fallback={
+        <JourneysView
+          {...props}
+          initialServiceId={undefined}
+          initialType={props.initialType ?? "client"}
+        />
+      }
+    >
+      <JourneysFromUrl {...props} />
+    </Suspense>
+  );
+}
+
+function JourneysView({
   initialServiceId,
-  initialType,
+  initialType = "client",
   services,
   turnstileSiteKey,
-}: {
-  initialServiceId?: string;
-  initialType: InquiryType;
-  services?: readonly { id: string; title: string }[];
-  turnstileSiteKey?: string;
-}) {
+}: ContactJourneysProps) {
   return (
     <Tabs defaultValue={initialType}>
       <div className="mb-7 flex flex-col gap-5 border-b border-white/[0.08] pb-7 sm:flex-row sm:items-end sm:justify-between">
