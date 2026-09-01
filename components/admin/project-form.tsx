@@ -193,6 +193,20 @@ export function ProjectForm({
             type="url"
           />
         </AdminField>
+        <div className="sm:col-span-2">
+          <AdminField
+            description="Optional gallery: one image URL per line (media-library URLs or /images paths). Shown as 'The full set' below the work page — great for ad-creative sets."
+            htmlFor="gallery"
+            label="Gallery images"
+          >
+            <Textarea
+              defaultValue={lines(project?.gallery)}
+              id="gallery"
+              name="gallery"
+              placeholder="https://…supabase.co/storage/v1/object/public/admin-media/…"
+            />
+          </AdminField>
+        </div>
       </AdminFormSection>
 
       <AdminFormSection

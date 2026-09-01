@@ -38,6 +38,7 @@ export type WorkStudy = {
   tone: readonly string[];
   videoUrl?: string | null;
   externalUrl?: string | null;
+  gallery?: readonly string[];
 };
 
 export const WORK_STUDIES: readonly WorkStudy[] = [

@@ -161,6 +161,7 @@ export type Database = {
         updated_by: string | null;
         video_url: string | null;
         external_url: string | null;
+        gallery: Json;
       }>;
       services: TableDefinition<{
         approach: Json;

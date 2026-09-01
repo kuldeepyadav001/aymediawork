@@ -42,6 +42,7 @@ export function WorkDetail({
   );
   const hasFullNarrative = narrativeLayers.length === 3;
   const isConcept = !study.videoUrl && !study.externalUrl;
+  const gallery = study.gallery ?? [];
   const services = study.services
     .map((slug) => catalog.find((service) => service.slug === slug))
     .filter((service): service is Service => Boolean(service));
@@ -133,18 +134,36 @@ export function WorkDetail({
             ) : null}
             {!videoId ? (
               <figure>
-                <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel lg:aspect-[21/10]">
-                  <Image
-                    fill
-                    priority
-                    alt={study.image.alt}
-                    className="object-cover"
-                    sizes="92vw"
-                    src={study.image.src}
-                  />
+                <div
+                  className={
+                    isConcept
+                      ? "relative aspect-[16/10] overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel lg:aspect-[21/10]"
+                      : "relative flex max-h-[52rem] items-center justify-center overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel"
+                  }
+                >
+                  {isConcept ? (
+                    <Image
+                      fill
+                      priority
+                      alt={study.image.alt}
+                      className="object-cover"
+                      sizes="92vw"
+                      src={study.image.src}
+                    />
+                  ) : (
+                    <Image
+                      priority
+                      alt={study.image.alt}
+                      className="max-h-[52rem] w-auto max-w-full object-contain"
+                      height={1000}
+                      sizes="92vw"
+                      src={study.image.src}
+                      width={1500}
+                    />
+                  )}
                   <div
                     aria-hidden="true"
-                    className="absolute inset-0 bg-[linear-gradient(180deg,transparent_58%,rgba(4,6,12,0.55))]"
+                    className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_78%,rgba(4,6,12,0.45))]"
                   />
                   <span className="absolute bottom-5 left-5 rounded-full border border-white/15 bg-background/60 px-3 py-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.17em] text-white/75 backdrop-blur-md sm:bottom-7 sm:left-7">
                     {isConcept
@@ -179,6 +198,41 @@ export function WorkDetail({
           </Reveal>
         </Container>
       </section>
+
+      {gallery.length > 0 ? (
+        <section
+          aria-labelledby="work-gallery"
+          className="border-t border-white/[0.08] py-section"
+        >
+          <Container>
+            <Reveal className="max-w-4xl">
+              <p className="editorial-kicker">More from this work</p>
+              <h2
+                className="mt-6 text-balance text-heading-xl"
+                id="work-gallery"
+              >
+                The full set.
+              </h2>
+            </Reveal>
+            <Stagger className="mt-12 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              {gallery.map((imageSrc, index) => (
+                <StaggerItem key={imageSrc}>
+                  <div className="flex items-center justify-center overflow-hidden rounded-xl border border-white/[0.1] bg-surface shadow-panel">
+                    <Image
+                      alt={`${study.title} — piece ${index + 2}`}
+                      className="h-auto w-full object-contain"
+                      height={1000}
+                      sizes="(max-width: 639px) 92vw, (max-width: 1279px) 46vw, 31vw"
+                      src={imageSrc}
+                      width={1000}
+                    />
+                  </div>
+                </StaggerItem>
+              ))}
+            </Stagger>
+          </Container>
+        </section>
+      ) : null}
 
       {study.premise.question ? (
         <section className="py-section">

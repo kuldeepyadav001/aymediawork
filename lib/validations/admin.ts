@@ -136,6 +136,20 @@ const optionalNarrative = (label: string, maximum = 5000) =>
 export const projectAdminSchema = z.object({
   category: requiredText("Category", 100),
   externalUrl: optionalHttpUrlSchema.optional().default(""),
+  gallery: z
+    .array(
+      z
+        .string()
+        .trim()
+        .max(1000)
+        .refine(
+          isApprovedImagePath,
+          "Gallery entries must be local /images paths or admin-media public URLs.",
+        ),
+    )
+    .max(24)
+    .optional()
+    .default([]),
   description: requiredText("Description", 1000),
   direction: optionalNarrative("Direction"),
   experience: optionalNarrative("Experience"),
