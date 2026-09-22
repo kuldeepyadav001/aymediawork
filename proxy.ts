@@ -6,6 +6,12 @@ import { getSupabasePublicConfig } from "@/lib/supabase/config";
 import type { Database } from "@/types/database";
 
 const CATALOG_ROOTS = new Set(["blog", "services", "work"]);
+
+// Search Console verification file for the aymediawork.vercel.app property.
+// It must stay reachable on the deployment host (no canonical redirect) so
+// Google can verify ownership and process the removal request that clears
+// the stale vercel.app results from its index.
+const DEPLOYMENT_HOST_VERIFICATION_PATH = "/google3e6201c9227841fc.html";
 const PUBLIC_ADMIN_PATHS = new Set([
   "/admin/auth/callback",
   "/admin/login",
@@ -47,7 +53,8 @@ export async function proxy(request: NextRequest) {
   if (
     requestHost.endsWith(".vercel.app") &&
     !pathname.startsWith("/admin") &&
-    !pathname.startsWith("/api")
+    !pathname.startsWith("/api") &&
+    pathname !== DEPLOYMENT_HOST_VERIFICATION_PATH
   ) {
     const canonicalUrl = request.nextUrl.clone();
     canonicalUrl.protocol = "https:";

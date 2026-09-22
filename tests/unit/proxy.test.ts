@@ -102,6 +102,12 @@ describe("deployment-host consolidation", () => {
     }
   });
 
+  it("keeps the Search Console verification file reachable on deployment hosts", async () => {
+    const response = await proxy(vercelRequest("/google3e6201c9227841fc.html"));
+    expect(response.status).toBe(200);
+    expect(response.headers.get("location")).toBeNull();
+  });
+
   it("keeps admin routes reachable on deployment hosts", async () => {
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "");
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "");
