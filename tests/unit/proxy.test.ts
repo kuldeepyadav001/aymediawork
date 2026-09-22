@@ -84,3 +84,37 @@ describe("catalog route boundaries", () => {
     }
   });
 });
+
+describe("deployment-host consolidation", () => {
+  function vercelRequest(pathname: string) {
+    return new NextRequest(`https://aymediawork.vercel.app${pathname}`, {
+      headers: { host: "aymediawork.vercel.app" },
+    });
+  }
+
+  it("permanently redirects public vercel.app pages to the canonical domain", async () => {
+    for (const pathname of ["/", "/work", "/services/video-editing"]) {
+      const response = await proxy(vercelRequest(pathname));
+      expect(response.status).toBe(308);
+      expect(response.headers.get("location")).toBe(
+        `https://www.aymediawork.site${pathname}`,
+      );
+    }
+  });
+
+  it("keeps admin routes reachable on deployment hosts", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "");
+    const response = await proxy(vercelRequest("/admin/login"));
+    expect(response.status).toBe(200);
+  });
+
+  it("never redirects the canonical production host", async () => {
+    const response = await proxy(
+      new NextRequest("https://www.aymediawork.site/work", {
+        headers: { host: "www.aymediawork.site" },
+      }),
+    );
+    expect(response.status).toBe(200);
+  });
+});

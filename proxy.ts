@@ -37,6 +37,25 @@ function loginRedirect(request: NextRequest, reason?: "configuration") {
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Deployment-host consolidation: the *.vercel.app domains serve the same
+  // build and were getting indexed as duplicates. Permanently redirect any
+  // non-production public host to the canonical domain so search engines
+  // drop the duplicates. Admin and API stay accessible on any host so
+  // preview deployments remain usable.
+  const requestHost = request.headers.get("host") ?? "";
+  if (
+    requestHost.endsWith(".vercel.app") &&
+    !pathname.startsWith("/admin") &&
+    !pathname.startsWith("/api")
+  ) {
+    const canonicalUrl = request.nextUrl.clone();
+    canonicalUrl.protocol = "https:";
+    canonicalUrl.host = "www.aymediawork.site";
+    canonicalUrl.port = "";
+    return NextResponse.redirect(canonicalUrl, 308);
+  }
+
   const segments = pathname.split("/").filter(Boolean);
   const routeRoot = segments[0];
 
@@ -92,10 +111,10 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
+  // The general matcher lets the deployment-host redirect cover every public
+  // page (excluding static assets); the specific route groups keep their
+  // catalog-depth and admin-session behavior.
   matcher: [
-    "/admin/:path*",
-    "/blog/:path*",
-    "/services/:path*",
-    "/work/:path*",
+    "/((?!_next/static|_next/image|images/|fonts/|videos/|favicon\\.ico|icon\\.png|apple-icon\\.png|robots\\.txt|sitemap\\.xml).*)",
   ],
 };
